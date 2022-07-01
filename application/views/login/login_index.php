@@ -71,7 +71,8 @@
 							Não possui
 						</span>
 						<a tabindex="0" class="txt2" role="button" data-toggle="popover" data-trigger="focus" title="Cadastro ou redefinir senha" data-content="
-						Para realizar um cadastro ou redefir sua senha, procure um bolsista do LiG.">Usuário?</a>
+						Para realizar um cadastro ou redefir sua senha, procure um bolsista do LiG.
+						email: capufrj.lig@gmail.com">Usuário?</a>
 					</div>
 					<?php
 					echo form_close();
