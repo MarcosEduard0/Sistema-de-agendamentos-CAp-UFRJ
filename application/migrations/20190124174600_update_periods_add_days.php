@@ -106,13 +106,13 @@ class Migration_Update_periods_add_days extends CI_Migration
 			$days[0] = '';
 		}
 
-		$days[1] = 'Monday';
-		$days[2] = 'Tuesday';
-		$days[3] = 'Wednesday';
-		$days[4] = 'Thursday';
-		$days[5] = 'Friday';
-		$days[6] = 'Saturday';
-		$days[7] = 'Sunday';
+		$days[1] = 'Segunda-Feira';
+		$days[2] = 'Terça-Feira';
+		$days[3] = 'Quarta-Feira';
+		$days[4] = 'Quinta-Feira';
+		$days[5] = 'Sexta-Feira';
+		$days[6] = 'Sábado';
+		$days[7] = 'Domingo';
 
 		return $days;
 	}

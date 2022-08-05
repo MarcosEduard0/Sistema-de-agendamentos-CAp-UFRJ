@@ -23,7 +23,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = "http://192.168.0.105/sistema-de-agendamentos-cap-ufrj/";
+$scheme = (isset($_SERVER["REQUEST_SCHEME"]) ? $_SERVER['REQUEST_SCHEME'] : 'http');
+$dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), "/\\") . '/';
+$host = $_SERVER['HTTP_HOST'];
+$config['base_url'] = "{$scheme}://{$host}{$dir}";
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +55,7 @@ $config['index_page'] = 'index.php';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']    = 'REQUEST_URI';
+$config['uri_protocol']	= 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -76,7 +79,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']    = 'portuguese';
+$config['language']	= 'portuguese';
 
 /*
 |--------------------------------------------------------------------------
@@ -378,9 +381,9 @@ $config['encryption_key'] = '';
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
+$config['sess_cookie_name'] = 'crbs';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_save_path'] = FCPATH . 'local/sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
@@ -400,11 +403,11 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']    = '';
-$config['cookie_domain']    = '';
-$config['cookie_path']        = '/';
-$config['cookie_secure']    = FALSE;
-$config['cookie_httponly']     = FALSE;
+$config['cookie_prefix']	= '';
+$config['cookie_domain']	= '';
+$config['cookie_path']		= '/';
+$config['cookie_secure']	= FALSE;
+$config['cookie_httponly'] 	= FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -527,16 +530,16 @@ $config['proxy_ips'] = '';
 // This is written to during installation process.
 $config['is_installed'] = is_file(FCPATH . 'local/installed') || is_file(FCPATH . 'local/.installed');
 
-// // Set some other default values
-// //
+// Set some other default values
+//
 
-// // Timeout for LDAP connections, in seconds
-// $config['auth_ldap_timeout'] = 3;
+// Timeout for LDAP connections, in seconds
+$config['auth_ldap_timeout'] = 3;
 
 
 if (is_file(FCPATH . 'local/config.php')) {
-    $local_config = include(FCPATH . 'local/config.php');
-    if (array_key_exists('config', $local_config) && is_array($local_config['config'])) {
-        $config = array_merge($config, $local_config['config']);
-    }
+	$local_config = include(FCPATH . 'local/config.php');
+	if (array_key_exists('config', $local_config) && is_array($local_config['config'])) {
+		$config = array_merge($config, $local_config['config']);
+	}
 }

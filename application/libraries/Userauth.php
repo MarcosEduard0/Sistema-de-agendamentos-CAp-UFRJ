@@ -1,7 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-// date_default_timezone_set('America/Sao_Paulo');
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 
 class Userauth
 {
@@ -19,7 +18,7 @@ class Userauth
 
 	public function __construct()
 	{
-		$this->CI = &get_instance();
+		$this->CI =& get_instance();
 
 		if ($this->CI->config->item('is_installed')) {
 			$this->CI->load->database();
@@ -59,22 +58,22 @@ class Userauth
 
 
 	/**
-	 * Com um nome de usuário e uma senha, autentique as credenciais e faça o login do usuário.
+	 * Given a username and password, authenticate the credentials and log the user in.
 	 *
-	 * @param string $username Usuário
-	 * @param string $password Senha
-	 * @param bool $force Especifique 'true' para forçar a criação da sessão para o usuário sem uma senha válida.
+	 * @param string $username Username
+	 * @param string $password Password
+	 * @param bool $force Specify 'true' to force the session to be created for the user without a valid password.
 	 *
 	 */
 	public function log_in($username, $password, $force = false)
 	{
-		// Linha de usuário válida
+		// Valid user row
 		$valid_user = FALSE;
 
-		// Sinalizador para qual método de autenticação foi usado para fazer login.
+		// Flag for which auth method was used to log them in.
 		$auth_method = 'local';
 
-		// Verifique as configurações
+		// Check settings
 		$use_ldap = (setting('ldap_enabled', 'auth') == '1');
 
 		// authenticate() on the local/LDAP libraries should return a valid DB User row on success.
@@ -84,6 +83,7 @@ class Userauth
 
 			$valid_user = $this->CI->users_model->get_by_username($username);
 			$auth_method = 'local';
+
 		} elseif ($use_ldap) {
 
 			log_message('info', "Trying LDAP authentication");
@@ -95,16 +95,17 @@ class Userauth
 			$connection_error = in_array('no_socket_connection', $ldap_errors);
 			$auth_method = 'ldap';
 
-			if (!$valid_user && $connection_error) {
-				// Em vez disso, tente local
+			if ( ! $valid_user && $connection_error) {
+				// Try local instead
 				$this->CI->load->library('auth_local');
 				$valid_user = $this->CI->auth_local->authenticate($username, $password);
 				$local_errors = $this->CI->auth_ldap->get_errors();
 				$auth_method = 'local';
 			}
+
 		}
 
-		if (!$valid_user && $force !== TRUE) {
+		if ( ! $valid_user && $force !== TRUE) {
 			$this->CI->load->library('auth_local');
 			$valid_user = $this->CI->auth_local->authenticate($username, $password);
 			$local_errors = $this->CI->auth_local->get_errors();
@@ -122,7 +123,7 @@ class Userauth
 		if (isset($local_errors)) $errors = array_merge($errors, $local_errors);
 		$errors = array_unique($errors);
 
-		log_message('error', "Userauth: Login sem sucesso para {$username}. Razões: " . json_encode($errors));
+		log_message('error', "Userauth: Unsuccessful login for {$username}. Reasons: " . json_encode($errors));
 
 		return FALSE;
 	}
@@ -135,7 +136,7 @@ class Userauth
 	private function touch_last_login($user_id)
 	{
 		$user_data = [
-			'lastlogin' => utf8_encode(strftime('%Y-%m-%d %H:%M:%S')),
+			'lastlogin' => date('Y-m-d H:i:s'),
 		];
 
 		$where = [
@@ -170,7 +171,7 @@ class Userauth
 	 */
 	public function is_level($level)
 	{
-		if (!$this->logged_in() || !strlen($level)) {
+		if ( ! $this->logged_in() || ! strlen($level)) {
 			return FALSE;
 		}
 
@@ -192,12 +193,19 @@ class Userauth
 	/**
 	 * Check if the logged in user can create a booking.
 	 *
+	 * @param string $on_date Date of the requested booking (Y-m-d).
+	 * @param string $start_from Date used as the anchor to check $on_date against for booking in advance. Default to today.
+	 *
 	 */
-	public function can_create_booking($on_date = '')
+	public function can_create_booking($on_date = '', $start_from = NULL)
 	{
+		$start_from = ($start_from === NULL)
+			? strtotime(date('Y-m-d'))
+			: strtotime($start_from);
+
 		$status = new StdClass();
 
-		$status->is_admin = ($this->is_level(ADMINISTRADOR));
+		$status->is_admin = ($this->is_level(ADMINISTRATOR));
 		$status->in_quota = TRUE;
 		$status->is_future_date = TRUE;
 		$status->date_in_range = TRUE;
@@ -223,18 +231,17 @@ class Userauth
 			$status->in_quota = ($this->num_bookings < $max_active_bookings);
 		}
 
-		if (!empty($on_date)) {
+		if ( ! empty($on_date)) {
 
 			// Check date boundaries
 
-			$today = strtotime(date("Y-m-d"));
 			$booking_date = strtotime($on_date);
 
-			$status->is_future_date = ($booking_date >= $today);
+			$status->is_future_date = ($booking_date >= $start_from);
 
 			$advance = (int) abs(setting('bia'));
 			if ($advance > 0) {
-				$max_date = strtotime("+{$advance} days", $today);
+				$max_date = strtotime("+{$advance} days", $start_from);
 				$status->date_in_range = ($booking_date <= $max_date);
 			}
 		}
@@ -245,4 +252,6 @@ class Userauth
 
 		return $status;
 	}
+
+
 }

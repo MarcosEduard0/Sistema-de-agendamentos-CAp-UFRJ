@@ -1,6 +1,6 @@
 <?php
 echo $this->session->flashdata('saved');
-echo form_open_multipart(current_url(), array('id'=>'schooldetails', 'class'=>'needs-validation', 'novalidate'=> 'true'));
+echo form_open_multipart(current_url(), array('id' => 'schooldetails', 'class' => 'needs-validation', 'novalidate' => 'true'));
 ?>
 
 
@@ -59,11 +59,11 @@ echo form_open_multipart(current_url(), array('id'=>'schooldetails', 'class'=>'n
 	<spam class='bd-content-title'>Use esta seção para fazer o upload do logotipo da instituição.</spam><br>
 
 	<div class="form-group row">
-		<label class="col-sm-2 col-form-label" >Logotipo atual</label>
+		<label class="col-sm-2 col-form-label">Logotipo atual</label>
 		<div class="col-sm-4" style="padding-top: 10px;">
 			<?php
 			$logo = element('logo', $settings);
-			if ( ! empty($logo) && is_file(FCPATH . 'uploads/' . $logo)) {
+			if (!empty($logo) && is_file(FCPATH . 'uploads/' . $logo)) {
 				echo img('uploads/' . $logo, FALSE, "style='padding:1px; border:1px solid #ccc; max-width: 300px; width: auto; height: auto'");
 			} else {
 				echo "<span><em>Nenhum encontrado</em></span>";
@@ -74,7 +74,7 @@ echo form_open_multipart(current_url(), array('id'=>'schooldetails', 'class'=>'n
 
 
 	<div class="form-group row">
-		<label  class="col-sm-2 col-form-label" for="userfile">Carregar imagem</label>
+		<label class="col-sm-2 col-form-label" for="userfile">Carregar imagem</label>
 		<div class="col-sm-4" style="padding-top: 5px;">
 			<?php
 			echo form_upload(array(
@@ -98,19 +98,19 @@ echo form_open_multipart(current_url(), array('id'=>'schooldetails', 'class'=>'n
 	?>
 
 	<div class="form-group row">
-		<label class="col-sm-2 col-form-label"  for="logo_delete">Deletar logotipo?</label>
+		<label class="col-sm-2 col-form-label" for="logo_delete">Deletar logotipo?</label>
 		<div class="col-sm-10" style="padding-top: 8px;">
 			<?php
-				echo form_hidden('logo_delete', '0');
-				echo '<div class="custom-control custom-switch">';
-				echo '<input name="logo_delete" type="checkbox" tabindex="'.tab_index().'" value = "1" class="custom-control-input" id="logo_delete">';
-				?>
-				<label class="custom-control-label" for="logo_delete" ></label>
-				</div>
-		<small class="form-text text-muted">Ative esta caixa para <strong>excluir</strong> o logotipo atual. Se você estiver enviando um novo logotipo, isso será feito automaticamente.</small>		
+			echo form_hidden('logo_delete', '0');
+			echo '<div class="custom-control custom-switch">';
+			echo '<input name="logo_delete" type="checkbox" tabindex="' . tab_index() . '" value = "1" class="custom-control-input" id="logo_delete">';
+			?>
+			<label class="custom-control-label" for="logo_delete"></label>
 		</div>
+		<small class="form-text text-muted">Ative esta caixa para <strong>excluir</strong> o logotipo atual. Se você estiver enviando um novo logotipo, isso será feito automaticamente.</small>
 	</div>
-		
+	</div>
+
 </fieldset>
 
 

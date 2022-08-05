@@ -36,7 +36,7 @@
 					'options' => $options,
 					'selected' => set_value('room_id', $value),
 				]);
-			?>
+				?>
 			</p>
 		</div>
 
@@ -54,14 +54,14 @@
 					'selected' => set_value('actor', $value),
 					'up-switch' => '.actor-type',
 				]);
-			?>
+				?>
 			</p>
 		</div>
 
 		<div class="block b-20 actor-type" up-show-for="D">
 			<p class="input-group">
 				<?php
-				echo form_label('Departamento', 'department_id');
+				echo form_label('Department', 'department_id');
 				$options = array('' => '(Qualquer)');
 				foreach ($departments as $department) {
 					$options[$department->department_id] = html_escape($department->name);
@@ -73,7 +73,7 @@
 					'options' => $options,
 					'value' => set_value('department_id', $value),
 				]);
-			?>
+				?>
 			</p>
 		</div>
 
@@ -88,10 +88,10 @@
 				]);
 
 				echo anchor('access_control', 'Limpar', ['class' => 'button']);
-			?>
+				?>
 			</p>
 		</div>
- 	</div>
+	</div>
 
 	<?php echo form_close(); ?>
 

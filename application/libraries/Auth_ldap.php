@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth_ldap
 {
@@ -31,7 +31,7 @@ class Auth_ldap
 
 	public function __construct($config = [])
 	{
-		$this->CI = &get_instance();
+		$this->CI =& get_instance();
 
 		$this->CI->load->model('users_model');
 
@@ -39,7 +39,7 @@ class Auth_ldap
 			'timeout' => config_item('auth_ldap_timeout'),
 		]);
 
-		if (!empty($config)) {
+		if ( ! empty($config)) {
 			$this->init($config);
 		} else {
 			$this->init_from_settings();
@@ -59,11 +59,11 @@ class Auth_ldap
 					case 'use_tls':
 					case 'ignore_cert':
 						$val = boolval($val);
-						break;
+					break;
 					case 'version':
 					case 'port':
 						$val = (int) $val;
-						break;
+					break;
 				}
 				$this->$key = $val;
 			}
@@ -110,12 +110,12 @@ class Auth_ldap
 	public function authenticate($username, $password)
 	{
 		$username = trim($username);
-		if (!strlen($username) || !strlen($password)) {
+		if ( ! strlen($username) || ! strlen($password)) {
 			$this->errors[] = 'no_username_or_password';
 			return FALSE;
 		}
 
-		if (!$this->enabled) {
+		if ( ! $this->enabled) {
 			// LDAP authentication isn't enabled.
 			$this->errors[] = 'ldap_not_enabled';
 			return FALSE;
@@ -132,7 +132,7 @@ class Auth_ldap
 			return FALSE;
 		}
 
-		if (!$db_user && !$this->create_users) {
+		if ( ! $db_user && ! $this->create_users) {
 			// User does not exist and they should not be created.
 			$this->errors[] = 'user_not_found_no_create';
 			return FALSE;
@@ -165,21 +165,23 @@ class Auth_ldap
 			$user_id = $db_user->user_id;
 
 			// Update, if there are attributes
-			if (!empty($user_data)) {
+			if ( ! empty($user_data)) {
 				$this->CI->users_model->update($user_data, $db_user->user_id);
 				log_message('info', "AuthLDAP: Updated profile details for {$username}.");
 			}
+
 		} else {
 
 			// Create user
 			$user_data['username'] = $username;
 			$user_data['created'] = date('Y-m-d H:i:s');
-			$user_data['authlevel'] = PROFESSOR;
+			$user_data['authlevel'] = TEACHER;
 			$user_data['enabled'] = 1;
 
 			$user_id = $this->CI->users_model->insert($user_data);
 
 			log_message('info', "AuthLDAP: Created new user account for {$username}.");
+
 		}
 
 		// Update the local password to one supplied here.
@@ -202,19 +204,19 @@ class Auth_ldap
 	{
 		$connection = $this->get_connection();
 
-		if (!$connection) {
+		if ( ! $connection) {
 			return FALSE;
 		}
 
 		$username = trim($username);
-		if (!strlen($username) || !strlen($password)) {
+		if ( ! strlen($username) || ! strlen($password)) {
 			$this->errors[] = 'no_username_or_password';
 			return FALSE;
 		}
 
 		$bind_dn = $this->get_user_bind_dn($username);
 
-		if (!$bind = @ldap_bind($this->connection, $bind_dn, $password)) {
+		if ( ! $bind = @ldap_bind($this->connection, $bind_dn, $password)) {
 			$error_number = ldap_errno($this->connection);
 			$this->errors[] = "bind_error";
 			$this->errors[] = ldap_err2str($error_number);
@@ -222,7 +224,7 @@ class Auth_ldap
 		}
 
 		// Successful bind: quick exit here if no query filter supplied.
-		if (!strlen($this->search_filter)) {
+		if ( ! strlen($this->search_filter)) {
 			return TRUE;
 		}
 
@@ -243,13 +245,13 @@ class Auth_ldap
 	 */
 	public function create_connection()
 	{
-		if (!strlen($this->server) || !strlen($this->port)) {
+		if ( ! strlen($this->server) || ! strlen($this->port)) {
 			$this->errors[] = 'no_server_or_port';
 			return FALSE;
 		}
 
 		$sock = @fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout);
-		if (!$sock) {
+		if ( ! $sock) {
 			$this->errors[] = "no_socket_connection";
 			// $this->errors[] = $errstr;
 			return FALSE;
@@ -262,7 +264,7 @@ class Auth_ldap
 			@putenv('LDAPTLS_REQCERT=never');
 		}
 
-		if (!$this->connection = @ldap_connect($this->get_ldap_uri())) {
+		if ( ! $this->connection = @ldap_connect($this->get_ldap_uri())) {
 			$this->errors[] = 'invalid_ldap_uri';
 			return FALSE;
 		}
@@ -288,7 +290,7 @@ class Auth_ldap
 	 */
 	public function map_user_attributes($ldap_user_attrs)
 	{
-		if (!is_array($ldap_user_attrs)) {
+		if ( ! is_array($ldap_user_attrs)) {
 			return FALSE;
 		}
 
@@ -306,7 +308,7 @@ class Auth_ldap
 			$template = isset($this->$template_prop) ? trim($this->$template_prop) : '';
 			$all_fields .= $template;
 		}
-		if (!strlen($all_fields)) {
+		if ( ! strlen($all_fields)) {
 			return FALSE;
 		}
 
@@ -329,7 +331,7 @@ class Auth_ldap
 			$template = isset($this->$template_prop) ? trim($this->$template_prop) : '';
 
 			// No template: remove from return data
-			if (!strlen($template)) {
+			if ( ! strlen($template)) {
 				unset($out[$field_name]);
 				continue;
 			}
@@ -371,7 +373,7 @@ class Auth_ldap
 
 			$template = isset($this->$template_prop) ? trim($this->$template_prop) : '';
 
-			if (!strlen($template)) {
+			if ( ! strlen($template)) {
 				continue;
 			}
 
@@ -387,6 +389,7 @@ class Auth_ldap
 					$attrs[] = ltrim($match, ':');
 				}
 			}
+
 		}
 
 		return array_unique($attrs);
@@ -420,7 +423,7 @@ class Auth_ldap
 
 		$filter = $this->get_user_search_filter($username);
 
-		if (!$results = @ldap_search($connection, $this->base_dn, $filter, $fields)) {
+		if ( ! $results = @ldap_search($connection, $this->base_dn, $filter, $fields)) {
 			$this->errors[] = 'search_error';
 			return FALSE;
 		}
@@ -430,12 +433,12 @@ class Auth_ldap
 			return FALSE;
 		}
 
-		if (!$entry = ldap_first_entry($connection, $results)) {
+		if ( ! $entry = ldap_first_entry($connection, $results)) {
 			$this->errors[] = 'search_get_entry_error';
 			return FALSE;
 		}
 
-		if (!$data = ldap_get_attributes($connection, $entry)) {
+		if ( ! $data = ldap_get_attributes($connection, $entry)) {
 			$this->errors[] = 'search_get_attributes_error';
 			return FALSE;
 		}
@@ -511,4 +514,6 @@ class Auth_ldap
 	{
 		return $this->errors;
 	}
+
+
 }

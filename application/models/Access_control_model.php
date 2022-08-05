@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Access_control_model extends CI_Model
 {
@@ -41,7 +41,7 @@ class Access_control_model extends CI_Model
 	public static function get_actors()
 	{
 		return [
-			self::ACTOR_AUTHENTICATED => 'Qualquer usuário conectado',
+			self::ACTOR_AUTHENTICATED => 'Qualquer usuário logado',
 			self::ACTOR_DEPARTMENT => 'Departamento',
 		];
 	}
@@ -50,7 +50,7 @@ class Access_control_model extends CI_Model
 	public static function get_permissions()
 	{
 		return [
-			self::ACCESS_VIEW => 'Ver',
+			self::ACCESS_VIEW => 'Vizualizar',
 		];
 	}
 
@@ -58,7 +58,7 @@ class Access_control_model extends CI_Model
 	public static function get_access()
 	{
 		return [
-			self::ACCESS_VIEW => 'Ver',
+			self::ACCESS_VIEW => 'Vizualizar',
 		];
 	}
 
@@ -84,7 +84,7 @@ class Access_control_model extends CI_Model
 			$where[] = "(actor = 'D' AND actor_id = {$department_id})";
 		}
 
-		if ( ! empty($where)) {
+		if (!empty($where)) {
 			$where_str = "\nAND\n" . implode("\nAND\n", $where);
 		}
 
@@ -121,26 +121,47 @@ class Access_control_model extends CI_Model
 
 			list($target, $actor, $permission) = explode('.', $item->reference);
 
-			$out[ $target ]['type'] = $targets[$item->target];
-			$out[ $target ]['name'] = $item->room->name;
+			$out[$target]['type'] = $targets[$item->target];
+			$out[$target]['name'] = $item->room->name;
 
 			$actor_name = $actors[$item->actor];
 			switch ($item->actor) {
 				case self::ACTOR_DEPARTMENT:
 					$actor_name = $item->department->name;
-				break;
+					break;
 			}
 
-			$out[ $target ]['actors'][ $actor ]['type'] = $actors[$item->actor];
-			$out[ $target ]['actors'][ $actor ]['name'] = $actor_name;
-			$out[ $target ]['actors'][ $actor ]['permissions'][] =
-			$item->permission_name = $permissions[$item->permission];
-			$out[ $target ]['actors'][ $actor ]['items'][] = $item;
-
+			$out[$target]['actors'][$actor]['type'] = $actors[$item->actor];
+			$out[$target]['actors'][$actor]['name'] = $actor_name;
+			$out[$target]['actors'][$actor]['permissions'][] =
+				$item->permission_name = $permissions[$item->permission];
+			$out[$target]['actors'][$actor]['items'][] = $item;
 		}
 
 		return $out;
+	}
 
+
+	public function get_rooms_subquery($user_id, $permission)
+	{
+		$user_id = $this->db->escape($user_id);
+		$permission = $this->db->escape($permission);
+
+		$sql = "SELECT target_id
+				FROM {$this->table}
+				LEFT JOIN users u ON user_id = {$user_id}
+				WHERE target = 'R'
+				AND permission = {$permission}
+				AND
+				(
+					(actor = 'A')
+					OR
+					(u.user_id IS NOT NULL AND actor = 'U' AND actor_id = u.user_id)
+					OR
+					(u.department_id IS NOT NULL AND actor = 'D' AND actor_id = u.department_id)
+				)";
+
+		return $sql;
 	}
 
 
@@ -215,6 +236,4 @@ class Access_control_model extends CI_Model
 	{
 		return $this->db->delete($this->table, $params);
 	}
-
-
 }

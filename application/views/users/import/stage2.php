@@ -1,6 +1,7 @@
 <?php
 
-function import_status($key) {
+function import_status($key)
+{
 
 	$labels = array(
 		'username_empty' => 'Usuário vazio',
@@ -20,40 +21,40 @@ function import_status($key) {
 
 ?>
 
-<?php if (is_array($result)): ?>
+<?php if (is_array($result)) : ?>
 
-<table cellpadding="2" cellspacing="2" width="100%">
+	<table cellpadding="2" cellspacing="2" width="100%">
 
-	<thead>
-		<tr class="heading">
-			<td class="h">Linha</td>
-			<td class="h">Usuário</td>
-			<td class="h">Criado</td>
-			<td class="h">Status</td>
-		</tr>
-	</thead>
+		<thead>
+			<tr class="heading">
+				<td class="h">Linha</td>
+				<td class="h">Usuário</td>
+				<td class="h">Criado</td>
+				<td class="h">Status</td>
+			</tr>
+		</thead>
 
-	<tbody class="has-border">
+		<tbody class="has-border">
 
-		<?php
-		foreach ($result as $row) {
+			<?php
+			foreach ($result as $row) {
 
-			//$colour = ($row->status == 'Success') ? 'darkgreen' : 'darkred';
-			$colour = ($row->status == 'Success') ? 'label label-success' : 'label label-danger';
+				//$colour = ($row->status == 'Success') ? 'darkgreen' : 'darkred';
+				$colour = ($row->status == 'Success') ? 'label label-success' : 'label label-danger';
 
-			echo '<tr>';
-			echo "<td>#{$row->line}</td>";
-			//echo '<td>' . html_escape($row->user->username) . '</td>';
-			echo '<td style="width: 50%">' . html_escape($row->user->username) . '</td>';
-			echo '<td>' . ($row->status == 'Success' ? 'Sim' : 'Não') . '</td>';
-			//echo "<td style='font-weight:bold;color:{$colour}'>" . import_status($row->status) . "</td>";
-			echo "<td><span class='{$colour}'>". import_status($row->status) ."</span>";
-			echo '</tr>';
-		}
-		?>
-	</tbody>
+				echo '<tr>';
+				echo "<td>#{$row->line}</td>";
+				//echo '<td>' . html_escape($row->user->username) . '</td>';
+				echo '<td style="width: 50%">' . html_escape($row->user->username) . '</td>';
+				echo '<td>' . ($row->status == 'Success' ? 'Sim' : 'Não') . '</td>';
+				//echo "<td style='font-weight:bold;color:{$colour}'>" . import_status($row->status) . "</td>";
+				echo "<td><span class='{$colour}'>" . import_status($row->status) . "</span>";
+				echo '</tr>';
+			}
+			?>
+		</tbody>
 
-</table>
+	</table>
 
 <?php endif; ?>
 

@@ -1,6 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use app\components\bookings\Context;
+use app\components\bookings\Grid;
+use app\components\bookings\agent\SingleAgent;
+use app\components\bookings\agent\MultiAgent;
+use app\components\bookings\agent\UpdateAgent;
+use app\components\bookings\exceptions\AgentException;
+
+
 class Bookings extends MY_Controller
 {
 
@@ -13,505 +21,387 @@ class Bookings extends MY_Controller
 
 		$this->lang->load('bookings');
 
-		$this->load->model(array(
-			'crud_model',
-			'rooms_model',
-			'departments_model',
-			'periods_model',
-			'weeks_model',
-			'users_model',
-			'holidays_model',
-			'bookings_model',
-			'access_control_model',
-		));
-
-		$this->school = array(
-			'users' => $this->users_model->Get(NULL, NULL, NULL),
-			'days_list' => $this->periods_model->days,
-		);
-
-		if ($this->userauth->is_level(PROFESSOR) && setting('maintenance_mode')) {
-			$this->data['title'] = 'Agendamentos';
-			$this->data['showtitle'] = 'Manutenção';
-			$this->data['body'] = 'Estamos em manutenção.';
+		if ($this->userauth->is_level(TEACHER) && setting('maintenance_mode')) {
+			$this->data['title'] = 'Bookings';
+			$this->data['showtitle'] = '';
+			$this->data['body'] = '';
 			$this->render();
 			$this->output->_display();
 			exit();
 		}
+
+		$this->load->model('bookings_model');
+		$this->load->model('multi_booking_model');
+		$this->load->helper('booking');
 	}
-
-
-
-	private function _store_query($data = array())
-	{
-		$_SESSION['query'] = $data;
-	}
-
-
-	private function _get_query()
-	{
-		if (array_key_exists('query', $_SESSION)) {
-			return $_SESSION['query'];
-		}
-
-		return array();
-	}
-
-
-
-
-	function index()
-	{
-		$query = $this->input->get();
-
-		$user_id = $this->userauth->user->user_id;
-
-		if (!isset($query['date'])) {
-			$query['date'] = date("Y-m-d");
-			// Número do dia da data escolhida
-			$day_num = date('N', strtotime($query['date']));
-		}
-
-		$room_of_user = $this->rooms_model->GetByUser($user_id);
-
-		if (!isset($query['room'])) {
-			if (!empty($room_of_user)) {
-				$query['room'] = $room_of_user->room_id;
-			} else {
-				$query['room'] = NULL;
-			}
-		}
-
-		if (!isset($query['direction'])) {
-			$query['direction'] = 'forward';
-		}
-
-		$this->_store_query($query);
-
-		$body['html'] = $this->bookings_model->html(array(
-			'school' => $this->school,
-			'query' => $query,
-		));
-
-		$this->data['title'] = 'Agendamentos';
-		$this->data['showtitle'] = '';
-		$this->data['body'] = $this->session->flashdata('saved');
-		$this->data['body'] .= $body['html'];
-
-		return $this->render();
-	}
-
-
 
 
 	/**
-	 * Esta função pega a data que foi POSTADA e carrega a view ()
-	 */
-	function load()
-	{
-		$style = $this->bookings_model->BookingStyle();
-
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('chosen_date', 'Date', 'max_length[10]|callback_valid_date');
-		$this->form_validation->set_rules('room_id', 'Room', 'integer');
-		$this->form_validation->set_rules('direction', 'Diretion', '');
-
-		if ($this->form_validation->run() == FALSE) {
-			show_error("Desculpe, os detalhes solicitados não podem ser carregados.");
-		}
-
-		$query = array(
-			'direction' => $this->input->post('direction'),
-			'date' => $this->input->post('chosen_date'),
-		);
-
-		switch ($style['display']) {
-
-			case 'day':
-
-				// O tipo de exibição é um dia de cada vez - todas as salas/períodos
-				if ($this->input->post('chosen_date')) {
-					$datearr = explode('-', $this->input->post('chosen_date'));
-
-					if (count($datearr) != 3) {
-						show_error('Data escolhida é invalida.');
-					}
-					$query['date'] = date("Y-m-d", mktime(0, 0, 0, $datearr[1], $datearr[2], $datearr[0]));
-				} else {
-					show_error('Sem data escolhida');
-				}
-
-				break;
-
-			case 'room':
-
-				if ($this->input->post('room_id')) {
-					$query['room'] = $this->input->post('room_id');
-				} else {
-					show_error('Nenhum dia selecionado');
-				}
-
-				break;
-		}
-
-		$uri = 'bookings/index?' . http_build_query($query);
-		redirect($uri);
-	}
-
-
-
-
-
-	function book()
-	{
-		$query = $this->input->get();
-		$query['department'] = 0;
-		$this->data['title'] = 'Agendar uma sala';
-		$this->data['showtitle'] = $this->data['title'];
-
-		// Nenhum URI ou todas as informações de URI especificadas
-
-		$this->data['hidden'] = new StdClass();
-
-		if (isset($query['period']) && isset($query['room']) && isset($query['date']) && isset($query['department'])) {
-
-			// Criar dados do agendamento
-			$booking = new StdClass();
-			$booking->booking_id = NULL;
-			$booking->period_id = $query['period'];
-			$booking->room_id = $query['room'];
-			$booking->department_id = $query['department'];
-			$booking->date = $query['date'];
-			$booking->notes = '';
-			$booking->user_id = $this->userauth->user->user_id;
-
-			if ($this->userauth->is_level(ADMINISTRADOR)) {
-				$booking->day_num = isset($query['day']) ? $query['day'] : NULL;
-				$booking->week_id = isset($query['week']) ? $query['week'] : NULL;
-
-				if (empty($booking->day_num)) {
-					$booking->day_num = date('N', strtotime($query['date']));
-				}
-			}
-
-			$this->data['booking'] = $booking;
-			$this->data['hidden'] = (array) $booking;
-		}
-		// Pesquisas que precisamos para um usuário 
-		$this->data['departments'] = $this->departments_model->Get();
-		$this->data['days'] = $this->periods_model->days;
-		$this->data['periods'] = $this->periods_model->Get();
-		$this->data['weeks'] = $this->weeks_model->Get();
-		$this->data['rooms'] = $this->rooms_model->Get();
-
-		// Pesquisas que precisamos para um administrador
-		if ($this->userauth->is_level(ADMINISTRADOR)) {
-			$this->data['users'] = $this->school['users'];
-		}
-
-		$prev_query = $this->_get_query();
-		$this->data['query_string'] = http_build_query($prev_query);
-		$this->data['cancel_uri'] = 'bookings?' . http_build_query($prev_query);
-		$this->data['body'] = $this->load->view('bookings/bookings_book', $this->data, TRUE);
-
-		// Se tivermos uma data e o usuário for um professor, faça algumas verificações extras
-
-		if (isset($query['date']) && $this->userauth->is_level(PROFESSOR)) {
-
-			$booking_status = $this->userauth->can_create_booking($query['date']);
-
-			if ($booking_status->result === FALSE) {
-
-				$messages = [];
-
-				if (!$booking_status->in_quota) {
-					$msg = "Você atingiu o número máximo de reservas ativas (%d).";
-					$msg = sprintf($msg, setting('num_max_bookings'));
-					$messages[] = msgbox('error', $msg);
-				}
-
-				if (!$booking_status->is_future_date) {
-					$msg = "A data escolhida é antiga.";
-					$messages[] = msgbox('error', $msg);
-				}
-
-				if (!$booking_status->date_in_range) {
-					$msg = "A data escolhida deve ter peloemnos %d dias de antecedência.";
-					$msg = sprintf($msg, setting('bia'));
-					$messages[] = msgbox('error', $msg);
-				}
-
-				$this->data['body'] = implode("\n", $messages);
-			}
-		}
-
-		return $this->render();
-	}
-
-
-
-	/**
-	 * Processe uma ação de formulário da tabela de reservas
+	 * Main bookings page.
+	 *
+	 * Nearly everything handled through bookings Grid and Context components.
 	 *
 	 */
-	public function action()
+	public function index()
 	{
-		if ($this->input->post('cancel')) {
-			return $this->process_cancel();
-		}
+		$context = new Context();
 
-		if ($this->input->post('recurring')) {
-			return $this->process_recurring();
-		}
-	}
+		$context->autofill([
+			'base_uri' => $this->uri->segment(1),
+		]);
 
+		$grid = new Grid($context);
 
+		$message = $this->session->flashdata('bookings');
 
+		$this->data['title'] = 'Bookings';
+		$this->data['showtitle'] = '';
+		$this->data['body'] = $message . $grid->render();
 
-	private function process_recurring()
-	{
-		$bookings = array();
-
-		foreach ($this->input->post('recurring') as $booking) {
-			list($uri, $params) = explode('?', $booking);
-			parse_str($params, $data);
-			$bookings[] = $data;
-		}
-
-		$errcount = 0;
-
-		foreach ($bookings as $booking) {
-			$booking_data = array(
-				'user_id' => $this->input->post('user_id'),
-				'period_id' => $booking['period'],
-				'room_id' => $booking['room'],
-				'notes' => $this->input->post('notes'),
-				'week_id' => $booking['week'],
-				'day_num' => $booking['day_num'],
-			);
-
-			if (!$this->bookings_model->Add($booking_data)) {
-				$errcount++;
-			}
-		}
-
-		if ($errcount > 0) {
-			$flashmsg = msgbox('error', 'Uma ou mais agendamentos não puderam ser feitas.');
-		} else {
-			$flashmsg = msgbox('info', 'As agendamentos foram criados com sucesso.');
-		}
-
-		$this->session->set_userdata('notes', $booking_data['notes']);
-
-		// Volta para o index
-		$this->session->set_flashdata('saved', $flashmsg);
-
-		$query = $this->_get_query();
-		$uri = 'bookings/index?' . http_build_query($query);
-		redirect($uri);
-	}
-
-
-
-
-	private function process_cancel()
-	{
-		$id = $this->input->post('cancel');
-		$booking = $this->bookings_model->Get($id);
-		$user_id = $this->userauth->user->user_id;
-		$room = $this->rooms_model->Get($booking->room_id);
-
-		$query = $this->_get_query();
-		$uri = 'bookings/index?' . http_build_query($query);
-
-		$can_delete = (($this->userauth->is_level(ADMINISTRADOR))
-			or ($user_id == $booking->user_id)
-			or (($user_id == $room->user_id) && ($booking->date != NULL)));
-
-		if (!$can_delete) {
-			$this->session->set_flashdata('saved', msgbox('error', "Você não tem os privilégios corretos para cancelar este agendamento."));
-			return redirect($uri);
-		}
-
-		if ($this->bookings_model->Cancel($id)) {
-			$msg = msgbox('info', 'O agendamento foi cancelado.');
-		} else {
-			$msg = msgbox('error', 'Ocorreu um erro ao cancelar o agendamento.');
-		}
-
-		$this->session->set_flashdata('saved', $msg);
-		redirect($uri);
-	}
-
-
-
-
-	function edit($booking_id)
-	{
-		$booking = $this->bookings_model->Get($booking_id);
-
-		$query = $this->_get_query();
-		$uri = 'bookings?' . http_build_query($query);
-
-		$can_edit = ($this->userauth->is_level(ADMINISTRADOR) or ($this->userauth->user->user_id == $booking->user_id));
-
-		if (!$can_edit) {
-			$this->session->set_flashdata('saved', msgbox('error', "Você não tem os privilégios corretos para cancelar este agendamento."));
-			return redirect($uri);
-		}
-
-		$this->data['title'] = 'Editar agendamento';
-		$this->data['showtitle'] = $this->data['title'];
-		$this->data['cancel_uri'] = 'bookings?' . http_build_query($query);
-
-		// Dados para um usuário administrador
-		if ($this->userauth->is_level(ADMINISTRADOR)) {
-			$this->data['days'] = $this->periods_model->days;
-			$this->data['rooms'] = $this->rooms_model->Get();
-			$this->data['periods'] = $this->periods_model->Get();
-			$this->data['weeks'] = $this->weeks_model->Get();
-			$this->data['users'] = $this->school['users'];
-		}
-		$this->data['departments'] = $this->departments_model->Get();
-		$this->data['booking'] = $booking;
-		$this->data['hidden'] = (array) $booking;
-
-		$this->data['body'] = $this->load->view('bookings/bookings_book', $this->data, TRUE);
+		$arr = $context->toArray();
+		$json = json_encode($arr, JSON_PRETTY_PRINT);
+		// $this->data['body'] .= "<pre>{$json}</pre>";
 
 		return $this->render();
 	}
 
 
-
-
-
-	function save()
+	/**
+	 * View details for single booking.
+	 *
+	 * This is designed to be shown in a sidebar panel.
+	 *
+	 */
+	public function view($booking_id)
 	{
-		// Obter ID do formulário
-		$booking_id = $this->input->post('booking_id');
+		$include = [
+			'repeat',
+			'session',
+			'period',
+			'week',
+			'room',
+			'user',
+			'department',
+			'repeat',
+		];
 
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('booking_id', 'Booking ID', 'integer');
-		$this->form_validation->set_rules('date', 'Date', 'max_length[10]');
-		$this->form_validation->set_rules('use', 'Notes', 'max_length[100]');
-		$this->form_validation->set_rules('period_id', 'Period', 'integer');
-		$this->form_validation->set_rules('user_id', 'User', 'integer');
-		$this->form_validation->set_rules('room_id', 'Room', 'integer');
-		$this->form_validation->set_rules('department_id', 'Department', 'integer');
-		$this->form_validation->set_rules('week_id', 'Week', 'integer');
-		$this->form_validation->set_rules('day_num', 'Day of week', 'integer');
+		$booking = $this->bookings_model->include($include)->get($booking_id);
 
-		if (!$this->input->post('day_num')) {
-			$this->form_validation->set_rules('date', 'Date', 'max_length[10]|callback_valid_date');
-		}
+		$this->data['booking'] = $booking;
+		$this->data['current_user'] = $this->userauth->user;
 
-		if ($this->form_validation->run() == FALSE) {
-			return (empty($booking_id) ? $this->book() : $this->edit($booking_id));
-		}
+		$msg = $this->session->flashdata('bookings');
 
-		$booking_data = array(
-			'user_id' => $this->input->post('user_id'),
-			'period_id' => $this->input->post('period_id'),
-			'room_id' => $this->input->post('room_id'),
-			'department_id' => $this->input->post('department_id'),
-			'notes' => $this->input->post('notes'),
-			'booking_id' => $this->input->post('booking_id'),
-		);
-
-		//Determine se esta reserva é recorrente ou estática.
-		if ($this->input->post('date')) {
-			$date_arr = explode('-', $this->input->post('date'));
-			$booking_data['date'] = date("Y-m-d", mktime(0, 0, 0, $date_arr[1], $date_arr[2], $date_arr[0]));
-			$booking_data['day_num'] = NULL;
-			$booking_data['week_id'] = NULL;
-		}
-
-		if ($this->input->post('recurring') && $this->input->post('week_id') && $this->input->post('day_num')) {
-			$booking_data['date'] = NULL;
-			$booking_data['day_num'] = $this->input->post('day_num');
-			$booking_data['week_id'] = $this->input->post('week_id');
-		}
-
-		if ($this->_check_unique_booking($booking_data)) {
-			$this->_persist_booking($booking_id, $booking_data);
+		if ($booking) {
+			$this->load->library('table');
+			$this->load->helper('room');
+			$body = $msg . $this->load->view('bookings/view', $this->data, TRUE);
 		} else {
-			$flashmsg = msgbox('exclamation', "Já existe um agendamento para essa data, período e sala.");
-			$this->data['notice'] = $flashmsg;
-			// $this->session->set_flashdata('saved', $flashmsg);
-			return (empty($booking_id) ? $this->book() : $this->edit($booking_id));
+			$body = msgbox('error', 'Não foi possível encontrar os detalhes do agendamento solicitado.');
 		}
 
-		$query = $this->_get_query();
-		$uri = 'bookings/index?' . http_build_query($query);
-		redirect($uri);
+		$this->data['title'] = 'Detalhes do agendamento';
+		$this->data['showtitle'] = '';
+		$this->data['body'] = '<div class="bookings-view">' . $body . '</div>';
+
+		return $this->render();
 	}
 
 
-
-
-	public function valid_date($date)
+	/**
+	 * View details for single booking. Like /view/ but a smaller/more minimal view.
+	 *
+	 */
+	public function card($booking_id)
 	{
-		if (strpos($date, '/') !== FALSE) {
-			$datearr = explode('/', $date);
-			$valid = checkdate($datearr[1], $datearr[0], $datearr[2]);
-		} elseif (strpos($date, '-') !== FALSE) {
-			$datearr = explode('-', $date);
-			$valid = checkdate($datearr[1], $datearr[2], $datearr[0]);
+		$include = [
+			'repeat',
+			'session',
+			'period',
+			'week',
+			'room',
+			'user',
+			'department',
+			'repeat',
+		];
+
+		$booking = $this->bookings_model->include($include)->get($booking_id);
+
+		$this->data['booking'] = $booking;
+		$this->data['current_user'] = $this->userauth->user;
+
+		if ($booking) {
+			$this->load->library('table');
+			$this->load->helper('room');
+			$body = $this->load->view('bookings/card', $this->data, TRUE);
 		} else {
-			$this->form_validation->set_message('valid_date', 'Data inválida');
-			return FALSE;
+			$body = msgbox('error', 'Could not find requested booking details.');
 		}
 
-		if ($valid) {
-			return TRUE;
-		}
+		$this->data['title'] = '';
+		$this->data['showtitle'] = '';
+		$this->data['body'] = '<div class="bookings-card">' . $body . '</div>';
 
-		$this->form_validation->set_message('valid_date', 'Data inválida');
-		return FALSE;
+		return $this->render();
 	}
 
 
-
-	private function _check_unique_booking($data)
+	/**
+	 * View all bookings in series.
+	 * This is accessed from viewing details of one booking in a series.
+	 *
+	 */
+	public function view_series($booking_id)
 	{
-		$bookings = $this->bookings_model->GetUnique(array(
-			'date' => $data['date'],
-			'period_id' => $data['period_id'],
-			'room_id' => $data['room_id'],
-			'booking_id' => $data['booking_id'],
-			'week_id' => $data['week_id'],
-			'day_num' => $data['day_num'],
-		));
+		// Get booking to highlight it in the list
+		$include = ['period'];
+		$booking = $this->bookings_model->include($include)->get($booking_id);
 
-		return count($bookings) == 0;
+		$this->data['booking'] = $booking;
+
+		if ($booking && $booking->repeat_id) {
+			$this->data['all_bookings'] = $this->bookings_model->find_by_repeat($booking->repeat_id);
+			$this->load->library('table');
+			$this->load->helper('room');
+			$body = $this->load->view('bookings/view_series', $this->data, TRUE);
+		} else {
+			$body = msgbox('error', 'Não foi possível encontrar os detalhes solicitados do agendamento ou não é recorrente.');
+		}
+
+		$this->data['title'] = 'Agendamentos recorrentes';
+		$this->data['showtitle'] = '';
+		$this->data['body'] = '<div class="bookings-view">' . $body . '</div>';
+
+		return $this->render();
 	}
 
 
-
-	private function _persist_booking($booking_id = NULL, $booking_data = array())
+	/**
+	 * Handle creation of a new booking.
+	 *
+	 * 'Type' should be supplied as the first URI param, with other relevant data coming in via query string.
+	 *
+	 * @param string $type		Type of booking [single|multi]
+	 *
+	 */
+	public function create($type)
 	{
-		if (empty($booking_id)) {
+		$this->data['title'] = 'Criar agendamento';
 
-			unset($booking_data['booking_id']);
+		if ($this->input->get('params')) {
+			$_SESSION['return_uri'] = 'bookings?' . $this->input->get('params');
+		}
 
-			$booking_id = $this->bookings_model->Add($booking_data);
+		$classes = [
+			'single' => SingleAgent::class,
+			'multi' => MultiAgent::class,
+		];
 
-			if ($booking_id) {
-				$flashmsg = msgbox('info', "Agendamento realizado com sucesso.");
-			} else {
-				$line = sprintf($this->lang->line('crbs_action_dberror'), 'adicionando');
-				$flashmsg = msgbox('error', $line);
+		$class = array_key_exists($type, $classes)
+			? $classes[$type]
+			: NULL;
+
+		if (!$type) {
+			$this->data['view'] = msgbox('error', 'Unrecognised booking type.');
+			$this->data['body'] = $this->load->view('bookings/create', $this->data, TRUE);
+			return $this->render();
+		}
+
+		try {
+			$agent = $class::create();
+			$agent->load();
+			$agent->process();
+			$this->data['view'] = $agent->render();
+		} catch (AgentException $e) {
+			$this->data['view'] = msgbox('error', $e->getMessage());
+		}
+
+		// Finished - redirect back
+		//
+		if ($agent->is_success()) {
+
+			$this->session->set_flashdata('bookings', msgbox('info', $agent->message));
+
+			$uri = isset($_SESSION['return_uri'])
+				? $_SESSION['return_uri']
+				: 'bookings';
+
+			unset($_SESSION['return_uri']);
+			redirect($uri);
+			return;
+		}
+
+		if ($agent->title) {
+			$this->data['title'] = $agent->title;
+		}
+
+		$this->data['body'] = $this->load->view('bookings/create', $this->data, TRUE);
+
+		return $this->render();
+	}
+
+
+	/**
+	 * Edit a booking.
+	 *
+	 * The fields that can be changed will  differ depending on some factors:
+	 *
+	 *  - single booking (period + room + department + user + notes)
+	 *  - recurring booking single instance (period + room + department + user + notes)
+	 *  - recurring booking single instance + others (department + user + notes)
+	 *  - recurring booking all instances (department + user + notes)
+	 *
+	 */
+	public function edit($booking_id)
+	{
+		$this->data['title'] = 'Editar agendamento';
+
+		if ($this->input->get('params')) {
+			$_SESSION['return_uri'] = 'bookings?' . $this->input->get('params');
+		}
+
+		$_GET['booking_id'] = $booking_id;
+
+		try {
+			$agent = UpdateAgent::create();
+			$agent->load();
+			$agent->process();
+			$this->data['view'] = $agent->render();
+		} catch (AgentException $e) {
+			$this->data['view'] = msgbox('error', $e->getMessage());
+		}
+
+		// Finished - redirect back
+		//
+		if ($agent->is_success()) {
+
+			$this->session->set_flashdata('bookings', msgbox('info', $agent->message));
+
+			$uri = isset($_SESSION['return_uri'])
+				? $_SESSION['return_uri']
+				: 'bookings';
+
+			unset($_SESSION['return_uri']);
+			redirect($uri);
+			return;
+		}
+
+		if ($agent->title) {
+			$this->data['title'] = $agent->title;
+		}
+
+		$this->data['body'] = $this->load->view('bookings/edit', $this->data, TRUE);
+
+		return $this->render();
+	}
+
+
+	/**
+	 * Handle cancellation of existing booking.
+	 *
+	 * On viewing, shows different content depending on booking type (single / recurring).
+	 * For recurring bookings, options will be presented for selected instance, all future instances, or all instances.
+	 * For single bookings, just a confirmation.
+	 *
+	 * On form submission, the requested action is carried out.
+	 *
+	 */
+	public function cancel($booking_id)
+	{
+		if ($this->input->get('params')) {
+			$return_uri = 'bookings?' . $this->input->get('params');
+			$_SESSION['return_uri'] = $return_uri;
+			$this->data['return_uri'] = $return_uri;
+		}
+
+		$booking = $this->bookings_model->include(['room'])->get($booking_id);
+
+		$this->data['booking'] = $booking;
+		$this->data['current_user'] = $this->userauth->user;
+
+		switch (TRUE) {
+
+			case ($booking === FALSE):
+				$body = msgbox('error', 'Could not find requested booking details.');
+				break;
+
+			case (booking_cancelable($booking) === FALSE):
+				$body = msgbox('error', 'Booking is not editable.');
+				break;
+		}
+
+		if ($cancel_type = $this->input->post('cancel')) {
+
+			$error = msgbox('error', 'There was an error cancelling the booking.');
+
+			switch ($cancel_type) {
+
+				case '1':
+					$res = $this->bookings_model->cancel_single($booking_id);
+					$success = msgbox('info', 'The booking has been cancelled.');
+					break;
+
+				case 'future':
+					$res = $this->bookings_model->cancel_future($booking_id);
+					$success = msgbox('info', 'The selected booking and all future occurrences in the series have been cancelled.');
+					break;
+
+				case 'all':
+					$res = $this->bookings_model->cancel_all($booking_id);
+					$success = msgbox('info', 'The whole recurring booking series has been cancelled.');
+					break;
+
+				default:
+					$res = FALSE;
+					$error = msgbox('error', 'Invalid cancellation type.');
 			}
+
+			$msg = ($res) ? $success : $error;
+			$this->session->set_flashdata('bookings', $msg);
+
+			$uri = isset($_SESSION['return_uri'])
+				? $_SESSION['return_uri']
+				: 'bookings';
+
+			unset($_SESSION['return_uri']);
+			return redirect($uri);
+		}
+	}
+
+
+	public function change_session()
+	{
+		$session_id = $this->input->post('session_id');
+
+		$params_str = $this->input->post('params');
+		parse_str($params_str, $params_data);
+
+		if (!$session_id) {
+
+			unset($params_data['date']);
+			unset($_SESSION['current_session_id']);
 		} else {
 
-			if ($this->bookings_model->Edit($booking_id, $booking_data)) {
-				$flashmsg = msgbox('info', "O agendamento foi atualizado.");
+			$this->load->model('sessions_model');
+			if ($this->userauth->is_level(ADMINISTRATOR)) {
+				$session = $this->sessions_model->get($session_id);
 			} else {
-				$line = sprintf($this->lang->line('crbs_action_dberror'), 'editando');
-				$flashmsg = msgbox('error', $line);
+				$session = $this->sessions_model->get_available_session($session_id);
+			}
+
+			if ($session) {
+				$_SESSION['current_session_id'] = $session->session_id;
+			} else {
+				$this->session->set_flashdata('bookings', msgbox('error', 'Requested session is not available.'));
 			}
 		}
 
-		$this->session->set_flashdata('saved', $flashmsg);
+		if (isset($params_data['date'])) {
+			unset($params_data['date']);
+		}
+
+		$params = http_build_query($params_data);
+		$return_uri = 'bookings?' . $params;
+		return redirect($return_uri);
 	}
 }

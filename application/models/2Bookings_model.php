@@ -213,7 +213,7 @@ class Bookings_model extends CI_Model
 				$actions[] = "<a class='booking-action' href='{$edit_url}' title='Editar este agendameto'>editar</a>";
 			}
 
-			// 'Cancelar 'ação se o usuário for um administrador, proprietário da sala ou proprietário do agendamento
+			// 'Cancelar 'ação se o usuário for um ADMINISTRATOR, proprietário da sala ou proprietário do agendamento
 			//
 			if (
 				($this->userauth->is_level(ADMINISTRATOR))
@@ -357,14 +357,14 @@ class Bookings_model extends CI_Model
 		// Get rooms
 		$rooms = $this->Rooms();
 		if ($rooms == FALSE) {
-			$html .= msgbox('error', 'Não há salas disponíveis. Entre em contato com o seu administrador.');
+			$html .= msgbox('error', 'Não há salas disponíveis. Entre em contato com o seu ADMINISTRATOR.');
 			return $html;
 		}
 
 		// Find out which columns to display and which view type we use
 		$style = $this->BookingStyle();
 		if (!$style or (empty($style['cols']) or empty($style['display']))) {
-			$html = msgbox('error', 'Nenhum estilo de reserva foi configurado. Entre em contato com o seu administrador.');
+			$html = msgbox('error', 'Nenhum estilo de reserva foi configurado. Entre em contato com o seu ADMINISTRATOR.');
 			return $html;
 		}
 		$cols = $style['cols'];

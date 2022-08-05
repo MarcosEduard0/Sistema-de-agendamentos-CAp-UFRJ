@@ -1,23 +1,16 @@
 <?php
 $c1 = (isset($c1) ? $c1 : array());
 $c2 = (isset($c2) ? $c2 : array());
-$login = (isset($login) ? $login : array());
 ?>
 
 <div>
-	<?php if ($c1): ?>
+	<?php if ($c1 && ! empty($c1)): ?>
 	<div style="float:left;width:<?php echo $c1['width'] ?>" class="column">
 		<div class="c" id="c1"><?php echo $c1['content'] ?></div>
 	</div>
 	<?php endif; ?>
 
-	<?php if ($login): ?>
-	<div style="float:left;width:<?php echo $login['width'] ?>" class="column">
-		<div class="c" id="login"><?php echo $login['content'] ?></div>
-	</div>
-	<?php endif; ?>
-
-	<?php if ($c2): ?>
+	<?php if ($c2 && ! empty($c2)): ?>
 	<div style="float:right;width:<?php echo $c2['width'] ?>" class="column">
 		<div class="c" id="c2"><?php echo $c2['content'] ?></div>
 	</div>

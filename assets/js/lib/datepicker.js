@@ -2,12 +2,12 @@
 var datePickerDivID = "datepicker";
 var iFrameDivID = "datepickeriframe";
 
-var dayArrayShort = new Array('Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sá');
-var dayArrayMed = new Array('Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb');
-var dayArrayLong = new Array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta-Feira', 'Sábado');
-var monthArrayShort = new Array('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez');
-var monthArrayMed = new Array('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Junh', 'Julh', 'Ago', 'Set', 'Out', 'Nov', 'Dez');
-var monthArrayLong = new Array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
+var dayArrayShort = new Array('Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa');
+var dayArrayMed = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+var dayArrayLong = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+var monthArrayShort = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+var monthArrayMed = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec');
+var monthArrayLong = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
 // these variables define the date formatting we're expecting and outputting.
 // If you want to use a different format by default, change the defaultDateSeparator
@@ -127,14 +127,14 @@ function refreshDatePicker(dateFieldName, year, month, day)
   // go back to a previous month or forward to the next month
   html += TR_title;
   html += TD_buttons + getButtonCode(dateFieldName, thisDay, -1, "&lt;") + xTD;
-  html += TD_title + DIV_title + monthArrayLong[ thisDay.getMonth()] + "<br>" + thisDay.getFullYear() + xDIV + xTD;
+  html += TD_title + DIV_title + monthArrayLong[ thisDay.getMonth()] + " " + thisDay.getFullYear() + xDIV + xTD;
   html += TD_buttons + getButtonCode(dateFieldName, thisDay, 1, "&gt;") + xTD;
   html += xTR;
 
   // this is the row that indicates which day of the week we're on
   html += TR_days;
-  for(i = 0; i < dayArrayMed.length; i++)
-    html += TD_days + dayArrayMed[i] + xTD;
+  for(i = 0; i < dayArrayShort.length; i++)
+    html += TD_days + dayArrayShort[i] + xTD;
   html += xTR;
 
   // now we'll start populating the table with days of the month
@@ -173,8 +173,8 @@ function refreshDatePicker(dateFieldName, year, month, day)
   var today = new Date();
   var todayString = "Today is " + dayArrayMed[today.getDay()] + ", " + monthArrayMed[ today.getMonth()] + " " + today.getDate();
   html += TR_todaybutton + TD_todaybutton;
-  html += "<button class='dpTodayButton' onClick='refreshDatePicker(\"" + dateFieldName + "\");'>Este mês</button> ";
-  html += "<button class='dpTodayButton' onClick='updateDateField(\"" + dateFieldName + "\");'>Fechar</button>";
+  html += "<button class='dpTodayButton' onClick='refreshDatePicker(\"" + dateFieldName + "\");'>this month</button> ";
+  html += "<button class='dpTodayButton' onClick='updateDateField(\"" + dateFieldName + "\");'>close</button>";
   html += xTD + xTR;
 
   // and finally, close the table
@@ -196,7 +196,7 @@ function getButtonCode(dateFieldName, dateVal, adjust, label)
     newYear += -1;
   }
 
-  return "<button class='prev' onClick='refreshDatePicker(\"" + dateFieldName + "\", " + newYear + ", " + newMonth + ");'>" + label + "</button>";
+  return "<button class='dpButton' onClick='refreshDatePicker(\"" + dateFieldName + "\", " + newYear + ", " + newMonth + ");'>" + label + "</button>";
 }
 
 
@@ -298,7 +298,7 @@ function datePickerClosed(dateField)
   if (dateField.name == "StartDate") {
     if (dateObj < today) {
       // if the date is before today, alert the user and display the datepicker again
-      alert("Insira uma data que seja hoje ou mais tarde");
+      alert("Please enter a date that is today or later");
       dateField.value = "";
       document.getElementById(datePickerDivID).style.visibility = "visible";
       adjustiFrame();

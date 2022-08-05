@@ -12,7 +12,7 @@ class Departments extends MY_Controller
 		parent::__construct();
 
 		$this->require_logged_in();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->load->library('pagination');
 		$this->load->model('crud_model');
@@ -50,13 +50,13 @@ class Departments extends MY_Controller
 
 
 	/**
-	 * Adicionar um departamento
+	 * Add a new department
 	 *
 	 */
 	function add()
 	{
-		// Carregar view
-		$this->data['title'] = 'Novo Departamento ';
+		// Load view
+		$this->data['title'] = 'Adicionar Departamento';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('departments/departments_add', NULL, TRUE);
 
@@ -78,7 +78,7 @@ class Departments extends MY_Controller
 			show_404();
 		}
 
-		$this->data['title'] = 'Editar Departamento ';
+		$this->data['title'] = 'Editar Departamento';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('departments/departments_add', $this->data, TRUE);
 
@@ -89,7 +89,7 @@ class Departments extends MY_Controller
 
 
 	/**
-	 * Salve as alterações para adicionar/editar um departamento
+	 * Save changes to add/edit a department
 	 *
 	 */
 	function save()
@@ -99,13 +99,8 @@ class Departments extends MY_Controller
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('department_id', 'ID', 'integer');
+		$this->form_validation->set_rules('name', 'Name', 'required|min_length[1]|max_length[50]');
 		$this->form_validation->set_rules('description', 'Description', 'max_length[255]');
-
-		if (empty($department_id)) {
-			$this->form_validation->set_rules('name', 'Name', 'required|min_length[1]|max_length[50]|is_unique[departments.name]');
-		} else {
-			$this->form_validation->set_rules('name', 'Name', 'required|min_length[1]|max_length[50]');
-		}
 
 		if ($this->form_validation->run() == FALSE) {
 			return (empty($department_id) ? $this->add() : $this->edit($department_id));
@@ -147,7 +142,7 @@ class Departments extends MY_Controller
 
 
 	/**
-	 * Deletar um departamento
+	 * Delete a department
 	 *
 	 */
 	function delete($id = NULL)
@@ -162,7 +157,7 @@ class Departments extends MY_Controller
 		$this->data['action'] = 'departments/delete';
 		$this->data['id'] = $id;
 		$this->data['cancel'] = 'departments';
-		$this->data['text'] = 'Se você excluir este departamento, deverá reatribuir qualquer um de seus membros a outro departamento.';
+		$this->data['text'] = 'If you delete this department, you must re-assign any of its members to another department.';
 
 		$row = $this->departments_model->Get($id);
 		$this->data['title'] = 'Deletar Departamento (' . html_escape($row->name) . ')';

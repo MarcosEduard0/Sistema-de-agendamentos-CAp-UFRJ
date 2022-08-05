@@ -9,7 +9,7 @@ class Access_control extends MY_Controller
 	{
 		parent::__construct();
 
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->load->model('access_control_model');
 		$this->load->model('departments_model');
@@ -21,7 +21,7 @@ class Access_control extends MY_Controller
 		$this->data['rooms_icons'] = [
 			['rooms', 'Salas', 'school_manage_rooms.png'],
 			['rooms/fields', 'Campo Personalizado', 'room_fields.png'],
-			['access_control', 'Controlhe de Acesso', 'key.png'],
+			['access_control', 'Controle de Acesso', 'key.png'],
 		];
 	}
 
@@ -44,7 +44,7 @@ class Access_control extends MY_Controller
 		$this->data['departments'] = $this->departments_model->Get(NULL, NULL, NULL);
 		$this->data['rooms'] = $this->rooms_model->Get();
 
-		$this->data['title'] = 'Salas';
+		$this->data['title'] = 'Rooms';
 
 		$icons = iconbar($this->data['rooms_icons'], 'access_control');
 		$body = $this->load->view('access_control/index', $this->data, TRUE);
@@ -62,7 +62,7 @@ class Access_control extends MY_Controller
 			show_404();
 		}
 
-		$this->data['title'] = 'Nova entrada';
+		$this->data['title'] = 'Add Entry';
 
 		$this->data['departments'] = $this->departments_model->Get(NULL, NULL, NULL);
 		$this->data['rooms'] = $this->rooms_model->Get();
@@ -128,7 +128,7 @@ class Access_control extends MY_Controller
 			$line = sprintf($this->lang->line('crbs_action_added'), 'Entry');
 			$flashmsg = msgbox('info', $line);
 		} else {
-			$line = sprintf($this->lang->line('crbs_action_dberror'), 'adicionava');
+			$line = sprintf($this->lang->line('crbs_action_dberror'), 'adding');
 			$flashmsg = msgbox('error', $line);
 		}
 

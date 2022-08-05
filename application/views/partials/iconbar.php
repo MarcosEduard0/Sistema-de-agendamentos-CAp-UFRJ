@@ -10,7 +10,7 @@ for( $z=0; $z<$items; $z++){
 	$html .= '<img src="webroot/images/ui/'.$icon.'" alt="'.$name.'" align="top" hspace="0" border="0" /> ';
 	$html .= $name . '</a>';
 	if( $z != ($items-1) ){
-		$html .= '<img src="webroot/images/ui/sep.gif" alt="|" align="top" hspace="0" border="0" style="margin:0px 6px;" />';
+		$html .= '<img src="webroot/images/sep.gif" alt="|" align="top" hspace="0" border="0" style="margin:0px 6px;" />';
 	}
 }
 $html .= '</p>';

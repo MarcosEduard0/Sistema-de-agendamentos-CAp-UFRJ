@@ -6,11 +6,11 @@ if (isset($field) && is_object($field)) {
 
 echo "<!-- $field_id -->";
 
-if ( ! empty($field_id)) {
+if (!empty($field_id)) {
 	echo msgbox('exclamation', 'Você não pode alterar o tipo de um campo. Em vez disso, exclua o campo e crie um novo.');
 }
 
-echo form_open('rooms/save_field', array('class' => 'needs-validation', 'id' => 'fields_add', 'novalidate'=> 'true'), array('field_id' => $field_id));
+echo form_open('rooms/save_field', array('class' => 'needs-validation', 'id' => 'fields_add', 'novalidate' => 'true'), array('field_id' => $field_id));
 ?>
 
 <br />
@@ -41,51 +41,52 @@ echo form_open('rooms/save_field', array('class' => 'needs-validation', 'id' => 
 	</div>
 	<?php echo form_error($input_name); ?>
 
-	<?php if ( ! isset($field)): ?>
+	<?php if (!isset($field)) : ?>
 
-	<div class="form-group row">
-		<label for="type"  class="col-sm-2 col-form-label">Tipo</label>
-		<div class="col-sm-3" style="padding-top: 8px;">
-			<?php
+		<div class="form-group row">
+			<label for="type" class="col-sm-2 col-form-label">Tipo</label>
+			<div class="col-sm-3" style="padding-top: 8px;">
+				<?php
 
-			$input_name = 'type';
-			$value = set_value($input_name, isset($field) ? $field->type : '', FALSE);
+				$input_name = 'type';
+				$value = set_value($input_name, isset($field) ? $field->type : '', FALSE);
 
-			foreach ($options_list as $k => $v) {
-				$id = "{$input_name}_{$k}";
-				$input = form_radio(array(
-					'name' => $input_name,
-					'id' => $id,
-					'value' => $k,
-					'checked' => ($value == $k),
-					'tabindex' => tab_index(),
-					'up-switch' => '.dropdown_options',
-				));
-				echo "<label for='{$id}' class='ni'>{$input}{$v}</label>";
-			}
-		?>
+				foreach ($options_list as $k => $v) {
+					$id = "{$input_name}_{$k}";
+					$input = form_radio(array(
+						'name' => $input_name,
+						'id' => $id,
+						'value' => $k,
+						'checked' => ($value == $k),
+						'tabindex' => tab_index(),
+						'class' => 'form-check-input',
+						'up-switch' => '.dropdown_options',
+					));
+					echo "<div class='form-check'><label for='{$id}' class='ni'>{$input}{$v}</label></div>";
+				}
+				?>
+			</div>
 		</div>
-	</div>
-	<?php echo form_error($input_name); ?>
+		<?php echo form_error($input_name); ?>
 
-	<?php else: ?>
+	<?php else : ?>
 
-	<?php
-	$input_name = 'type';
-	$value = set_value($input_name, isset($field) ? $field->type : '');
-	echo form_input(array(
-		'type' => 'hidden',
-		'name' => $input_name,
-		'id' => $input_name,
-		'value' => $value,
-	));
-	?>
+		<?php
+		$input_name = 'type';
+		$value = set_value($input_name, isset($field) ? $field->type : '');
+		echo form_input(array(
+			'type' => 'hidden',
+			'name' => $input_name,
+			'id' => $input_name,
+			'value' => $value,
+		));
+		?>
 
 	<?php endif; ?>
 
 	<?php
 	$options_attrs = '';
-	if ( ! isset($field)) {
+	if (!isset($field)) {
 		$options_attrs .= ' up-show-for="SELECT" ';
 	} elseif (isset($field) && $field->type != 'SELECT') {
 		$options_attrs .= 'style="display:none"';
@@ -94,7 +95,7 @@ echo form_open('rooms/save_field', array('class' => 'needs-validation', 'id' => 
 
 	<div class="dropdown_options" <?= $options_attrs ?>>
 		<div class="form-group row">
-			<label for="items"  class="col-sm-2 col-form-label">Itens</label>
+			<label for="items" class="col-sm-2 col-form-label">Itens</label>
 			<div class="col-sm-8" style="padding-top: 8px;">
 				<?php
 				$input_name = 'options';
@@ -117,10 +118,13 @@ echo form_open('rooms/save_field', array('class' => 'needs-validation', 'id' => 
 					'class' => 'form-control',
 				));
 				?><small class="form-text text-muted">Insira as opções selecionáveis para a lista suspensa aqui; um em cada linha.</small>
-				</div>
+			</div>
 		</div>
 		<?php echo form_error($input_name); ?>
 	</div>
+
+
+
 
 </fieldset>
 

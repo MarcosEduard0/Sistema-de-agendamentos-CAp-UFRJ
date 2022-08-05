@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Authentication extends MY_Controller
 {
@@ -9,7 +9,7 @@ class Authentication extends MY_Controller
 	{
 		parent::__construct();
 
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->lang->load('auth');
 
@@ -18,9 +18,9 @@ class Authentication extends MY_Controller
 
 
 	/**
-	 * LDAP Configuration
-	 *
-	 */
+	* LDAP Configuration
+	*
+	*/
 	public function ldap()
 	{
 		$ldap_available = extension_loaded('ldap');
@@ -44,6 +44,7 @@ class Authentication extends MY_Controller
 
 			$body = $this->session->flashdata('saved');
 			$body .= $this->load->view('columns', $columns, TRUE);
+
 		} else {
 			$body = msgbox('error', 'The PHP LDAP module is not installed or enabled.');
 		}
@@ -99,9 +100,9 @@ class Authentication extends MY_Controller
 
 
 	/**
-	 * Handle submitted form
-	 *
-	 */
+	* Handle submitted form
+	*
+	*/
 	private function save_ldap()
 	{
 		$this->load->library('form_validation');
@@ -155,10 +156,10 @@ class Authentication extends MY_Controller
 				case 'ldap_version':
 				case 'ldap_ignore_cert':
 					$value = (int) $this->input->post($field);
-					break;
+				break;
 			}
 
-			$settings[$field] = $value;
+			$settings[ $field ] = $value;
 		}
 
 		if (DEMO_MODE) {
@@ -171,4 +172,7 @@ class Authentication extends MY_Controller
 
 		redirect('settings/authentication/ldap');
 	}
+
+
+
 }

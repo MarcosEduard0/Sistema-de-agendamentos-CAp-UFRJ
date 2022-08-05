@@ -12,11 +12,13 @@ class Periods_model extends CI_Model
 	{
 		parent::__construct();
 
-		$this->days[1] = 'Segunda-feira';
-		$this->days[2] = 'Terça-feira';
-		$this->days[3] = 'Quarta-feira';
-		$this->days[4] = 'Quinta-feira';
-		$this->days[5] = 'Sexta-feira';
+		$this->load->model('crud_model');
+
+		$this->days[1] = 'Segunda-Feira';
+		$this->days[2] = 'Terça-Feira';
+		$this->days[3] = 'Quarta-Feira';
+		$this->days[4] = 'Quinta-Feira';
+		$this->days[5] = 'Sexta-Feira';
 		$this->days[6] = 'Sábado';
 		$this->days[7] = 'Domingo';
 	}
@@ -33,6 +35,24 @@ class Periods_model extends CI_Model
 			$row = $this->crud_model->Get('periods', 'period_id', $period_id);
 			return $row;
 		}
+	}
+
+
+	public function arrange_by_day_num()
+	{
+		$data = [];
+		$periods = $this->GetBookable();
+
+		foreach ($periods as $period) {
+			foreach ($this->days as $num => $name) {
+				$field = "day_{$num}";
+				if ($period->$field == 1) {
+					$data["{$num}"][] = $period;
+				}
+			}
+		}
+
+		return $data;
 	}
 
 

@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
 class Login extends MY_Controller
 {
 
@@ -8,7 +9,6 @@ class Login extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->require_logged_out();
 	}
 
 
@@ -34,26 +34,26 @@ class Login extends MY_Controller
 		log_message('debug', 'login submit');
 
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('username', 'Usuário', 'required');
-		$this->form_validation->set_rules('password', 'Senha', 'required');
+		$this->form_validation->set_rules('username', 'Username', 'required');
+		$this->form_validation->set_rules('password', 'Password', 'required');
 
-		// Executar validação
+		// Run validation
 		if ($this->form_validation->run() == FALSE) {
-			// A validação falhou, carregue a página de login novamente
+			// Validation failed, load login page again
 			return $this->index();
 		}
 
-		// A validação de preenchimento passou, agora veja se as credenciais estão no banco de dados
-		// Pegar os valores
+		// Form validation for length etc. passed, now see if the credentials are OK in the DB
+		// Post values
 		$username = $this->input->post('username');
 		$password = $this->input->post('password');
 
-		// Agora veja se podemos entrar
+		// Now see if we can login
 		if ($this->userauth->log_in($username, $password)) {
-			// Sucesso! Redirecionar para o painel inicial
+			// Success! Redirect to control panel
 			redirect('');
 		} else {
-			$this->session->set_flashdata('auth', msgbox('error', 'Usuário e/ou senha incorretos.'));
+			$this->session->set_flashdata('auth', msgbox('error', 'Incorrect username and/or password.'));
 			return $this->index();
 		}
 	}

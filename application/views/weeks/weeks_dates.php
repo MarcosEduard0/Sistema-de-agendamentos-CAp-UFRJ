@@ -64,7 +64,7 @@ foreach($mondays as $monday){
 	$input = '<input type="checkbox" name="dates[]" value="'.$monday['date'].'" id="'.$monday['date'].'" '.$checkbox_disabled.' '.$checked.' /> ';
 	echo '<label class="ni" for="'.$monday['date'].'" style="color:'.$fgcol.'">';
 	echo $input;
-	echo utf8_encode(strftime("%d %b %Y", strtotime($monday['date'])));
+	echo date("d M Y", strtotime($monday['date']));
 	echo '</label>';
 	echo '</td>';
 	echo "\n";

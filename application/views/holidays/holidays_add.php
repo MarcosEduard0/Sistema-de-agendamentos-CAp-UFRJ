@@ -4,7 +4,7 @@ if (isset($holiday) && is_object($holiday)) {
 	$holiday_id = set_value('holiday_id', $holiday->holiday_id);
 }
 
-echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate'=> 'true'), array('holiday_id' => $holiday_id) );
+echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate' => 'true'), array('holiday_id' => $holiday_id));
 ?>
 
 <fieldset>
@@ -25,7 +25,7 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 				'tabindex' => tab_index(),
 				'value' => $value,
 				'class' => 'form-control',
-				'required'=> '',
+				'required' => '',
 			));
 			?>
 			<div class="invalid-feedback">Por favor, digite o nome do feriado.</div>
@@ -39,9 +39,9 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 			<?php
 			$field = 'date_start';
 			$default = (isset($holiday)
-						? date('Y-m-d', strtotime($holiday->date_start))
-						: date('Y-m-d')
-					);
+				? date('Y-m-d', strtotime($holiday->date_start))
+				: date('Y-m-d')
+			);
 			$value = set_value($field, $default, FALSE);
 			echo form_input(array(
 				'name' => $field,
@@ -66,9 +66,9 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 			<?php
 			$field = 'date_end';
 			$default = (isset($holiday)
-						? date('Y-m-d', strtotime($holiday->date_end))
-						: date('Y-m-d')
-					);
+				? date('Y-m-d', strtotime($holiday->date_end))
+				: date('Y-m-d')
+			);
 			$value = set_value($field, $default, FALSE);
 			echo form_input(array(
 				'name' => $field,
@@ -81,7 +81,7 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 				'type' => 'date'
 			));
 			?>
-		<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_end', false);" /> -->
+			<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_end', false);" /> -->
 		</div>
 	</div>
 	<?php echo form_error($field) ?>

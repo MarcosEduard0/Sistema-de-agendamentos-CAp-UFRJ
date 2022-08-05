@@ -5,10 +5,15 @@ class General extends MY_Controller
 {
 
 
+	private $tzlist;
+
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
+
+		$this->tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 	}
 
 
@@ -24,9 +29,16 @@ class General extends MY_Controller
 			$this->save_settings();
 		}
 
-		$this->data['title'] = 'Settings';
+
+		$zones = [];
+		foreach ($this->tzlist as $tz) {
+			$zones[$tz] = $tz;
+		}
+		$this->data['timezones'] = $zones;
+
+		$this->data['title'] = 'Configurações';
 		$this->data['showtitle'] = $this->data['title'];
-		$this->data['body'] = $this->load->view('settings', $this->data, TRUE);
+		$this->data['body'] = $this->load->view('settings/general', $this->data, TRUE);
 
 		return $this->render();
 	}
@@ -45,13 +57,15 @@ class General extends MY_Controller
 		$this->load->library('image_lib');
 
 		$this->load->library('form_validation');
+		$this->form_validation->set_rules('validity', 'Validade da conta', 'max_length[3]|numeric');
 		$this->form_validation->set_rules('bia', 'Booking in advance', 'max_length[3]|numeric');
 		$this->form_validation->set_rules('num_max_bookings', 'Maximum number of bookings', 'max_length[3]|numeric');
 		$this->form_validation->set_rules('displaytype', 'Display type', 'required');
 		$this->form_validation->set_rules('d_columns', 'Display columns', 'callback__valid_columns');
-		$this->form_validation->set_rules('date_format_long', 'Long date format', 'required|max_length[15]');
-		$this->form_validation->set_rules('date_format_weekday', 'Weekday date format', 'max_length[15]');
-		$this->form_validation->set_rules('time_format_period', 'Period time format', 'max_length[15]');
+		$this->form_validation->set_rules('timezone', 'Timezone', 'required');
+		$this->form_validation->set_rules('date_format_long', 'Long date format', 'required|max_length[30]');
+		$this->form_validation->set_rules('date_format_weekday', 'Weekday date format', 'max_length[30]');
+		$this->form_validation->set_rules('time_format_period', 'Period time format', 'max_length[30]');
 		$this->form_validation->set_rules('bookings_show_user_single', 'User display (single)', 'is_natural');
 		$this->form_validation->set_rules('bookings_show_user_recurring', 'User display (recurring)', 'is_natural');
 		$this->form_validation->set_rules('login_message_enabled', 'Login message', 'is_natural');
@@ -64,10 +78,12 @@ class General extends MY_Controller
 		}
 
 		$settings = array(
+			'validity' => (int) $this->input->post('validity'),
 			'bia' => (int) $this->input->post('bia'),
 			'num_max_bookings' => (int) $this->input->post('num_max_bookings'),
 			'displaytype' => $this->input->post('displaytype'),
 			'd_columns' => $this->input->post('d_columns'),
+			'timezone' => $this->input->post('timezone'),
 			'date_format_long' => $this->input->post('date_format_long'),
 			'date_format_weekday' => $this->input->post('date_format_weekday'),
 			'time_format_period' => $this->input->post('time_format_period'),
@@ -84,12 +100,12 @@ class General extends MY_Controller
 		// Set default date value if empty
 		$date_format_long = trim($settings['date_format_long']);
 		if (!strlen($date_format_long)) {
-			$settings['date_format_long'] = 'l jS F Y';
+			$settings['date_format_long'] = "EEEE, dd MMMM 'de' y";
 		}
 
 		$this->settings_model->set($settings);
 
-		$this->session->set_flashdata('saved', msgbox('info', 'Settings have been updated.'));
+		$this->session->set_flashdata('saved', msgbox('info', 'As configurações foram atualizadas.'));
 
 		redirect('settings/general');
 	}
@@ -124,7 +140,7 @@ class General extends MY_Controller
 		}
 
 		if ($ret == FALSE) {
-			$this->form_validation->set_message('_valid_columns', 'The column you selected is incompatible with the display type.');
+			$this->form_validation->set_message('_valid_columns', 'A coluna que você selecionou é incompatível com o tipo de exibição.');
 		}
 
 		return $ret;

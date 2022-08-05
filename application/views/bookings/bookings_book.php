@@ -52,7 +52,7 @@
 					}
 					$value = set_value($field, isset($booking) ? $default : '', FALSE);
 					$disabled = 'disabled';
-					if ($this->userauth->is_level(ADMINISTRADOR))
+					if ($this->userauth->is_level(ADMINISTRATOR))
 						$disabled = '';
 
 					echo form_input(array(
@@ -89,7 +89,7 @@
 					$field = 'period_id';
 					$value = set_value($field, isset($booking) ? $booking->period_id : '', FALSE);
 					$disabled = 'disabled';
-					if ($this->userauth->is_level(ADMINISTRADOR))
+					if ($this->userauth->is_level(ADMINISTRATOR))
 						$disabled = '';
 					echo form_dropdown('period_id', $period_options, $value, 'tabindex="' . tab_index() . '"class="form-control"' . $disabled);
 					?>
@@ -114,7 +114,7 @@
 			<?php echo form_error($field) ?>
 
 
-			<?php if ($this->userauth->is_level(ADMINISTRADOR)) : ?>
+			<?php if ($this->userauth->is_level(ADMINISTRATOR)) : ?>
 				<div class="form-group row">
 					<label for="department_id" class="col-sm-2 col-form-label">Departamento:</label>
 					<div class="col-sm-4">
@@ -165,7 +165,7 @@
 
 		</fieldset>
 
-		<?php if ($this->userauth->is_level(ADMINISTRADOR)) : ?>
+		<?php if ($this->userauth->is_level(ADMINISTRATOR)) : ?>
 
 			<fieldset>
 

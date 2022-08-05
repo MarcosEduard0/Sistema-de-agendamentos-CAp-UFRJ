@@ -43,6 +43,9 @@ class Settings_model extends CI_Model
 
 		if (  ! isset($this->_cache[$group])) {
 			$this->_cache[$group] = array();
+		}
+
+		if ( ! isset($this->_cache[$group][$name])) {
 			$this->_cache[$group][$name] = $value;
 		}
 
@@ -85,14 +88,14 @@ class Settings_model extends CI_Model
 
 
 	/**
-	 * Defina um ou mais valores de configuração
+	 * Set one or more settings values
 	 *
 	 */
 	public function set($key, $value = null, $group = 'crbs')
 	{
 		if (is_array($key)) {
 
-			// Definir multi
+			// Set multi
 			//
 
 			if (strlen($value)) {

@@ -2,7 +2,7 @@
 echo $this->session->flashdata('saved');
 
 $iconbar = iconbar(array(
-	array('weeks', 'Semanas', 'school_manage_weeks.png'),
+	array('weeks', 'Weeks', 'school_manage_weeks.png'),
 ));
 
 echo $iconbar;
@@ -13,14 +13,13 @@ echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'sa
 
 <fieldset style="width:50%">
 
-	<legend accesskey="A" tabindex="<?= tab_index() ?>">Ano letivo</legend>
+	<legend accesskey="A" tabindex="<?= tab_index() ?>">Academic year</legend>
 
 	<p>
-		<label for="date_start" class="required">Data inicial:</label>
+		<label for="date_start" class="required">Start date:</label>
 		<?php
 		$field = 'date_start';
-		$value = set_value('date_start', date('Y-m-d', strtotime($academicyear->date_start)), FALSE);
-		//$value = '2009-10-09';
+		$value = set_value('date_start', date('d/m/Y', strtotime($academicyear->date_start)), FALSE);
 		echo form_input(array(
 			'name' => 'date_start',
 			'id' => 'date_start',
@@ -28,19 +27,17 @@ echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'sa
 			'maxlength' => '10',
 			'tabindex' => tab_index(),
 			'value' => $value,
-			'class' => 'form-control2',
-			'type' => 'date'
 		));
 		?>
-		<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_start', false);" /> -->
+		<img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_start', false);" />
 	</p>
 	<?php echo form_error($field); ?>
 
 	<p>
-		<label for="date_end" class="required">Data final:</label>
+		<label for="date_end" class="required">End date:</label>
 		<?php
 		$field = 'date_end';
-		$value = set_value($field, date('Y-m-d', strtotime($academicyear->date_end)), FALSE);
+		$value = set_value($field, date('d/m/Y', strtotime($academicyear->date_end)), FALSE);
 		echo form_input(array(
 			'name' => 'date_end',
 			'id' => 'date_end',
@@ -48,11 +45,9 @@ echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'sa
 			'maxlength' => '10',
 			'tabindex' => tab_index(),
 			'value' => $value,
-			'class' => 'form-control2',
-			'type' => 'date'
 		));
 		?>
-		<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_end', false);" /> -->
+		<img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_end', false);" />
 	</p>
 	<?php echo form_error($field); ?>
 
@@ -62,8 +57,8 @@ echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'sa
 <?php
 
 $this->load->view('partials/submit', array(
-	'submit' => array('Salvar', tab_index()),
-	'cancel' => array('Voltar', tab_index(), 'weeks'),
+	'submit' => array('Save', tab_index()),
+	'cancel' => array('Cancel', tab_index(), 'weeks'),
 ));
 
 echo form_close();

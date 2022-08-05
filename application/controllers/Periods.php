@@ -10,7 +10,7 @@ class Periods extends MY_Controller
 		parent::__construct();
 
 		$this->require_logged_in();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->load->model('crud_model');
 		$this->load->model('periods_model');
@@ -25,7 +25,7 @@ class Periods extends MY_Controller
 		$this->data['periods'] = $this->periods_model->Get();
 		$this->data['days_list'] = $this->periods_model->days;
 
-		$this->data['title'] = 'Horário das Aulas';
+		$this->data['title'] = 'Períodos';
 		$this->data['showtitle'] = $this->data['title'];	// . ' ('.$section.')';
 		$this->data['body'] = $this->load->view('periods/periods_index', $this->data, TRUE);
 
@@ -56,7 +56,7 @@ class Periods extends MY_Controller
 			),
 		);
 
-		$this->data['title'] = 'Novo Periodo';
+		$this->data['title'] = 'Adicionar Período';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('columns', $columns, TRUE);
 
@@ -114,7 +114,7 @@ class Periods extends MY_Controller
 		$this->form_validation->set_rules('day_3', 'Wednesday', 'required|integer');
 		$this->form_validation->set_rules('day_4', 'Thursday', 'required|integer');
 		$this->form_validation->set_rules('day_5', 'Friday', 'required|integer');
-		$this->form_validation->set_rules('day_6', 'Sábado', 'required|integer');
+		$this->form_validation->set_rules('day_6', 'Saturday', 'required|integer');
 		$this->form_validation->set_rules('day_7', 'Sunday', 'required|integer');
 		$this->form_validation->set_rules('time_start', 'Start time', 'required|min_length[4]|max_length[5]|callback__is_valid_time');
 		$this->form_validation->set_rules('time_end', 'End time', 'required|min_length[4]|max_length[5]|callback__is_valid_time|callback__is_after[time_start]');
@@ -142,11 +142,11 @@ class Periods extends MY_Controller
 		if (empty($period_id)) {
 			// No ID, adding new record
 			$period_id = $this->periods_model->Add($period_data);
-			$this->session->set_flashdata('saved', msgbox('info', "{$period_data['name']} foi adicionado."));
+			$this->session->set_flashdata('saved', msgbox('info', "{$period_data['name']} has been added."));
 		} else {
 			// We have an ID, updating existing record
 			$this->periods_model->Edit($period_id, $period_data);
-			$this->session->set_flashdata('saved', msgbox('info', "{$period_data['name']} foi modificado."));
+			$this->session->set_flashdata('saved', msgbox('info', "{$period_data['name']} has been modified."));
 		}
 
 		redirect('periods');
@@ -177,9 +177,9 @@ class Periods extends MY_Controller
 		$this->data['action'] = 'periods/delete';
 		$this->data['id'] = $id;
 		$this->data['cancel'] = 'periods';
-		$this->data['text'] = 'Se você excluir este período, <strong>todas</strong> os agendamentos para este período em todas as salas serão <strong>excluídas permanentemente</strong>.';
+		$this->data['text'] = 'Se você excluir este período, todas os agendamentos para este período em <strong>todas</strong> as salas serão <strong>excluídas permanentemente</strong>.';
 		$row = $this->periods_model->Get($id);
-		$this->data['title'] = 'Delete Period (' . html_escape($row->name) . ')';
+		$this->data['title'] = 'Deletar Período (' . html_escape($row->name) . ')';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('partials/deleteconfirm', $this->data, TRUE);
 		return $this->render();

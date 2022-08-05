@@ -10,7 +10,7 @@ class School extends MY_Controller
 		parent::__construct();
 
 		$this->require_logged_in();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		// Load models etc.
 		$this->load->helper('file');
@@ -127,7 +127,7 @@ class School extends MY_Controller
 
 		$this->settings_model->set($settings);
 
-		$this->session->set_flashdata('saved', msgbox('info', 'Detalhes da escola foram atualizados.'));
+		$this->session->set_flashdata('saved', msgbox('info', 'Os detalhes da escola foram atualizados.'));
 
 		redirect('school');
 	}

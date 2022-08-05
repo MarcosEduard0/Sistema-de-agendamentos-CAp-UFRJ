@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Departments_model extends CI_Model
 {
@@ -12,7 +12,7 @@ class Departments_model extends CI_Model
 	}
 
 
-	function Get($department_id = NULL, $pp = 50, $start = 0)
+	function Get($department_id = NULL, $pp = 10, $start = 0)
 	{
 		if ($department_id == NULL) {
 			return $this->crud_model->Get('departments', NULL, NULL, NULL, 'name asc', $pp, $start);
@@ -45,4 +45,8 @@ class Departments_model extends CI_Model
 		$this->db->where('department_id', $id);
 		return $this->db->delete('departments');
 	}
+
+
+
+
 }

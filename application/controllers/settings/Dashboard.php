@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller
 {
@@ -8,7 +8,7 @@ class Dashboard extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 		redirect('settings/general');
 	}
 
@@ -16,4 +16,7 @@ class Dashboard extends MY_Controller
 	public function index()
 	{
 	}
+
+
+
 }

@@ -15,7 +15,6 @@ class Auth_local
 		$this->CI = &get_instance();
 
 		$this->CI->load->model('users_model');
-		$this->CI->load->model('settings_model');
 
 		if (!empty($config)) {
 			$this->init($config);
@@ -54,11 +53,11 @@ class Auth_local
 
 
 	/**
-	 * Verifique se um determinado nome de usuário e senha são válidos.
+	 * Check to see if a given username and password are valid.
 	 *
 	 * @param string $username
 	 * @param string $password
-	 * @return mixed FALSE em caso de falha ou o objeto usuário do banco de dados em caso de sucesso.
+	 * @return mixed FALSE on failure or DB User row on success.
 	 *
 	 */
 	public function verify($username, $password)
@@ -66,14 +65,14 @@ class Auth_local
 		$username = trim($username);
 
 		if (!strlen($username) || !strlen($password)) {
-			$this->errors[] = 'sem_usuario_ou_sem_senha';
+			$this->errors[] = 'no_username_or_password';
 			return FALSE;
 		}
 
 		$user = $this->CI->users_model->get_by_username($username, FALSE);
 
 		if (!$user) {
-			$this->errors[] = 'usuario_nao_encontrado';
+			$this->errors[] = 'user_not_found';
 			return FALSE;
 		}
 
@@ -93,33 +92,34 @@ class Auth_local
 			}
 		}
 
+
 		if ($user->enabled == 0) {
-			$this->errors[] = 'usuario_nao_habilitado';
+			$this->errors[] = 'user_not_enabled';
 			return FALSE;
 		}
 
-		// Controlador para determinar se a senha deve ser atualizada, se bem-sucedida.
+		// Flag to determine if password should be updated, if successful.
 		$upgrade_password = FALSE;
 
 		$password_hash = $user->password;
 
-		// Verifique o formato de senha antigo
+		// Check for old password format
 		if (substr($password_hash, 0, 5) === 'sha1:') {
-			// o valor da senha do usuário é password_hash () do antigo valor sha1
+			// user password value is password_hash() of old sha1 value
 			$password_hash = substr($password_hash, 5);
 			$upgrade_password = TRUE;
 			$verified = password_verify(sha1($password), $password_hash);
 		} else {
-			// O valor da senha do usuário é a saída direta de password_hash () de sua senha.
+			// user password value is direct output of password_hash() of their password.
 			$verified = password_verify($password, $password_hash);
 		}
 
 		if (!$verified) {
-			$this->errors[] = 'senha_incorreta';
+			$this->errors[] = 'password_incorrect';
 			return FALSE;
 		}
 
-		// Se precisarmos atualizar sua senha para um novo armazenamento sem sha1, faça isso agora
+		// If we need to upgrade their password to new storage without sha1, do it now
 		if ($upgrade_password) {
 			$this->CI->users_model->set_password($user->user_id, $password);
 		}

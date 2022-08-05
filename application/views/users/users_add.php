@@ -72,7 +72,7 @@ echo form_open_multipart('users/save', array('class' => 'needs-validation', 'id'
 			}
 			$field = 'authlevel';
 			$value = set_value($field, isset($user) ? $user->authlevel : '2', FALSE);
-			$options = array('1' => 'Administrador', '2' => 'Professor');
+			$options = array('1' => 'ADMINISTRATOR', '2' => 'Professor');
 			echo form_dropdown(
 				$field,
 				$options,

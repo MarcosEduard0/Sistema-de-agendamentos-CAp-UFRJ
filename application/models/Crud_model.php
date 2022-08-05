@@ -65,11 +65,11 @@ class Crud_model extends CI_Model{
 
 
   function Add($table, $pk, $data){
-		// Execute a consulta para inserir uma linha em branco
+		// Run query to insert blank row
   	$this->db->insert($table, array($pk => NULL) );
-		// Obter id do registro inserido
+		// Get id of inserted record
   	$pk_id = $this->db->insert_id();
-		// Agora chame a função de edição para atualizar os dados reais para esta nova linha agora que temos o ID
+		// Now call the edit function to update the actual data for this new row now we have the ID
   	return $this->Edit($table, $pk, $pk_id, $data);
   }
 
@@ -80,7 +80,7 @@ class Crud_model extends CI_Model{
   function Edit($table, $pk, $pk_id, $data, $school_id = NULL){
   	$this->db->where($pk, $pk_id);
   	$result = $this->db->update($table, $data);
-		// Retornar bool em caso de sucesso
+		// Return bool on success
   	if( $result ){
   		return $pk_id;
   	} else {

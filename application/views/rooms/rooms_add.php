@@ -4,7 +4,7 @@ if (isset($room) && is_object($room)) {
 	$room_id = set_value('room_id', $room->room_id);
 }
 
-echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id' => 'rooms_add', 'novalidate'=> 'true'), array('room_id' => $room_id) );
+echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id' => 'rooms_add', 'novalidate' => 'true'), array('room_id' => $room_id));
 
 ?>
 
@@ -61,14 +61,14 @@ echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id'
 			$userlist = array('' => '(Nenhum)');
 			foreach ($users as $user) {
 				$label = empty($user->displayname) ? $user->username : $user->displayname;
-				$userlist[ $user->user_id ] = html_escape($label);
+				$userlist[$user->user_id] = html_escape($label);
 			}
 			$field = 'user_id';
 			$value = set_value($field, isset($room) ? $room->user_id : '', FALSE);
-			echo form_dropdown($field, $userlist, $value, 'tabindex="'.tab_index().'" class= "form-control"');
+			echo form_dropdown($field, $userlist, $value, 'tabindex="' . tab_index() . '" class= "form-control"');
 			?>
 		</div>
-		</div>
+	</div>
 	<?php echo form_error($field); ?>
 
 	<div class="form-group row">
@@ -94,20 +94,20 @@ echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id'
 	<div class="form-group row">
 		<label for="bookable" class="col-sm-2 col-form-label">Agendável</label>
 		<div class="col-sm-10" style="padding-top: 8px;">
-		<?php
-		$field = 'bookable';
-		$value = isset($room) ? $room->bookable : '1';
-		$checked = set_checkbox($field, '1', $value == '1');
-		echo form_hidden($field, '0');
-		echo form_checkbox(array(
-			'name' => $field,
-			'id' => $field,
-			'value' => '1',
-			'tabindex' => tab_index(),
-			'checked' => $checked,
-		));
-		?>
-		<small class="form-text text-muted">Marque esta caixa para permitir que os agendamentos sejam feitos nesta sala.</small>
+			<?php
+			$field = 'bookable';
+			$value = isset($room) ? $room->bookable : '1';
+			$checked = set_checkbox($field, '1', $value == '1');
+			echo form_hidden($field, '0');
+			echo form_checkbox(array(
+				'name' => $field,
+				'id' => $field,
+				'value' => '1',
+				'tabindex' => tab_index(),
+				'checked' => $checked,
+			));
+			?>
+			<small class="form-text text-muted">Marque esta caixa para permitir que os agendamentos sejam feitos nesta sala.</small>
 		</div>
 	</div>
 
@@ -123,20 +123,20 @@ echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id'
 	<div class="form-group row">
 		<label class="col-sm-2 col-form-label">Foto atual</label>
 		<div class="col-sm-4" style="padding-top: 8px;">
-		<?php
-		if (isset($room) && isset($room->photo) && ! empty($room->photo)) {
-			$path = "uploads/{$room->photo}";
-			if (file_exists(FCPATH . $path)) {
-				$url = base_url($path);
-				$img = img($path, FALSE, "width='200' style='width:200px;height:auto;max-width:200px;padding:1px;border:1px solid #ccc'");
-				echo anchor($url, $img);
+			<?php
+			if (isset($room) && isset($room->photo) && !empty($room->photo)) {
+				$path = "uploads/{$room->photo}";
+				if (file_exists(FCPATH . $path)) {
+					$url = base_url($path);
+					$img = img($path, FALSE, "width='200' style='width:200px;height:auto;max-width:200px;padding:1px;border:1px solid #ccc'");
+					echo anchor($url, $img);
+				} else {
+					echo '<em>Nenhuma</em>';
+				}
 			} else {
 				echo '<em>Nenhuma</em>';
 			}
-		} else {
-			echo '<em>Nenhuma</em>';
-		}
-		?>
+			?>
 		</div>
 	</div>
 
@@ -149,112 +149,110 @@ echo form_open_multipart('rooms/save', array('class' => 'needs-validation', 'id'
 				'id' => 'userfile',
 				'size' => '30',
 				'maxlength' => '255',
-				'tabindex' =>tab_index(),
+				'tabindex' => tab_index(),
 				'value' => '',
 			));
 			?>
-		<small class="form-text text-muted">Tamanho máximo do arquivo <strong><?php echo $max_size_human ?></strong>.</small>
-		<small class="form-text text-muted">Carregar uma nova foto irá <strong>substituir</strong> a atual.</small>
+			<small class="form-text text-muted">Tamanho máximo do arquivo <strong><?php echo $max_size_human ?></strong>.</small>
+			<small class="form-text text-muted">Carregar uma nova foto irá <strong>substituir</strong> a atual.</small>
 		</div>
 	</div>
 
 	<?php
-	if ($this->session->flashdata('image_error') != '' ) {
+	if ($this->session->flashdata('image_error') != '') {
 		$err = $this->session->flashdata('image_error');
 		echo "<p class='hint error'><span>{$err}</span></p>";
 	}
 	?>
 
-	<?php if (isset($room) && ! empty($room->photo)): ?>
+	<?php if (isset($room) && !empty($room->photo)) : ?>
 
 		<div class="form-group row">
-		<label class="col-sm-2 col-form-label"  for="photo_delete">Deletar logotipo?</label>
-		<div class="col-sm-10" style="padding-top: 8px;">
-			<?php
+			<label class="col-sm-2 col-form-label" for="photo_delete">Deletar logotipo?</label>
+			<div class="col-sm-10" style="padding-top: 8px;">
+				<?php
 				echo form_hidden('photo_delete', '0');
 				echo '<div class="custom-control custom-switch">';
-				echo '<input name="photo_delete" type="checkbox" tabindex="'.tab_index().'" value = "1" class="custom-control-input" id="photo_delete">';
+				echo '<input name="photo_delete" type="checkbox" tabindex="' . tab_index() . '" value = "1" class="custom-control-input" id="photo_delete">';
 				?>
-				<label class="custom-control-label" for="photo_delete" ></label>
-				</div>
-		<small class="form-text text-muted">Ative esta caixa para <strong>excluir</strong> o logotipo atual. Se você estiver enviando um novo logotipo, isso será feito automaticamente.</small>		
+				<label class="custom-control-label" for="photo_delete"></label>
+			</div>
+			<small class="form-text text-muted">Ative esta caixa para <strong>excluir</strong> o logotipo atual. Se você estiver enviando um novo logotipo, isso será feito automaticamente.</small>
 		</div>
-	</div>
+		</div>
 
-	
+
 
 	<?php endif; ?>
 
 </fieldset>
 
 
-<?php if (isset($fields) && is_array($fields)): ?>
+<?php if (isset($fields) && is_array($fields)) : ?>
 
-<fieldset>
+	<fieldset>
 
-	<legend accesskey="F" tabindex="<?php echo tab_index() ?>">Campos</legend>
+		<legend accesskey="F" tabindex="<?php echo tab_index() ?>">Campos</legend>
 
-	<?php
+		<?php
 
-	foreach ($fields as $field) {
+		foreach ($fields as $field) {
 
-		echo '<div class="form-group row">';
-		echo '<label class="col-sm-2 col-form-label">' . $field->name . '</label>';
-		echo '<div class="col-sm-5" style="padding-top: 7px;">';
+			echo '<div class="form-group row">';
+			echo '<label class="col-sm-2 col-form-label">' . $field->name . '</label>';
+			echo '<div class="col-sm-5" style="padding-top: 7px;">';
 
-		switch ($field->type) {
+			switch ($field->type) {
 
-			case Rooms_model::FIELD_TEXT:
+				case Rooms_model::FIELD_TEXT:
 
-				$input = "f{$field->field_id}";
-				$value = set_value($input, element($field->field_id, $fieldvalues), FALSE);
-				echo form_input(array(
-					'name' => $input,
-					'id' => $input,
-					'size' => '30',
-					'maxlength' => '255',
-					'tabindex' => tab_index(),
-					'value' => $value,
-					'class' => 'form-control',
-				));
+					$input = "f{$field->field_id}";
+					$value = set_value($input, element($field->field_id, $fieldvalues), FALSE);
+					echo form_input(array(
+						'name' => $input,
+						'id' => $input,
+						'size' => '30',
+						'maxlength' => '255',
+						'tabindex' => tab_index(),
+						'value' => $value,
+						'class' => 'form-control',
+					));
 
-			break;
-
-
-			case Rooms_model::FIELD_SELECT:
-
-				$input = "f{$field->field_id}";
-				$value = set_value($input, element($field->field_id, $fieldvalues), FALSE);
-				$options = $field->options;
-				$opts = array();
-				foreach ($options as $option) {
-					$opts[$option->option_id] = html_escape($option->value);
-				}
-				echo form_dropdown($input, $opts, $value, 'tabindex="'.tab_index().'"');
-
-			break;
+					break;
 
 
-			case Rooms_model::FIELD_CHECKBOX:
+				case Rooms_model::FIELD_SELECT:
 
-				$input = "f{$field->field_id}";
-				$value = set_checkbox($input, '1', element($field->field_id, $fieldvalues) == '1');
-				echo form_hidden($input, '0');
-				echo '<div class="custom-control custom-switch">';
-				echo '<input name="'.$input.'" type="checkbox" tabindex="'.tab_index().'" value = "1" class="custom-control-input" id="'.$input.'" '.$value.'>';
-				echo "<label for='{$input}' class='custom-control-label'></label></div>";
+					$input = "f{$field->field_id}";
+					$value = set_value($input, element($field->field_id, $fieldvalues), FALSE);
+					$options = $field->options;
+					$opts = array();
+					foreach ($options as $option) {
+						$opts[$option->option_id] = html_escape($option->value);
+					}
+					echo form_dropdown($input, $opts, $value, 'tabindex="' . tab_index() . '"');
 
-			break;
+					break;
 
+
+				case Rooms_model::FIELD_CHECKBOX:
+
+					$input = "f{$field->field_id}";
+					$value = set_checkbox($input, '1', element($field->field_id, $fieldvalues) == '1');
+					echo form_hidden($input, '0');
+					echo '<div class="custom-control custom-switch">';
+					echo '<input name="' . $input . '" type="checkbox" tabindex="' . tab_index() . '" value = "1" class="custom-control-input" id="' . $input . '" ' . $value . '>';
+					echo "<label for='{$input}' class='custom-control-label'></label></div>";
+
+					break;
+			}
+			echo '</div>';
+			echo '</div>';
 		}
-		echo '</div>';
-		echo '</div>';
 
-	}
+		?>
 
-	?>
-
-</fieldset>
+	</fieldset>
 
 <?php endif; ?>
 

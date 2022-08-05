@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller
 {
@@ -9,42 +9,42 @@ class Dashboard extends MY_Controller
 	{
 		parent::__construct();
 		$this->require_logged_in(FALSE);
-
-
-		$this->load->model('bookings_model');
-		$this->load->model('users_model');
 	}
 
 
 	/**
-	 * Dashboard
-	 *
-	 */
+	* Dashboard
+	*
+	*/
 	public function index()
 	{
+		if ($this->userauth->is_level(ADMINISTRATOR)) {
+			redirect('setup');
+		}
+
+		$this->load->model('bookings_model');
+		$this->load->model('users_model');
 
 		// Get User ID
 		$user_id = $this->userauth->user->user_id;
 
-		// Obter agendamentos de um sala, se este usuário possuir um
-		$this->data['myroom'] = $this->bookings_model->ByRoomOwner($user_id);
-		// Obtenha todas os agendamentos feitos por este usuário (apenas as da equipe)
-		$this->data['mybookings'] = $this->bookings_model->ByUser($user_id);
-		// Obter total
-		$this->data['total'] = $this->bookings_model->TotalNum($user_id);
+		// Get bookings for a room if this user owns one
+		$this->data['room_bookings'] = $this->bookings_model->ByRoomOwner($user_id);
+		// Get all bookings made by this user (only staff ones)
+		$this->data['user_bookings'] = $this->bookings_model->ByUser($user_id);
+		// Get totals
+		$this->data['totals'] = $this->bookings_model->TotalNum($user_id);
 
-
-		// $this->data['showtitle'] = 'Início';
-		$this->data['title'] = setting('name');
+		$this->data['title'] = 'Dashboard';
+		$this->data['showtitle'] = '';	//$this->data['title'];
 
 		$this->data['body'] = '';
-
 		$this->data['body'] .= $this->session->flashdata('auth');
 		$this->data['body'] .= $this->load->view('dashboard/index', $this->data, TRUE);
 
-
-
-
 		return $this->render();
 	}
+
+
+
 }

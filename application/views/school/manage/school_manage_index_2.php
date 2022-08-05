@@ -29,7 +29,7 @@
 <h5>
 	<a href="<?php echo site_url('profile') ?>">
 		<?php
-		if ($this->userauth->is_level(ADMINISTRADOR)) {
+		if ($this->userauth->is_level(ADMINISTRATOR)) {
 			$icon = 'user_administrator.png';
 		} else {
 			$icon = 'user_teacher.png';

@@ -1,3 +1,7 @@
+<?php
+$global_menu = $this->menu_model->global();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -73,12 +77,15 @@
 							</li>&nbsp&nbsp
 						<?php endif; ?>
 						<!-- Começo do Dropdown Perfil / Logout  -->
+
 						<?php if ($this->userauth->logged_in()) :
-							$output = html_escape(strlen($this->userauth->user->displayname) > 1 ? $this->userauth->user->displayname : $this->userauth->user->firstname);
+							$label = strlen($this->userauth->user->displayname) > 1
+								? $this->userauth->user->displayname
+								: $this->userauth->user->username;
 						?>
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="<?php echo $menu[3]['class'] ?>"></i>&nbsp<?php echo $output ?>&nbsp</a>
+									<i class="<?php echo $menu[3]['class'] ?>"></i>&nbsp<?= $label ?>&nbsp</a>
 								<div class="dropdown-menu">
 									<a class="dropdown-item" href="<?php echo $menu[2]['href'] ?>"><i class="fa fa-pencil fa-fw"></i> <?php echo $menu[2]['title'] ?></a>
 									<a class="dropdown-item" href="<?php echo $menu[3]['href'] ?>"><i class="fa fa-sign-out"></i> <?php echo $menu[3]['title'] ?></a>

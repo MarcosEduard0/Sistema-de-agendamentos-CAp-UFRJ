@@ -12,7 +12,7 @@ class Users extends MY_Controller
 		parent::__construct();
 
 		$this->require_logged_in();
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->load->model('crud_model');
 		$this->load->model('users_model');
@@ -27,18 +27,30 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Lista de contas de usuário
+	 * User account listing
 	 *
 	 */
 	function index($page = NULL)
 	{
-		// Limpe os arquivos relacionados à importação, se necessário
+		// Cleanup import-related files if necessary
 		$this->cleanup_import();
+
+		$pp = 25;
+
+		$q = $this->input->get('q');
+
+		if (strlen($q)) {
+			$users = $this->users_model->search($q);
+			$user_count = $this->users_model->search($q, 'count');
+		} else {
+			$users = $this->users_model->Get(NULL, $pp, $page);
+			$user_count = $this->crud_model->Count('users');
+		}
 
 		$pagination_config = array(
 			'base_url' => site_url('users/index'),
-			'total_rows' => $this->crud_model->Count('users'),
-			'per_page' => 50,
+			'total_rows' => $user_count,
+			'per_page' => $pp,
 			'full_tag_open' => '<p class="pagination">',
 			'full_tag_close' => '</p>',
 		);
@@ -47,27 +59,27 @@ class Users extends MY_Controller
 		$this->pagination->initialize($pagination_config);
 
 		$this->data['pagelinks'] = $this->pagination->create_links();
-		$this->data['users'] = $this->users_model->Get(NULL, $pagination_config['per_page'], $page);
 
-		$this->data['title'] = 'Painel de Usuários';
+		$this->data['users'] = $users;
+		$this->data['title'] = 'Gerenciar Usuários';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('users/users_index', $this->data, TRUE);
 
-		return $this->render();
+		return up_target() ? $this->render_up() : $this->render();
 	}
 
 
 
 
 	/**
-	 * Adicionar um novo usuário
+	 * Add a new user
 	 *
 	 */
 	function add()
 	{
 		$this->data['departments'] = $this->departments_model->Get(NULL, NULL, NULL);
 
-		$this->data['title'] = 'Novo Usuário';
+		$this->data['title'] = 'Adicionar Usuário';
 		$this->data['showtitle'] = $this->data['title'];
 
 		$columns = array(
@@ -90,7 +102,7 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Editar conta de usuário
+	 * Edit user account
 	 *
 	 */
 	function edit($id = NULL)
@@ -127,7 +139,7 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Salvar detalhes do usuário
+	 * Save user details
 	 *
 	 */
 	function save()
@@ -137,32 +149,34 @@ class Users extends MY_Controller
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('user_id', 'ID', 'integer');
-
-		$this->form_validation->set_rules('authlevel', 'Tipo', 'required|integer');
-		$this->form_validation->set_rules('enabled', 'Habilitado', 'required|integer');
-		$this->form_validation->set_rules('email', 'Email', 'valid_email|max_length[255]');
+		$this->form_validation->set_rules('username', 'Username', 'required|max_length[32]|regex_match[/^[A-Za-z0-9-_.@]+$/]');
+		$this->form_validation->set_rules('authlevel', 'Type', 'required|integer');
+		$this->form_validation->set_rules('enabled', 'Enabled', 'required|integer');
+		$this->form_validation->set_rules('email', 'Email address', 'valid_email|max_length[255]');
 
 		if (empty($user_id)) {
-			$this->form_validation->set_rules('username', 'Usuário', 'required|max_length[32]|regex_match[/^[A-Za-z0-9-_.@]+$/]|is_unique[users.username]');
-			$this->form_validation->set_rules('password1', 'Senha', 'trim|required|min_length[6]|matches[password2]');
-			$this->form_validation->set_rules('password2', 'Senha (novamente)', 'trim|min_length[6]');
+			$this->form_validation->set_rules('password1', 'Password', 'trim|required');
+			$this->form_validation->set_rules('password2', 'Password (confirm)', 'trim|matches[password1]');
 		} else {
-			$this->form_validation->set_rules('username', 'Usuário', 'required|max_length[32]|regex_match[/^[A-Za-z0-9-_.@]+$/]');
 			if ($this->input->post('password1')) {
-				$this->form_validation->set_rules('password1', 'Senha', 'trim|min_length[6]|matches[password2]');
-				$this->form_validation->set_rules('password2', 'Senha (novamente)', 'trim|min_length[6]');
+				$this->form_validation->set_rules('password1', 'Password', 'trim');
+				$this->form_validation->set_rules('password2', 'Password (confirm)', 'trim|matches[password1]');
 			}
 		}
 
-		$this->form_validation->set_rules('firstname', 'Nome', 'max_length[20]');
-		$this->form_validation->set_rules('lastname', 'Sobrenome', 'max_length[20]');
-		$this->form_validation->set_rules('displayname', 'Nome Social', 'max_length[20]');
-		$this->form_validation->set_rules('department_id', 'Departamento', 'integer');
-		$this->form_validation->set_rules('ext', 'telefone', 'max_length[15]');
+		$this->form_validation->set_rules('firstname', 'First name', 'max_length[20]');
+		$this->form_validation->set_rules('lastname', 'Last name', 'max_length[20]');
+		$this->form_validation->set_rules('displayname', 'Display name', 'max_length[20]');
+		$this->form_validation->set_rules('department_id', 'Department', 'integer');
+		$this->form_validation->set_rules('ext', 'Extension', 'max_length[10]');
 
 		if ($this->form_validation->run() == FALSE) {
 			return (empty($user_id) ? $this->add() : $this->edit($user_id));
 		}
+
+		$department_id = $this->input->post('department_id')
+			? $this->input->post('department_id')
+			: NULL;
 
 		$user_data = array(
 			'username' => $this->input->post('username'),
@@ -172,9 +186,8 @@ class Users extends MY_Controller
 			'firstname' => $this->input->post('firstname'),
 			'lastname' => $this->input->post('lastname'),
 			'displayname' => $this->input->post('displayname'),
-			'department_id' => $this->input->post('department_id'),
+			'department_id' => $department_id,
 			'ext' => $this->input->post('ext'),
-			'created' => date("Y-m-d H:i:s"),
 		);
 
 		if ($this->input->post('password1') && $this->input->post('password2')) {
@@ -186,15 +199,8 @@ class Users extends MY_Controller
 			$user_id = $this->users_model->Add($user_data);
 
 			if ($user_id) {
-				// if($user_id == "username_exists"){
-				// 	$flashmsg = msgbox('error', 'Usuário já em uso.');
-				// 	$this->session->set_flashdata('saved', $flashmsg);
-				// 	redirect('users/add');
-				// }
-				// else{
 				$line = sprintf($this->lang->line('crbs_action_added'), $user_data['username']);
 				$flashmsg = msgbox('info', $line);
-				// }
 			} else {
 				$line = sprintf($this->lang->line('crbs_action_dberror'), 'adding');
 				$flashmsg = msgbox('error', $line);
@@ -219,7 +225,7 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Deletar um usuário
+	 * Delete a user
 	 *
 	 */
 	function delete($id = NULL)
@@ -240,7 +246,7 @@ class Users extends MY_Controller
 		$this->data['action'] = 'users/delete';
 		$this->data['id'] = $id;
 		$this->data['cancel'] = 'users';
-		$this->data['text'] = 'Se você excluir este usuário, todas as suas reservas anteriores e futuras também serão excluídas e os quartos não serão mais propriedade deles.';
+		$this->data['text'] = 'Se você excluir este usuário, todas os seus agendamentos anteriores e futuros também serão excluídas, e suas salas não serão mais de sua propriedade.';
 
 		$row = $this->users_model->Get($id);
 
@@ -255,8 +261,8 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Primeira página de importação.
-	 * Se GET, mostra o formulário. Se for POST, lidar com upload e importação de CSV.
+	 * First page of import.
+	 * If GET, show the form. If POST, handle CSV upload + import.
 	 *
 	 */
 	public function import()
@@ -291,10 +297,10 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Mostra os resultados da importação.
+	 * Show the results of the import.
 	 *
-	 * Os resultados são armazenados em um arquivo "temporário", o nome do arquivo
-	 * do qual é armazenado na sessão.
+	 * The results are stored in a temporary file, the filename
+	 * of which is stored in the session.
 	 *
 	 */
 	public function import_results()
@@ -312,17 +318,15 @@ class Users extends MY_Controller
 			return redirect('users/import');
 		}
 
-
-
 		$raw = @file_get_contents(FCPATH . "local/{$filename}");
 		$result = json_decode($raw);
 
 		$this->data['result'] = $result;
 
-		$this->data['title'] = 'Importar Usuários';
+		$this->data['title'] = 'Usuários Importados';
 		$this->data['showtitle'] = $this->data['title'];
 		$this->data['body'] = $this->load->view('users/import/stage2', $this->data, TRUE);
-		@unlink(FCPATH . "local/{$filename}"); //Apaga o arquivo dataFile.
+
 		return $this->render();
 	}
 
@@ -330,8 +334,8 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Quando o formulário CSV é enviado, este é chamado para lidar com o arquivo
-	 * e processar as linhas.
+	 * When the CSV form is submitted, this is called to handle the file
+	 * and process the lines.
 	 *
 	 */
 	private function process_import()
@@ -358,7 +362,7 @@ class Users extends MY_Controller
 
 		$this->load->library('upload', $upload_config);
 
-		// Valores padrão fornecidos no formulário
+		// Default values supplied in form
 		$defaults = array(
 			'password' => $this->input->post('password'),
 			'authlevel' => $this->input->post('authlevel'),
@@ -377,31 +381,26 @@ class Users extends MY_Controller
 		$results = array();
 		$handle = fopen($file_path, 'r');
 		$line = 0;
-		$i = 0;
-		// Analisar arquivo CSV
+
+		// Parse CSV file
 		while (($row = fgetcsv($handle, filesize($file_path), ',')) !== FALSE) {
 
-			if ($row[0] == 'username' || $row[0] == 'login') {
+			if ($row[0] == 'username') {
 				$line++;
 				continue;
 			}
-			if ($row[0] == 'Carimbo de data/hora') {
-				$i++;
-				$line++;
-				continue;
-			}
+
 			$user = array(
-				'username' => trim($row[$i + 0]),
-				'firstname' => trim($row[$i + 1]),
-				'lastname' => trim($row[$i + 2]),
-				'email' => trim($row[$i + 3]),
-				'password' => trim($row[$i + 4]),
+				'username' => trim($row[0]),
+				'firstname' => trim($row[1]),
+				'lastname' => trim($row[2]),
+				'email' => trim($row[3]),
+				'password' => trim($row[4]),
 				'authlevel' => $defaults['authlevel'],
 				'enabled' => $defaults['enabled'],
 				'department_id' => NULL,
 				'ext' => NULL,
-				'displayname' => trim("{$row[$i + 1]} {$row[$i + 2]}"),
-				'created' => date("Y-m-d H:i:s"),
+				'displayname' => trim("{$row[1]} {$row[2]}"),
 			);
 
 			if (empty($user['password'])) {
@@ -419,25 +418,21 @@ class Users extends MY_Controller
 			$line++;
 		}
 
-		// Concluir com CSV
+		// Finish with CSV
 		fclose($handle);
 		@unlink($file_path);
 
-		// Grave os resultados no arquivo temporário
+		// Write results to temp file
 		$data = json_encode($results);
 		$res_filename = "." . random_string('alnum', 25);
+		write_file(FCPATH . "local/{$res_filename}", $data);
 
-		$dataFile = fopen(FCPATH . "local/{$res_filename}", "w");
-		fwrite($dataFile, $data);
-		fclose($dataFile);
-
-		write_file(FCPATH . "local/{$res_filename}", $data); //PROBLEMA NA HORA DE ESCREVER O ARQUIVO TIME OUT
-
-		// Consulte o arquivo na sessão para a próxima página a recuperar.
+		// Reference the file in the session for the next page to retrieve.
 		$_SESSION['import_results'] = $res_filename;
 
 		return redirect('users/import_results');
 	}
+
 
 	private function validate_import_user($user = array())
 	{
@@ -482,9 +477,9 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Adicionar uma linha de usuário do arquivo CSV importado
+	 * Add a user row from the imported CSV file
 	 *
-	 * @return  string		Descrição do status de adição de determinado usuário
+	 * @return  string		Description of the status of adding the given user
 	 *
 	 */
 	private function add_user($data = array())
@@ -510,7 +505,7 @@ class Users extends MY_Controller
 		$res = $this->users_model->Add($data);
 
 		if ($res) {
-			return 'Success';
+			return 'success';
 		} else {
 			return 'db_error';
 		}
@@ -520,7 +515,7 @@ class Users extends MY_Controller
 
 
 	/**
-	 * Se houver um arquivo de resultados na sessão, remova-o e remova a chave.
+	 * If there is a results file in the session, remove it, and unset the key.
 	 *
 	 */
 	private function cleanup_import()

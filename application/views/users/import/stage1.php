@@ -59,12 +59,12 @@ echo form_hidden('action', 'import');
 			<label class="col-sm-3 col-form-label" style="margin-left: 0px" for="authlevel">Tipo</label>
 			<div class="col-sm-8">
 				<?php
-				$data = array('1' => 'Administrador', '2' => 'Professor');
+				$data = array('1' => 'ADMINISTRATOR', '2' => 'Professor');
 				echo form_dropdown(
 					'authlevel',
 					$data,
 					'2',
-					' id="authlevel" tabindex="' . tab_index() . '" class="form-control2"'
+					' id="authlevel" tabindex="' . tab_index() . '" class="form-control"'
 				);
 				?>
 				<div class="invalid-feedback">Por favor, preencha este campo.</div>

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Rooms_model extends CI_Model
 {
@@ -8,6 +8,9 @@ class Rooms_model extends CI_Model
 	const FIELD_CHECKBOX = 'CHECKBOX';
 	const FIELD_SELECT = 'SELECT';
 	const FIELD_TEXT = 'TEXT';
+
+
+	protected $table = 'rooms';
 
 
 	public $options = array();
@@ -25,6 +28,78 @@ class Rooms_model extends CI_Model
 	}
 
 
+	/**
+	 * Get list of bookable rooms based on user's permissions.
+	 *
+	 * "Bookable" where:
+	 * - Room property "can be booked" = yes
+	 * - User has permission via Access Control entries.
+	 *
+	 */
+	public function get_bookable_rooms($for_user_id = NULL, $room_id = NULL)
+	{
+		$out = [];
+
+		$for_user_id = (int) $for_user_id;
+
+		$this->db->reset_query();
+
+		$this->db->select('rooms.*');
+		$this->db->select([
+			'owner.user_id AS owner__user_id',
+			'owner.username AS owner__username',
+			'owner.displayname AS owner__displayname'
+		], FALSE);
+
+		$this->db->from($this->table);
+		$this->db->join('users AS owner', 'user_id', 'LEFT');
+		$this->db->join('users AS actor', sprintf('actor.user_id = %d', $for_user_id), 'INNER');
+
+		$permission = Access_control_model::ACCESS_VIEW;
+		$subquery = $this->access_control_model->get_rooms_subquery($for_user_id, $permission);
+		$this->db->join("({$subquery}) accessible_rooms", 'rooms.room_id = accessible_rooms.target_id', 'LEFT');
+
+		$this->db->where([
+			'bookable' => 1,
+		]);
+
+		if (strlen($room_id)) {
+			$this->db->where([
+				'rooms.room_id' => (int) $room_id,
+			]);
+		}
+
+		$this->db->group_start()
+			->where(['actor.authlevel' => ADMINISTRATOR])
+			->or_where('accessible_rooms.target_id IS NOT NULL')
+			->group_end();
+
+		$this->db->order_by('name ASC');
+		$this->db->group_by('room_id');
+
+		$query = $this->db->get();
+
+		// Return row for specific room
+		//
+		if (strlen($room_id)) {
+			if ($query->num_rows() == 0) return FALSE;
+			return nest_object_keys($query->row());
+		}
+
+		// Return for all rooms
+		//
+
+		if ($query->num_rows() == 0) return $out;
+
+		$result = $query->result();
+		foreach ($result as &$row) {
+			$out[$row->room_id] = nest_object_keys($row);
+		}
+
+		return $out;
+	}
+
+
 
 
 	/**
@@ -37,9 +112,9 @@ class Rooms_model extends CI_Model
 	{
 		$this->db->select(
 			'rooms.*,'
-			.'users.user_id,'
-			.'users.username,'
-			.'users.displayname'
+				. 'users.user_id,'
+				. 'users.username,'
+				. 'users.displayname'
 		);
 		$this->db->from('rooms');
 		$this->db->join('users', 'users.user_id = rooms.user_id', 'left');
@@ -68,8 +143,8 @@ class Rooms_model extends CI_Model
 
 	public function room_info($room)
 	{
-		if ( ! is_object($room)) {
-			$room = $this->Get( (int) $room);
+		if (!is_object($room)) {
+			$room = $this->Get((int) $room);
 		}
 
 		$fields = $this->GetFields();
@@ -80,19 +155,19 @@ class Rooms_model extends CI_Model
 		if ($room->location) {
 			$info[] = [
 				'name' => 'location',
-				'label' => 'Localização',
+				'label' => 'Location',
 				'value' => html_escape($room->location),
 			];
 		}
 
 		// User
-		if ($room->displayname == '' ) {
+		if ($room->displayname == '') {
 			$room->displayname = $room->username;
 		}
 		if ($room->displayname) {
 			$info[] = [
 				'name' => 'teacher',
-				'label' => 'Professor',
+				'label' => 'Teacher',
 				'value' => html_escape($room->displayname),
 			];
 		}
@@ -100,7 +175,7 @@ class Rooms_model extends CI_Model
 		if ($room->notes) {
 			$info[] = [
 				'name' => 'notes',
-				'label' => 'Descrição',
+				'label' => 'Notes',
 				'value' => html_escape($room->notes),
 			];
 		}
@@ -116,19 +191,19 @@ class Rooms_model extends CI_Model
 			switch ($field->type) {
 				case 'TEXT':
 					$field_value = html_escape($field_values[$field->field_id]);
-				break;
+					break;
 
 				case 'CHECKBOX':
 					$val = boolval($field_values[$field->field_id]);
 					if ($val) {
 						$img_src = base_url('assets/images/ui/enabled.png');
-						$alt = 'Sim';
+						$alt = 'Yes';
 					} else {
 						$img_src = base_url('assets/images/ui/no.png');
-						$alt = 'Não';
+						$alt = 'No';
 					}
 					$field_value = "<img src='{$img_src}' alt='{$alt}' up-tooltip='{$alt}' width='16' height='16'>";
-				break;
+					break;
 
 				case 'SELECT':
 					foreach ($field->options as $option) {
@@ -137,7 +212,7 @@ class Rooms_model extends CI_Model
 							break;
 						}
 					}
-				break;
+					break;
 			}
 
 			$info[] = [
@@ -145,7 +220,6 @@ class Rooms_model extends CI_Model
 				'label' => $field->name,
 				'value' => $field_value,
 			];
-
 		}
 
 		return $info;
@@ -267,7 +341,7 @@ class Rooms_model extends CI_Model
 		$this->db->where('room_id', $room_id);
 		$result = $this->db->update('rooms', $data);
 		// Return bool on success
-		if ($result){
+		if ($result) {
 			return true;
 		} else {
 			return false;
@@ -346,7 +420,6 @@ class Rooms_model extends CI_Model
 				// None
 				return FALSE;
 			}
-
 		} else {
 
 			// Getting all
@@ -416,7 +489,6 @@ class Rooms_model extends CI_Model
 					'value' => $value,
 				));
 			}
-
 		}
 
 		return ($result ? TRUE : FALSE);
@@ -518,8 +590,4 @@ class Rooms_model extends CI_Model
 			return array();
 		}
 	}
-
-
-
-
 }

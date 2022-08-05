@@ -10,7 +10,7 @@ $menu[$i]['href'] = site_url('bookings');
 
 $i++;
 $menu[$i]['text'] = 'Meu Perfil';
-$menu[$i]['icon'] = ($this->userauth->is_level(ADMINISTRADOR)) ? 'user_ADMINISTRADOR.png' : 'user_teacher.png';
+$menu[$i]['icon'] = ($this->userauth->is_level(ADMINISTRATOR)) ? 'user_ADMINISTRATOR.png' : 'user_teacher.png';
 $menu[$i]['href'] = site_url('profile');
 
 $i++;
@@ -21,7 +21,7 @@ $menu[$i]['href'] = '';
 
 
 
-// Menu items for ADMINISTRADORs
+// Menu items for ADMINISTRATORs
 
 $i = 0;
 $school[$i]['text'] = 'Detalhes da Escola';
@@ -92,7 +92,7 @@ dotable($menu);
 
 
 // Check if user is admin
-if ($this->userauth->is_level(ADMINISTRADOR)) {
+if ($this->userauth->is_level(ADMINISTRATOR)) {
 	echo '<h2>Configuração da Escola</h2>';
 	dotable($school);
 	echo '<h2>Administração</h2>';
@@ -102,27 +102,33 @@ if ($this->userauth->is_level(ADMINISTRADOR)) {
 
 
 
-function dotable($array){
+function dotable($array)
+{
 
 	echo '<table width="100%" cellpadding="0" cellspacing="0" border="0">';
 	echo '<tbody>';
 	$row = 0;
 
-	foreach($array as $link){
-		if($row == 0){ echo '<tr>'; }
+	foreach ($array as $link) {
+		if ($row == 0) {
+			echo '<tr>';
+		}
 		echo '<td width="33%">';
 		echo '<h5 style="margin:14px 0px">';
-		echo '<a href="'.$link['href'].'">';
-		echo '<img src="' . base_url('assets/images/ui/'.$link['icon']) . '" alt="'.$link['text'].'" hspace="4" align="top" width="16" height="16" />';
+		echo '<a href="' . $link['href'] . '">';
+		echo '<img src="' . base_url('assets/images/ui/' . $link['icon']) . '" alt="' . $link['text'] . '" hspace="4" align="top" width="16" height="16" />';
 		echo $link['text'];
 		echo '</a>';
 		echo '</h5>';
 		echo '</td>';
 		echo "\n";
-		if($row == 2){ echo '</tr>'."\n\n"; $row = -1; }
+		if ($row == 2) {
+			echo '</tr>' . "\n\n";
+			$row = -1;
+		}
 		$row++;
 	}
 
 	echo '</tbody>';
-	echo '</table>'."\n\n";
+	echo '</table>' . "\n\n";
 }

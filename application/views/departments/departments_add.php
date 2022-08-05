@@ -4,7 +4,7 @@ if (isset($department) && is_object($department)) {
 	$department_id = set_value('department_id', $department->department_id);
 }
 
-echo form_open('departments/save', array('class' => 'needs-validation', 'id' => 'department_add', 'novalidate'=> 'true'), array('department_id' => $department_id) );
+echo form_open('departments/save', array('class' => 'needs-validation', 'id' => 'department_add', 'novalidate' => 'true'), array('department_id' => $department_id));
 ?>
 
 <fieldset>
@@ -12,12 +12,15 @@ echo form_open('departments/save', array('class' => 'needs-validation', 'id' => 
 	<legend accesskey="D" tabindex="<?= tab_index() ?>">Detalhes do departamento</legend>
 
 	<div class="form-group row">
-		<label for="name"class="col-sm-2 col-form-label">Nome</label>
+		<label for="name" class="col-sm-2 col-form-label">Nome</label>
 		<div class="col-sm-4">
 			<?php
 			$field = 'name';
-			if(form_error($field)){$valid = 'is-invalid';}
-			else{$valid = '';}
+			if (form_error($field)) {
+				$valid = 'is-invalid';
+			} else {
+				$valid = '';
+			}
 
 			$value = set_value($field, isset($department) ? $department->name : '', FALSE);
 			echo form_input(array(
@@ -27,14 +30,20 @@ echo form_open('departments/save', array('class' => 'needs-validation', 'id' => 
 				'maxlength' => '50',
 				'tabindex' => tab_index(),
 				'value' => $value,
-				'class' => 'form-control '.$valid,
+				'class' => 'form-control ' . $valid,
 				'required' => '',
 			));
-			if(form_error($field)){echo '<div class="invalid-feedback" style="display: block;">Departamento já existente.</div>';}
-			else{echo '<div class="invalid-feedback">Por favor, digite o nome do departamento.</div>';}
+			if (form_error($field)) {
+				echo '<div class="invalid-feedback" style="display: block;">Departamento já existente.</div>';
+			} else {
+				echo '<div class="invalid-feedback">Por favor, digite o nome do departamento.</div>';
+			}
 
-			if($valid == 'is-invalid'){$valid = 'is-valid';} 
-			else{$valid = '';}
+			if ($valid == 'is-invalid') {
+				$valid = 'is-valid';
+			} else {
+				$valid = '';
+			}
 			?>
 		</div>
 	</div>
@@ -53,7 +62,7 @@ echo form_open('departments/save', array('class' => 'needs-validation', 'id' => 
 				'maxlength' => '255',
 				'tabindex' => tab_index(),
 				'value' => $value,
-				'class' => 'form-control '.$valid,
+				'class' => 'form-control ' . $valid,
 			));
 			?>
 		</div>

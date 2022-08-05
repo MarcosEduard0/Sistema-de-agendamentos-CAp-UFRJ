@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -93,14 +93,12 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
-);	
+);
 
 
-if (is_file(FCPATH . 'local/config.php'))
-{
+if (is_file(FCPATH . 'local/config.php')) {
 	$local_config = include(FCPATH . 'local/config.php');
-	if (array_key_exists('database', $local_config) && is_array($local_config['database']))
-	{
+	if (array_key_exists('database', $local_config) && is_array($local_config['database'])) {
 		$db['default'] = array_merge($db['default'], $local_config['database']);
 	}
 }

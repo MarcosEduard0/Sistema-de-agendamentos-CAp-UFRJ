@@ -21,7 +21,7 @@ $menu[$i]['href'] = '';
 
 
 
-// Itens de menu para administradores
+// Itens de menu para ADMINISTRATORes
 
 $i = 0;
 $school[$i]['text'] = 'Detalhes da Escola';
@@ -82,7 +82,7 @@ $admin[$i]['href'] = site_url('settings/authentication/ldap');
 */
 
 
-// Comece o menu do administrador
+// Comece o menu do ADMINISTRATOR
 $i = 0;
 
 
@@ -91,7 +91,7 @@ dotable($menu);
 
 
 
-// Verifique se o usuário é administrador
+// Verifique se o usuário é ADMINISTRATOR
 if ($this->userauth->is_level(ADMINISTRATOR)) {
 	echo '<h2>Configurações da escola</h2>';
 	dotable($school);
@@ -126,4 +126,3 @@ function dotable($array){
 	echo '</tbody>';
 	echo '</table>'."\n\n";
 }
-?>

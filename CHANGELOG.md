@@ -1,44 +1,72 @@
 # classroombookings Changelog
 
-## [3.1.1] 2021-06-23
-### Adicionado
-- Validade nas contas de usuário professor, com tempo customizado em meses na pagina de configurações.
-- Filtro de busca de usuário pelo seu login, nome ou última conexão
 
-### Alterado
-- Paginação de úsuario customizada entre 10, 25, 50 ou 100 usuários por página.
-- Visual dos check box para Toggle 
-- Alert JS ao deletar um agendamento alterado para um Modal
+## [2.6.4] 2022-07-22
 
-### Corrigido
-- Validação de campo existente ao tentar criar um dado ja existente no banco, agora parecendo uma div com a msg inves de um flash
-
-### Removido
-- Obrigatoriedade de o usuário possuir e-mail
+### Fixed
+- Issue where a user with no department creating multiple single bookings would result in no bookings being created.
 
 
-## [3.0.0] 2021-06-21
-### Adicionado
-- Novas opções ao realizar um agendamento
-- Nova tela de login
-- Novo sistema de mensagem para ao usuário
-- Aperfeiçoamento na importação de usuários
+## [2.6.3] 2022-06-29
 
-### Alterado
-- Visual dos labels e verificação de resposta vazia.
+### Fixed
+- Issue where Session calendar might not display the last month, depending on start/end date of Session.
+
+
+## [2.6.2] 2022-03-26
+
+### Fixed
+- Bookings Grid display issues in Firefox - cells should now all be the same size.
+
+
+## [2.6.1] 2022-03-02
+
+### Fixed
+- Issue when creating a recurring booking with no user selected.
+
+
+## [2.6.0] 2022-01-29
+
+### Added
+- Sessions feature, to replace Academic Years. Create as many as you need and switch between them.
+- Settings: Option to set timezone.
+- Users page: Search filter.
+- Dashboard: improved interface for teacher users.
+- Bookings: Multiple selection mode.
+- Bookings: Preview recurring bookings.
+- Bookings: View detailed information for bookings.
+- Bookings: View reasons when rooms/periods are unavailable.
+- Bookings: Edit or Cancel individual instances of recurring bookings.
+- Bookings: Ability for users to switch between Sessions.
+
+### Changed
+- Bookings section overhauled with many new features.
+- Timetable Weeks: these are now configured within each Session.
+- Holidays: These are now configured within each Session.
+- Timetable Weeks: improved colour picker widget.
+
+### Fixed
+- Timetable weeks: now have a default colour, instead of none at all.
+
 
 ## [2.5.0] 2021-04-27
 
-### Adicionado
-- Recurso de controle de acesso à sala - defina a visibilidade de cada sala para usuários ou departamentos específicos.
+### Added
+- Room Access Control feature - set visibility of each room to specific Users or Departments.
 
-### Alterado
-- Dimensionamento atualizado para widget Seletor de data.
-- Adicionadas strings de consulta de impedimento de cache a recursos JS / CSS.
-- Correção no Calendário escolar, agora o sistema salva ao desmarcar todas as semnas de uma só vez.
+### Changed
+- Updated sizing for Date Picker widget.
+- Added cache-busting query strings to JS/CSS assets.
 
-### Corrigido
-- Problema com o carregamento de entradas de idioma de substituição do banco de dados.
+### Fixed
+- Issue with loading override language entries from database.
+
+
+## [2.4.1] 2020-12-09
+
+### Fixed
+- Potential SQL security issue when importing users from CSV file.
+
 
 ## [2.4.0] 2020-03-10
 

@@ -4,6 +4,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Rooms extends MY_Controller
 {
 
+
+
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -23,7 +26,7 @@ class Rooms extends MY_Controller
 		$this->data['rooms_icons'] = [
 			['rooms', 'Salas', 'school_manage_rooms.png'],
 			['rooms/fields', 'Campo Personalizado', 'room_fields.png'],
-			['access_control', 'Controlhe de Acesso', 'key.png'],
+			['access_control', 'Controle de Acesso', 'key.png'],
 		];
 	}
 
@@ -32,13 +35,13 @@ class Rooms extends MY_Controller
 	function info($room_id = NULL)
 	{
 		if (empty($room_id)) {
-			show_error('Sem sala para mostrar ');
+			show_error('Sem salas para mostrar');
 		}
 
 		$this->data['room'] = $this->rooms_model->Get($room_id);
 
 		if (empty($this->data['room'])) {
-			show_error("A sala solicitado não foi encontrado.");
+			show_error("The requested room could not be found.");
 		}
 
 		$this->load->library('table');
@@ -60,13 +63,13 @@ class Rooms extends MY_Controller
 	public function photo($room_id = NULL)
 	{
 		if (empty($room_id)) {
-			show_error('Não há salas para mostrar');
+			show_error('No room to show');
 		}
 
 		$room = $this->rooms_model->Get($room_id);
 
 		if (empty($room)) {
-			show_error("A sala solicitada não foi encontrado.");
+			show_error("The requested room could not be found.");
 		}
 
 		if (!strlen($room->photo)) {
@@ -76,7 +79,7 @@ class Rooms extends MY_Controller
 		$photo_path = "uploads/{$room->photo}";
 
 		if (!is_file(FCPATH . $photo_path)) {
-			show_error('O arquivo de foto não existe.');
+			show_error('Photo file does not exist.');
 		}
 
 		$url = base_url($photo_path);
@@ -95,11 +98,11 @@ class Rooms extends MY_Controller
 
 	function index()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->data['rooms'] = $this->rooms_model->Get();
 
-		$this->data['title'] = 'Salas';
+		$this->data['title'] = 'Rooms';
 
 		$icons = iconbar($this->data['rooms_icons'], 'rooms');
 		$body = $this->load->view('rooms/rooms_index', $this->data, TRUE);
@@ -118,14 +121,14 @@ class Rooms extends MY_Controller
 	 */
 	function add()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		// Get list of users
 		$this->data['users'] = $this->users_model->Get(NULL, NULL, NULL);
 		$this->data['fields'] = $this->rooms_model->GetFields();
 		$this->data['fieldvalues'] = array();
 
-		$this->data['title'] = 'Nova Sala';
+		$this->data['title'] = 'Adicionar Sala';
 		// $this->data['showtitle'] = $this->data['title'];
 
 		$columns = array(
@@ -157,7 +160,7 @@ class Rooms extends MY_Controller
 	 */
 	function edit($id = NULL)
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->data['room'] = $this->rooms_model->Get($id);
 
@@ -169,7 +172,7 @@ class Rooms extends MY_Controller
 		$this->data['fields'] = $this->rooms_model->GetFields();
 		$this->data['fieldvalues'] = $this->rooms_model->GetFieldValues($id);
 
-		$this->data['title'] = 'Editar Sala';
+		$this->data['title'] = 'Edit Room';
 		// $this->data['showtitle'] = $this->data['title'];
 
 		$columns = array(
@@ -202,7 +205,7 @@ class Rooms extends MY_Controller
 	 */
 	function save()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$room_id = $this->input->post('room_id');
 
@@ -379,7 +382,7 @@ class Rooms extends MY_Controller
 	 */
 	function delete($id = NULL)
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		if ($this->input->post('id')) {
 			$this->rooms_model->delete($this->input->post('id'));
@@ -391,10 +394,10 @@ class Rooms extends MY_Controller
 		$this->data['action'] = 'rooms/delete';
 		$this->data['id'] = $id;
 		$this->data['cancel'] = 'rooms';
-		$this->data['text'] = 'Se você excluir esta sala, <strong>todos os agendamentos</strong> para esta sala serão <strong>excluídas permanentemente</strong> também.';
+		$this->data['text'] = 'If you delete this room, <strong>all bookings</strong> for this room will be <strong>permanently deleted</strong> as well.';
 
 		$row = $this->rooms_model->Get($id);
-		$this->data['title'] = 'Deletar Salar (' . html_escape($row->name) . ')';
+		$this->data['title'] = 'Deletar Sala (' . html_escape($row->name) . ')';
 
 		$icons = iconbar($this->data['rooms_icons'], 'rooms');
 		$title = "<h2>{$this->data['title']}</h2>";
@@ -419,7 +422,7 @@ class Rooms extends MY_Controller
 
 	function fields()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->data['options_list'] = $this->rooms_model->options;
 		$this->data['fields'] = $this->rooms_model->GetFields();
@@ -439,11 +442,11 @@ class Rooms extends MY_Controller
 
 	function add_field()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->data['options_list'] = $this->rooms_model->options;
 
-		$this->data['title'] = 'Novo campo';
+		$this->data['title'] = 'Adicionar Campo';
 		// $this->data['showtitle'] = $this->data['title'];
 
 		$columns = array(
@@ -475,7 +478,7 @@ class Rooms extends MY_Controller
 	 */
 	function edit_field($id = NULL)
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		$this->data['field'] = $this->rooms_model->GetFields($id);
 		$this->data['options_list'] = $this->rooms_model->options;
@@ -508,7 +511,7 @@ class Rooms extends MY_Controller
 
 	function save_field()
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		// Get ID from form
 		$field_id = $this->input->post('field_id');
@@ -552,7 +555,7 @@ class Rooms extends MY_Controller
 	 */
 	function delete_field($id = NULL)
 	{
-		$this->require_auth_level(ADMINISTRADOR);
+		$this->require_auth_level(ADMINISTRATOR);
 
 		if ($this->input->post('id')) {
 			$this->rooms_model->field_delete($this->input->post('id'));

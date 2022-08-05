@@ -1,8 +1,8 @@
 <style>
-pre {
-	background: #f4f4f4;
-	padding: 10px;
-}
+	pre {
+		background: #f4f4f4;
+		padding: 10px;
+	}
 </style>
 
 <div>

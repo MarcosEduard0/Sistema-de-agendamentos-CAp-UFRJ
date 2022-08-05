@@ -6,7 +6,7 @@ class MY_Controller extends CI_Controller
 
 
 	/**
-	 * Dados globais para visualização
+	 * Global data for view
 	 *
 	 * @var array
 	 *
@@ -45,19 +45,25 @@ class MY_Controller extends CI_Controller
 		}
 
 		$this->data['scripts'] = array();
+		// $this->data['scripts'][] = 'assets/js/lib/sorttable.js';
+		// $this->data['scripts'][] = 'assets/js/lib/datepicker.js';
+		// $this->data['scripts'][] = 'assets/js/lib/es6-promise.auto.min.js';
+		// $this->data['scripts'][] = 'assets/js/lib/unpoly.min.js';
+		// $this->data['scripts'][] = 'assets/js/lib/accessible-autocomplete.min.js';
+		// $this->data['scripts'][] = 'assets/js/main.js';
 
 		$this->data['scripts'][] = 'assets/js/lib/jquery-3.5.1.min.js';
 		$this->data['scripts'][] = 'assets/js/lib/sorttable.js';
 		$this->data['scripts'][] = 'assets/js/lib/datepicker.js';
 		$this->data['scripts'][] = 'assets/js/lib/es6-promise.auto.min.js';
 		$this->data['scripts'][] = 'assets/js/lib/unpoly.min.js';
+		$this->data['scripts'][] = 'assets/js/lib/accessible-autocomplete.min.js';
 		$this->data['scripts'][] = 'assets/vendor/jquery/jquery-3.2.1.min.js';
 		$this->data['scripts'][] = 'assets/js/popper.js';
 		$this->data['scripts'][] = 'assets/js/popper.min.js';
 		$this->data['scripts'][] = 'assets/vendor/select2/select2.min.js';
 		$this->data['scripts'][] = 'assets/vendor/tilt/tilt.jquery.min.js';
 		$this->data['scripts'][] = 'assets/js/bootstrap.js';
-		// $this->data['scripts'][] = 'assets/js/bootstrap.min.js';
 		$this->data['scripts'][] = 'assets/js/bootstrap.bundle.js';
 		$this->data['scripts'][] = 'assets/js/bootstrap.bundle.min.js';
 		$this->data['scripts'][] = 'assets/js/jquery.mask.min.js';
@@ -66,8 +72,6 @@ class MY_Controller extends CI_Controller
 		$this->data['scripts'][] = 'assets/js/main.min.js';
 		$this->data['scripts'][] = 'assets/js/dataTables.bootstrap4.min.js';
 
-
-
 		$this->data['styles'] = array();
 		$this->data['styles'][] = 'assets/css/bootstrap.css';
 		$this->data['styles'][] = 'assets/css/bootstrap.min.css';
@@ -75,11 +79,13 @@ class MY_Controller extends CI_Controller
 		$this->data['styles'][] = 'assets/css/bootstrap-grid.min.css';
 		$this->data['styles'][] = 'assets/css/bootstrap-reboot.css';
 		$this->data['styles'][] = 'assets/css/bootstrap-reboot.min.css';
+		$this->data['styles'][] = 'assets/css/sorttable.css';
+		$this->data['styles'][] = 'assets/css/login.css';
 		$this->data['styles'][] = 'assets/css/style.css';
-		$this->data['styles'][] = 'assets/css/unpoly.min.css';
 		$this->data['styles'][] = 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css';
 		$this->data['styles'][] = 'assets/vendor/animate/animate.css';
-		$this->data['styles'][] = 'assets/css/dataTables.bootstrap4.min.css';
+		// $this->data['styles'][] = 'assets/css/dataTables.bootstrap4.min.css';
+		$this->data['styles'][] = 'assets/css/unpoly.min.css';
 	}
 
 
@@ -102,7 +108,6 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
-
 	public function require_auth_level($level)
 	{
 		if (!$this->userauth->is_level($level)) {
@@ -115,5 +120,11 @@ class MY_Controller extends CI_Controller
 	public function render($view_name = 'layout')
 	{
 		$this->load->view($view_name, $this->data);
+	}
+
+
+	public function render_up()
+	{
+		$this->load->view('unpoly', $this->data);
 	}
 }

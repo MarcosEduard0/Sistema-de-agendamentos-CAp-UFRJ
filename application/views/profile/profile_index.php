@@ -2,17 +2,17 @@
 echo $this->session->flashdata('saved');
 
 echo iconbar(array(
-	array('profile/edit', 'Editar minhas informações', 'user_edit.png'),
+	array('profile/edit', 'Editar perfil', 'user_edit.png'),
 ));
 
 ?>
 
 <?php if ($myroom) { ?>
-	<h3>Agendamentos nas minhas salas:</h3>
+	<h3>Staff bookings in my rooms</h3>
 	<ul>
 		<?php
 		foreach ($myroom as $booking) {
-			$string = '<li>A sala %s está agendado para o dia %s por %s para o %s. %s</li>';
+			$string = '<li>%s is booked on %s by %s for %s. %s</li>';
 			if ($booking->notes) {
 				$booking->notes = '(' . $booking->notes . ')';
 			}
@@ -28,11 +28,11 @@ echo iconbar(array(
 
 
 <?php if ($mybookings) { ?>
-	<h3>Meus Agendamentos:</h3>
+	<h3>My bookings</h3>
 	<ul>
 		<?php
 		foreach ($mybookings as $booking) {
-			$string = '<li>A sala %s está agendado para o dia %s no %s.</li>';
+			$string = '<li>%s is booked on %s for %s. %s.</li>';
 			$notes = '';
 			if ($booking->notes) {
 				$notes = '(' . $booking->notes . ')';
@@ -44,9 +44,9 @@ echo iconbar(array(
 <?php } ?>
 
 
-<h3>Total de Agendamentos:</h3>
+<h3>My total bookings</h3>
 <ul>
-	<li>Número de agendamentos já realizadas: <?php echo $total['singleuser'] ?></li>
-	<li>Número de agendamentos do começo do ano até agora: <?php echo $total['yeartodate'] ?></li>
-	<li>Número de agendamentos atualmente ativos: <?php echo $total['active'] ?></li>
+	<li>Number of bookings ever made: <?php echo $total['all'] ?></li>
+	<li>Number of bookings this year to date: <?php echo $total['yeartodate'] ?></li>
+	<li>Number of current active bookings: <?php echo $total['active'] ?></li>
 </ul>

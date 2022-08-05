@@ -182,7 +182,7 @@ echo form_open(current_url(), array('id' => 'settings', 'class' => 'needs-valida
 				?>
 			</div>
 			<small class="form-text text-muted">Esta configuração controla a visibilidade do nome do usuário de um agendamento na página agendamentos.</small>
-			<small class="form-text text-muted">Os detalhes do usuário são sempre exibidos aos administradores e nos agendamentos do próprio usuário.</small>
+			<small class="form-text text-muted">Os detalhes do usuário são sempre exibidos aos ADMINISTRATORes e nos agendamentos do próprio usuário.</small>
 		</div>
 	</div>
 

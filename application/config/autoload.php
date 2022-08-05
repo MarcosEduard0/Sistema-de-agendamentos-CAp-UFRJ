@@ -92,8 +92,6 @@ $autoload['drivers'] = array();
 $autoload['helper'] = array(
 	'url',
 	'form',
-	'file',
-	'string',
 	'date',
 	'cookie',
 	'directory',
@@ -101,6 +99,7 @@ $autoload['helper'] = array(
 	'html',
 	'array',
 	'crbs',
+	'unpoly',
 );
 
 /*
@@ -146,4 +145,5 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
 	'settings_model',
+	'menu_model',
 );

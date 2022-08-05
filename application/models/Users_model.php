@@ -6,6 +6,25 @@ class Users_model extends CI_Model
 {
 
 
+	protected $fields = [
+		'user_id',
+		'department_id',
+		'username',
+		'firstname',
+		'lastname',
+		'email',
+		'authlevel',
+		'displayname',
+		'ext',
+		'lastlogin',
+		'enabled',
+		'created',
+	];
+
+
+	protected $table = 'users';
+
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -13,10 +32,10 @@ class Users_model extends CI_Model
 
 
 	/**
-	 * Obtenha um usuário ativo/habilitado com o nome de usuário fornecido.
+	 * Get an active/enabled user by the given username.
 	 *
-	 * @param  string $username usuário
-	 * @return  mixed FALSE em caso de falha ou objeto usuário em caso de sucesso.
+	 * @param  string $username Username
+	 * @return  mixed FALSE on failure or DB row on success.
 	 *
 	 */
 	public function get_by_username($username, $require_enabled = TRUE)
@@ -44,10 +63,10 @@ class Users_model extends CI_Model
 
 
 	/**
-	 * Obtenha um usuário ativo/habilitado pelo ID fornecido.
+	 * Get an active/enabled user by the given ID.
 	 *
-	 * @param  int $id ID do usuário
-	 * @return  mixed FALSE em caso de falha ou objeto usuário em caso de sucesso.
+	 * @param  int $id User ID
+	 * @return  mixed FALSE on failure or DB row on success.
 	 *
 	 */
 	public function get_by_id($id)
@@ -68,10 +87,10 @@ class Users_model extends CI_Model
 
 
 	/**
-	 * Defina uma senha de usuário.
+	 * Set a user password.
 	 *
-	 * @param  mixed $Id do usuário ou objeto usuário.
-	 * @param  string $password Nova senha a ser definida.
+	 * @param  mixed $user ID or User row object.
+	 * @param  string $password New password to set.
 	 *
 	 */
 	public function set_password($user, $password)
@@ -88,33 +107,6 @@ class Users_model extends CI_Model
 
 		$user_data = [
 			'password' => password_hash($password, PASSWORD_DEFAULT),
-		];
-
-		$where = [ 'user_id' => $user_id ];
-
-		return $this->db->update('users', $user_data, $where);
-	}
-
-	/**
-	 * Desabilitar um usuário
-	 *
-	 * @param  mixed $Id do usuário ou objeto usuário.
-	 *
-	 */
-	public function set_disabled($user)
-	{
-		if (is_object($user)) {
-			$user_id = $user->user_id;
-		} elseif (is_numeric($user)) {
-			$user_id = $user;
-		}
-
-		if ( ! isset($user_id)) {
-			return FALSE;
-		}
-
-		$user_data = [
-			'enabled' => 0,
 		];
 
 		$where = [ 'user_id' => $user_id ];
@@ -140,6 +132,30 @@ class Users_model extends CI_Model
 	}
 
 
+	public function search($query = '', $mode = 'results')
+	{
+		if ( ! strlen($query)) return FALSE;
+
+		$this->db->reset_query();
+		$this->db->select($this->fields);
+		$this->db->from($this->table);
+		$this->db->or_like('email', $query);
+		$this->db->or_like('username', $query);
+		$this->db->or_like('firstname', $query);
+		$this->db->or_like('lastname', $query);
+		$this->db->or_like('displayname', $query);
+
+		if ($mode === 'count') {
+			return $this->db->count_all_results();
+		}
+
+		$query = $this->db->get();
+		$result = $query->result();
+
+		return $result;
+	}
+
+
 	function Get($user_id = NULL, $pp = 10, $start = 0)
 	{
 		if ($user_id == NULL) {
@@ -150,19 +166,10 @@ class Users_model extends CI_Model
 	}
 
 
-	function Add($data){
-
-		$username = $data['username'];
-
-		$sql = "SELECT user_id FROM users WHERE username='$username' LIMIT 1";
-		$query = $this->db->query($sql);
-
-		if ($query->num_rows() == 1) {
-			return 'username_exists';
-		}else{
-			$query = $this->db->insert('users', $data);
-			return ($query ? $this->db->insert_id() : $query);
-		}
+	function Add($data)
+	{
+		$query = $this->db->insert('users', $data);
+		return ($query ? $this->db->insert_id() : $query);
 	}
 
 
@@ -175,9 +182,9 @@ class Users_model extends CI_Model
 
 
 	/**
-	 * Excluir um usuário
+	 * Delete a user
 	 *
-	 * @param   int   $id   ID do usuário a ser excluído
+	 * @param   int   $id   ID of user to delete
 	 *
 	 */
 	function Delete($id)

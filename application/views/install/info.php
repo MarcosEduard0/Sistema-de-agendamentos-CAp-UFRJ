@@ -30,7 +30,7 @@ echo form_open_multipart(current_url(), array('class' => 'cssform', 'id' => 'ins
 
 <fieldset>
 
-	<legend accesskey="U" tabindex="<?php echo tab_index() ?>">ADMINISTRADOR user</legend>
+	<legend accesskey="U" tabindex="<?php echo tab_index() ?>">Administrator user</legend>
 
 	<p>
 		<label for="url" class="required">Username</label>
@@ -63,7 +63,7 @@ echo form_open_multipart(current_url(), array('class' => 'cssform', 'id' => 'ins
 			'value' => $value,
 		));
 		?>
-	<p class="hint">At least 8 characters.</p>
+		<p class="hint">At least 8 characters.</p>
 	</p>
 	<?php echo form_error($field); ?>
 

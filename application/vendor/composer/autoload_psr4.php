@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'Feather\\' => array($vendorDir . '/pixelrobin/php-feather/src'),
+    'app\\' => array($baseDir . '/application'),
 );

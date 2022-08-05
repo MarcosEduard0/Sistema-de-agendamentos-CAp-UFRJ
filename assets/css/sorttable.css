@@ -8,6 +8,10 @@
 	background:ButtonFace;
 }
 
+.sort-table td {
+	/*padding:	2px 5px;*/
+}
+
 .sort-table thead td {
 	border:0px solid;
 	border-color:ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
@@ -35,9 +39,9 @@
 }
 
 .sort-arrow.descending {
-	background-image:	url(./brand/bullet_arrow_down.png);
+	background-image:	url(./bullet_arrow_down.png);
 }
 
 .sort-arrow.ascending {
-	background-image:url(./brand/bullet_arrow_up.png);
+	background-image:url(./bullet_arrow_up.png);
 }

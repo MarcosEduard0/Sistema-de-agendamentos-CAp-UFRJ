@@ -7,21 +7,39 @@ namespace Composer\Autoload;
 class ComposerStaticInitaa0a3ffad63bc934453ea58996adc5b7
 {
     public static $prefixLengthsPsr4 = array (
-        'F' => 
+        'a' => 
         array (
-            'Feather\\' => 8,
+            'app\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Feather\\' => 
+        'app\\' => 
         array (
-            0 => __DIR__ . '/..' . '/pixelrobin/php-feather/src',
+            0 => __DIR__ . '/../../..' . '/application',
         ),
     );
 
     public static $classMap = array (
-        'Feather\\Icons' => __DIR__ . '/..' . '/pixelrobin/php-feather/src/Icons.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'app\\components\\Calendar' => __DIR__ . '/../../..' . '/application/components/Calendar.php',
+        'app\\components\\TabPane' => __DIR__ . '/../../..' . '/application/components/TabPane.php',
+        'app\\components\\bookings\\Context' => __DIR__ . '/../../..' . '/application/components/bookings/Context.php',
+        'app\\components\\bookings\\Grid' => __DIR__ . '/../../..' . '/application/components/bookings/Grid.php',
+        'app\\components\\bookings\\Slot' => __DIR__ . '/../../..' . '/application/components/bookings/Slot.php',
+        'app\\components\\bookings\\agent\\BaseAgent' => __DIR__ . '/../../..' . '/application/components/bookings/agent/BaseAgent.php',
+        'app\\components\\bookings\\agent\\MultiAgent' => __DIR__ . '/../../..' . '/application/components/bookings/agent/MultiAgent.php',
+        'app\\components\\bookings\\agent\\SingleAgent' => __DIR__ . '/../../..' . '/application/components/bookings/agent/SingleAgent.php',
+        'app\\components\\bookings\\agent\\UpdateAgent' => __DIR__ . '/../../..' . '/application/components/bookings/agent/UpdateAgent.php',
+        'app\\components\\bookings\\exceptions\\AgentException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/AgentException.php',
+        'app\\components\\bookings\\exceptions\\AvailabilityException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/AvailabilityException.php',
+        'app\\components\\bookings\\exceptions\\BookingValidationException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/BookingValidationException.php',
+        'app\\components\\bookings\\exceptions\\DateException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/DateException.php',
+        'app\\components\\bookings\\exceptions\\SessionException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/SessionException.php',
+        'app\\components\\bookings\\exceptions\\SettingsException' => __DIR__ . '/../../..' . '/application/components/bookings/exceptions/SettingsException.php',
+        'app\\components\\bookings\\grid\\Controls' => __DIR__ . '/../../..' . '/application/components/bookings/grid/Controls.php',
+        'app\\components\\bookings\\grid\\Header' => __DIR__ . '/../../..' . '/application/components/bookings/grid/Header.php',
+        'app\\components\\bookings\\grid\\Table' => __DIR__ . '/../../..' . '/application/components/bookings/grid/Table.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
