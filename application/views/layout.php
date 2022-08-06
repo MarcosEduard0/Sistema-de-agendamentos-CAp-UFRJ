@@ -132,9 +132,9 @@ $global_menu = $this->menu_model->global();
 				<br />
 				<div id="footer">
 					<br />
-					<small class="form-text text-muted">
+					<small class="form-text text-muted" style="text-align: center">
 						Adptado de <a href="https://www.classroombookings.com/" target="_blank">classroombookings</a> por
-						<t up-tooltip="marcos.eduardo22@gmail.com">Marcos Eduardo de Souza</t>.
+						<t data-toggle="tooltip" title="marcos.eduardo22@gmail.com">Marcos Eduardo de Souza</t>.
 						<br />Versão <?= VERSION ?>&copy; <?= date('Y') ?>
 					</small>
 					<br /><br />
@@ -146,16 +146,8 @@ $global_menu = $this->menu_model->global();
 		<div id="tipDiv" style="position:absolute; visibility:hidden; z-index:100"></div>
 	<?php endif ?>
 
-
-	<!-- <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script> -->
-	<!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js'></script> -->
-	<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
-	<!-- <script type='text/javascript' src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
-
 	<?php
 	foreach ($scripts as $script) {
-		// $url = sprintf('%s?v=%s', base_url($script), VERSION);
 		$url = base_url($script);
 		echo "<script type='text/javascript' src='{$url}'></script>\n";
 	} ?>

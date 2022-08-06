@@ -188,6 +188,7 @@ class Users extends MY_Controller
 			'displayname' => $this->input->post('displayname'),
 			'department_id' => $department_id,
 			'ext' => $this->input->post('ext'),
+			'created' => date("Y-m-d H:i:s"),
 		);
 
 		if ($this->input->post('password1') && $this->input->post('password2')) {

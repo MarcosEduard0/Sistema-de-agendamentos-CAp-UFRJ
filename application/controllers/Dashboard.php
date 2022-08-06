@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller
 {
@@ -13,9 +13,9 @@ class Dashboard extends MY_Controller
 
 
 	/**
-	* Dashboard
-	*
-	*/
+	 * Dashboard
+	 *
+	 */
 	public function index()
 	{
 		if ($this->userauth->is_level(ADMINISTRATOR)) {
@@ -35,7 +35,7 @@ class Dashboard extends MY_Controller
 		// Get totals
 		$this->data['totals'] = $this->bookings_model->TotalNum($user_id);
 
-		$this->data['title'] = 'Dashboard';
+		$this->data['title'] = 'Início';
 		$this->data['showtitle'] = '';	//$this->data['title'];
 
 		$this->data['body'] = '';
@@ -44,7 +44,4 @@ class Dashboard extends MY_Controller
 
 		return $this->render();
 	}
-
-
-
 }

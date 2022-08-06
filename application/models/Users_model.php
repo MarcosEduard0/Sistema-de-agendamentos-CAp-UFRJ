@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
 class Users_model extends CI_Model
@@ -40,7 +40,7 @@ class Users_model extends CI_Model
 	 */
 	public function get_by_username($username, $require_enabled = TRUE)
 	{
-		if ( ! strlen($username)) {
+		if (!strlen($username)) {
 			return FALSE;
 		}
 
@@ -101,7 +101,7 @@ class Users_model extends CI_Model
 			$user_id = $user;
 		}
 
-		if ( ! isset($user_id)) {
+		if (!isset($user_id)) {
 			return FALSE;
 		}
 
@@ -109,7 +109,34 @@ class Users_model extends CI_Model
 			'password' => password_hash($password, PASSWORD_DEFAULT),
 		];
 
-		$where = [ 'user_id' => $user_id ];
+		$where = ['user_id' => $user_id];
+
+		return $this->db->update('users', $user_data, $where);
+	}
+
+	/**
+	 * Desabilitar um usuário
+	 *
+	 * @param  mixed $Id do usuário ou objeto usuário.
+	 *
+	 */
+	public function set_disabled($user)
+	{
+		if (is_object($user)) {
+			$user_id = $user->user_id;
+		} elseif (is_numeric($user)) {
+			$user_id = $user;
+		}
+
+		if (!isset($user_id)) {
+			return FALSE;
+		}
+
+		$user_data = [
+			'enabled' => 0,
+		];
+
+		$where = ['user_id' => $user_id];
 
 		return $this->db->update('users', $user_data, $where);
 	}
@@ -124,7 +151,7 @@ class Users_model extends CI_Model
 
 	public function update($user_data = [], $where)
 	{
-		if ( ! is_array($where)) {
+		if (!is_array($where)) {
 			$where = ['user_id' => (int) $where];
 		}
 
@@ -134,7 +161,7 @@ class Users_model extends CI_Model
 
 	public function search($query = '', $mode = 'results')
 	{
-		if ( ! strlen($query)) return FALSE;
+		if (!strlen($query)) return FALSE;
 
 		$this->db->reset_query();
 		$this->db->select($this->fields);
@@ -199,6 +226,4 @@ class Users_model extends CI_Model
 		$this->db->where('user_id', $id);
 		return $this->db->delete('users');
 	}
-
-
 }

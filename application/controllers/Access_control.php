@@ -44,7 +44,7 @@ class Access_control extends MY_Controller
 		$this->data['departments'] = $this->departments_model->Get(NULL, NULL, NULL);
 		$this->data['rooms'] = $this->rooms_model->Get();
 
-		$this->data['title'] = 'Rooms';
+		$this->data['title'] = 'Salas';
 
 		$icons = iconbar($this->data['rooms_icons'], 'access_control');
 		$body = $this->load->view('access_control/index', $this->data, TRUE);
@@ -62,7 +62,7 @@ class Access_control extends MY_Controller
 			show_404();
 		}
 
-		$this->data['title'] = 'Add Entry';
+		$this->data['title'] = 'Adicionar entrada';
 
 		$this->data['departments'] = $this->departments_model->Get(NULL, NULL, NULL);
 		$this->data['rooms'] = $this->rooms_model->Get();

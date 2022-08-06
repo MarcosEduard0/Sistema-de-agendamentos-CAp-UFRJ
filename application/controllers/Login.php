@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+ini_set('display_errors', 1);
 
 class Login extends MY_Controller
 {
@@ -53,7 +53,7 @@ class Login extends MY_Controller
 			// Success! Redirect to control panel
 			redirect('');
 		} else {
-			$this->session->set_flashdata('auth', msgbox('error', 'Incorrect username and/or password.'));
+			$this->session->set_flashdata('auth', msgbox('error', 'Usuário e/ou senha incorreto.'));
 			return $this->index();
 		}
 	}

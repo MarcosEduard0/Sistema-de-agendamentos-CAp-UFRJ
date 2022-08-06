@@ -955,6 +955,7 @@ button.link-md {
 
 	.booking-choices-cancel {
 		border:2px solid #FF4136;
+		border-radius: 5px;
 	}
 	.booking-choices button {
 		width: 100%;
@@ -1651,4 +1652,10 @@ table {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+
+.booking-choices-holiday {
+    border: 2px solid #17a2b8;
+	border-radius: 5px;
 }

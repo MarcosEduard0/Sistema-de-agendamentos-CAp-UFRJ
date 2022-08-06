@@ -1,6 +1,6 @@
 <td class="<?= $class ?>">
-	<a href="#" class="bookings-grid-button" up-layer="new popup" up-align="top" up-size="medium" up-content="<p><?= html_escape($slot->label) ?></p>
-	<br><button up-dismiss type='button' class='btn btn-outline-secondary btn-sm'>Ok</button>">
+	<a href="#" class="bookings-grid-button" up-layer="new popup" up-align="top" up-size="medium" up-class="booking-choices-cancel" up-content="<p><?= html_escape($slot->label) ?></p>
+	<br><button up-dismiss type='button' class='btn btn-outline-danger btn-sm'>Ok, entendi.</button>">
 		<?php
 		$icon = 'error.png';
 		switch ($extended) {

@@ -1,7 +1,7 @@
 <?php
 
 if (DEMO_MODE) {
-	echo msgbox('notice large', "To prevent abuse and getting locked out, the authentication setting is disabled on the demo. You can still test the connection details and credentials.");
+	echo msgbox('notice large', "Para evitar abuso e bloqueio, a configuração de autenticação está desabilitada na demonstração. Você ainda pode testar os detalhes e credenciais da conexão.");
 }
 
 echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform', 'ldap-settings' => ''));
@@ -18,7 +18,7 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 	$value = set_value($field, element($field, $settings, '0'), FALSE);
 	?>
 	<p>
-		<label for="<?= $field ?>">Enable</label>
+		<label for="<?= $field ?>">Habilitado</label>
 		<?php
 		echo form_hidden($field, '0');
 		$input_options = [
@@ -37,7 +37,7 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 
 		$input = form_checkbox($input_options);
 		echo "<label for='{$field}' class='ni'>{$input} Use LDAP to authenticate users</label>";
-	?>
+		?>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -54,12 +54,13 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'id' => $field,
 			'value' => '1',
 			'tabindex' => tab_index(),
-			'checked' => ($value == '1')
+			'checked' => ($value == '1'),
+			'class' => 'form-control',
 		));
 		echo "<label for='{$field}' class='ni'>{$input} Automatically create user accounts on successful login.</label>";
 		?>
-		<p class="hint">When enabled, any valid credentials returned from an LDAP authentication attempt will automatically create a classroombookings 'Teacher' account.</p><br>
-		<p class="hint">When not enabled, only users who have a classroombookings account will be authenticated.</p>
+	<p class="hint">When enabled, any valid credentials returned from an LDAP authentication attempt will automatically create a classroombookings 'Teacher' account.</p><br>
+	<p class="hint">When not enabled, only users who have a classroombookings account will be authenticated.</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -84,9 +85,10 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'maxlength' => '100',
 			'tabindex' => tab_index(),
 			'value' => $value,
+			'class' => 'form-control',
 		));
 		?>
-		<p class="hint">Hostname or IP address.</p>
+	<p class="hint">Hostname or IP address.</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -106,9 +108,10 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'tabindex' => tab_index(),
 			'value' => $value,
 			'style' => 'max-width:50px'
+			'class' => 'form-control',
 		));
 		?>
-		<p class="hint">Standard ports are 389 (non-SSL) or 636 (SSL).</p>
+	<p class="hint">Standard ports are 389 (non-SSL) or 636 (SSL).</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -128,9 +131,10 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'tabindex' => tab_index(),
 			'value' => $value,
 			'style' => 'max-width:50px'
+			'class' => 'form-control',
 		));
 		?>
-		<p class="hint">Usually 3.</p>
+	<p class="hint">Usually 3.</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -148,8 +152,9 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'value' => '1',
 			'tabindex' => tab_index(),
 			'checked' => ($value == '1')
+			'class' => 'form-control',
 		));
-	?>
+		?>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -167,8 +172,9 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'value' => '1',
 			'tabindex' => tab_index(),
 			'checked' => ($value == '1')
+			'class' => 'form-control',
 		));
-	?>
+		?>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -187,14 +193,15 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'cols' => '60',
 			'tabindex' => tab_index(),
 			'value' => $value,
+			'class' => 'form-control',
 		]);
 		?>
-		<p class="hint">This will vary depending on your server and configuration. The tag <span>:user</span> will be replaced with the authenticating user. Some common formats are:</p>
-		<ul class="hint">
-			<li>EXAMPLE.LOCAL\:user</li>
-			<li>:user@EXAMPLE.LOCAL</li>
-			<li>uid=:user,cn=users,dc=example,dc=com</li>
-		</ul>
+	<p class="hint">This will vary depending on your server and configuration. The tag <span>:user</span> will be replaced with the authenticating user. Some common formats are:</p>
+	<ul class="hint">
+		<li>EXAMPLE.LOCAL\:user</li>
+		<li>:user@EXAMPLE.LOCAL</li>
+		<li>uid=:user,cn=users,dc=example,dc=com</li>
+	</ul>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -218,9 +225,10 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'cols' => '60',
 			'tabindex' => tab_index(),
 			'value' => $value,
+			'class' => 'form-control',
 		));
 		?>
-		<p class="hint">E.g. dc=example,dc=local</p>
+	<p class="hint">E.g. dc=example,dc=local</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -238,11 +246,12 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'cols' => '60',
 			'tabindex' => tab_index(),
 			'value' => $value,
+			'class' => 'form-control',
 		));
 		?>
-		<p class="hint">Example: (&(:attr=:user))</p>
-		<br>
-		<p class="hint">The tag <span>:user</span> will be replaced by the user logging in.</p>
+	<p class="hint">Example: (&(:attr=:user))</p>
+	<br>
+	<p class="hint">The tag <span>:user</span> will be replaced by the user logging in.</p>
 	</p>
 	<?php echo form_error($field) ?>
 
@@ -280,6 +289,7 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 			'maxlength' => '100',
 			'tabindex' => tab_index(),
 			'value' => $value,
+			'class' => 'form-control',
 		]);
 
 		$hint = '';
@@ -289,7 +299,6 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 
 		echo "<p>\n{$label_el}\n{$input}\n{$hint}</p>";
 		echo form_error($field['name']);
-
 	}
 	?>
 

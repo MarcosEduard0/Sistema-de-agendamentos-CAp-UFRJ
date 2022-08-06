@@ -24,10 +24,11 @@ $formatter = new IntlDateFormatter(
 
 				foreach ($user_bookings as $booking) {
 					$date_str = $booking->date->format("d/m/Y");
-					// $time_str = $booking->date->format($time_format);
+					// $time_str = $booking->date->format("H:i");
 					$period_name = html_escape($booking->period->name);
 					$room_name = html_escape($booking->room->name);
-					$time = "<span class='dash-booking-time'>({$booking->period->time_start})</span>";
+					$time_str = (new \DateTime($booking->period->time_start))->format("H:i");
+					$time = "<span class='dash-booking-time'>({$time_str})</span>";
 
 					$title_html = "<div class='dash-booking-title'>{$date_str}</div>";
 					$room_url = "rooms/info/{$booking->room->room_id}";

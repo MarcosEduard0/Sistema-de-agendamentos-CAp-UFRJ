@@ -33,8 +33,8 @@ foreach ($slot->instances as $key => $instance) {
 	if (isset($instance['booking'])) {
 
 		$user_label = strlen($instance['booking']->user->displayname)
-				? $instance['booking']->user->displayname
-				: $instance['booking']->user->username;
+			? $instance['booking']->user->displayname
+			: $instance['booking']->user->username;
 
 		$notes_html = '';
 		if ($instance['booking']->notes) {
@@ -76,7 +76,6 @@ foreach ($slot->instances as $key => $instance) {
 		]);
 
 		$actions_html = $hidden . $actions_list;
-
 	} else {
 
 		$field_id = sprintf('slot_%d_date_%s', $slot->mbs_id, $date_ymd);

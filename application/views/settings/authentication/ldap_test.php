@@ -28,35 +28,37 @@ echo form_open('settings/authentication/ldap_test', $attrs, $hidden);
 <fieldset>
 
 	<div class="fieldset-description">
-		<p><small>Change settings on the left then enter a username and password here to test them. You don't need to click Save before testing the credentials.</small></p>
-		<p><small>These credentials are only passed to the LDAP server and are never saved or stored.</small></p>
+		<p><small>Altere as configurações à esquerda e insira um nome de usuário e senha aqui para testá-los. Você não precisa clicar em Salvar antes de testar as credenciais.</small></p>
+		<p><small>Essas credenciais são passadas apenas para o servidor LDAP e nunca são salvas ou armazenadas.</small></p>
 		<br>
 	</div>
 
-	<legend accesskey="T" tabindex="<?php echo tab_index() ?>">Test Settings</legend>
+	<legend accesskey="T" tabindex="<?php echo tab_index() ?>">Configurações de teste</legend>
 
 	<p class="input-group">
 		<?php
-		echo form_label('Username', 'username');
+		echo form_label('Usuário', 'username');
 		echo form_input([
 			'name' => 'username',
 			'id' => 'username',
 			'size' => '30',
 			'maxlength' => '50',
 			'tabindex' => tab_index(),
+			'class' => 'form-control',
 		]);
-	?>
+		?>
 	</p>
 
 	<p class="input-group">
 		<?php
-		echo form_label('Password', 'password');
+		echo form_label('Senha', 'password');
 		echo form_password([
 			'name' => 'password',
 			'id' => 'password',
 			'size' => '30',
 			'maxlength' => '50',
 			'tabindex' => tab_index(),
+			'class' => 'form-control',
 		]);
 		?>
 	</p>
@@ -70,7 +72,7 @@ echo form_open('settings/authentication/ldap_test', $attrs, $hidden);
 
 </fieldset>
 
-<div class="loading-notice">Testing connection...</div>
+<div class="loading-notice">Testando a conexão...</div>
 
 <div id="ldap_test_results"></div>
 

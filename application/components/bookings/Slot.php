@@ -114,7 +114,7 @@ class Slot
 
 			$this->label = $holiday
 				? sprintf(
-					"Feriado: %s\n(%s até %s)",
+					"<b>Feriado:</b><br> %s\n(%s até %s)",
 					$holiday->name,
 					$holiday->date_start->format($date_fmt),
 					$holiday->date_end->format($date_fmt)
@@ -131,11 +131,15 @@ class Slot
 
 			$day_names = Calendar::get_day_names();
 			$day_name = $day_names["{$this->date->weekday}"];
+			$day_name = Calendar::traslate_2_portuguese($day_name);
 
 			$this->status = self::STATUS_UNAVAILABLE;
 			$this->reason = self::UNAVAILABLE_PERIOD;
-
-			$this->label = sprintf('%s não disponível em %s.', $this->period->name, $day_name);
+			if ($day_name == 'Sábado' || $day_name == 'Domingo')
+				$pt = 'no';
+			else
+				$pt = 'na';
+			$this->label = sprintf('%s não disponível %s %s.', $this->period->name, $pt, $day_name);
 
 			return;
 		}

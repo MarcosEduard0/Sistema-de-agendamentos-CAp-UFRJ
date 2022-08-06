@@ -102,7 +102,7 @@ class Rooms extends MY_Controller
 
 		$this->data['rooms'] = $this->rooms_model->Get();
 
-		$this->data['title'] = 'Rooms';
+		$this->data['title'] = 'Salas';
 
 		$icons = iconbar($this->data['rooms_icons'], 'rooms');
 		$body = $this->load->view('rooms/rooms_index', $this->data, TRUE);

@@ -13,7 +13,7 @@ echo form_open('sessions/apply_week', $attrs, ['session_id' => $session->session
 
 	<p>
 		<?php
-		$options = array('' => 'Seleciona uma semana...');
+		$options = array('' => 'Selecionar uma semana...');
 		if (isset($weeks)) {
 			foreach ($weeks as $week) {
 				$options[$week->week_id] = html_escape($week->name);

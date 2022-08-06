@@ -22,7 +22,7 @@ class Bookings extends MY_Controller
 		$this->lang->load('bookings');
 
 		if ($this->userauth->is_level(TEACHER) && setting('maintenance_mode')) {
-			$this->data['title'] = 'Bookings';
+			$this->data['title'] = 'Agendamentos';
 			$this->data['showtitle'] = '';
 			$this->data['body'] = '';
 			$this->render();
@@ -54,7 +54,7 @@ class Bookings extends MY_Controller
 
 		$message = $this->session->flashdata('bookings');
 
-		$this->data['title'] = 'Bookings';
+		$this->data['title'] = 'Agendamentos';
 		$this->data['showtitle'] = '';
 		$this->data['body'] = $message . $grid->render();
 
