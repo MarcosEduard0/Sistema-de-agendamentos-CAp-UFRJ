@@ -42,14 +42,14 @@ if ($booking->repeat_id) {
 	$content = implode("\n", $buttons) . $cancel;
 } else {
 
-	$heading = '<strong>Cancelar este agendamento?</strong><br><br>';
+	$heading = '<strong>Deseja cancelar este agendamento?</strong><br><br>';
 
 	$submit = form_button([
 		'type' => 'submit',
 		'name' => 'cancel',
 		'value' => '1',
-		'content' => 'Sim, cancelar agendamentos',
-		'autofocus' => true,
+		'content' => 'Sim, cancelar agendamento',
+		'class' => 'btn btn-outline-danger btn-sm',
 	]);
 
 	$cancel = "<a href='#' up-dismiss>Não, mantenha-o</a>";

@@ -63,21 +63,21 @@ if (booking_editable($booking)) {
 	}
 }
 
-if (booking_cancelable($booking)) {
-	$cancel_choices = $this->load->view('bookings/cancel_choice', ['booking' => $booking, 'params' => $params], TRUE);
-	$links[] = [
-		'link' => '#',
-		'name' => 'Cancelar agendamento',
-		'icon' => 'delete.png',
-		'attrs' => [
-			'up-layer' => 'new popup',
-			'up-align' => 'right',
-			'up-size' => 'medium',
-			'up-content' => html_escape($cancel_choices),
-			'up-class' => 'booking-choices-cancel',
-		]
-	];
-}
+
+$cancel_choices = $this->load->view('bookings/cancel_choice', ['booking' => $booking, 'params' => $params], TRUE);
+$links[] = [
+	'link' => '#',
+	'name' => 'Cancelar',
+	'icon' => 'delete.png',
+	'attrs' => [
+		'up-layer' => 'new popup',
+		'up-align' => 'right',
+		'up-size' => 'medium',
+		'up-content' => html_escape($cancel_choices),
+		'up-class' => 'booking-choices-cancel',
+	]
+];
+
 
 $links_html = empty($links)
 	? ''

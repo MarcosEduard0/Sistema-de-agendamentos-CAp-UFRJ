@@ -280,7 +280,7 @@ class SingleAgent extends BaseAgent
 
 		$this->view_data['slots'] = $slots;
 
-		$this->title = 'Preview recurring bookings';
+		$this->title = 'Visualizar agendamentos recorrentes';
 
 		$this->view = 'bookings/create/single_recurring_preview';
 	}

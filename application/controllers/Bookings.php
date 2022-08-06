@@ -322,38 +322,38 @@ class Bookings extends MY_Controller
 		switch (TRUE) {
 
 			case ($booking === FALSE):
-				$body = msgbox('error', 'Could not find requested booking details.');
+				$body = msgbox('error', 'Não foi possível encontrar os detalhes do agendamento solicitado.');
 				break;
 
 			case (booking_cancelable($booking) === FALSE):
-				$body = msgbox('error', 'Booking is not editable.');
+				$body = msgbox('error', 'O agendamento não é editável.');
 				break;
 		}
 
 		if ($cancel_type = $this->input->post('cancel')) {
 
-			$error = msgbox('error', 'There was an error cancelling the booking.');
+			$error = msgbox('error', 'Ocorreu um erro ao cancelar o agendamento.');
 
 			switch ($cancel_type) {
 
 				case '1':
 					$res = $this->bookings_model->cancel_single($booking_id);
-					$success = msgbox('info', 'The booking has been cancelled.');
+					$success = msgbox('info', 'O agendamento foi cancelada.');
 					break;
 
 				case 'future':
 					$res = $this->bookings_model->cancel_future($booking_id);
-					$success = msgbox('info', 'The selected booking and all future occurrences in the series have been cancelled.');
+					$success = msgbox('info', 'O agendamento selecionado e todas as ocorrências futuras da série foram canceladas.');
 					break;
 
 				case 'all':
 					$res = $this->bookings_model->cancel_all($booking_id);
-					$success = msgbox('info', 'The whole recurring booking series has been cancelled.');
+					$success = msgbox('info', 'Toda a série de aendamentos recorrentes foi cancelada.');
 					break;
 
 				default:
 					$res = FALSE;
-					$error = msgbox('error', 'Invalid cancellation type.');
+					$error = msgbox('error', 'Tipo de cancelamento inválido.');
 			}
 
 			$msg = ($res) ? $success : $error;

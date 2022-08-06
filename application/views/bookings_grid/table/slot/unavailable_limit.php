@@ -8,7 +8,7 @@
 				$icon = 'stop.png';
 				break;
 			case 'past':
-				$icon = 'school_manage_weeks1.png';
+				$icon = 'school_manage_weeks.png';
 				break;
 			case 'future':
 				$icon = 'date_error.png';

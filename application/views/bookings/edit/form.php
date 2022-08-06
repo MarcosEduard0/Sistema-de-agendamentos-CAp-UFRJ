@@ -163,7 +163,7 @@ echo ($show_department)
 // Who
 //
 $field = 'user_id';
-$label = form_label('Quem', $field);
+$label = form_label('Usuário', $field);
 if ($is_admin) {
 	$options = results_to_assoc($all_users, 'user_id', function ($user) {
 		return strlen($user->displayname)
@@ -216,8 +216,8 @@ $submit = form_button([
 	'type' => 'submit',
 	'name' => 'action',
 	'value' => 'update',
-	'content' => 'Atualizar agendamento',
-	'class' => "btn btn-primary",
+	'content' => 'Atualizar',
+	'class' => "btn btn-primary btn-sm",
 ]);
 
 $cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);

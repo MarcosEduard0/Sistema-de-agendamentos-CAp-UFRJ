@@ -4,9 +4,10 @@ use app\components\Calendar;
 
 // Weekday name that the selected date falls on
 $day_name = Calendar::get_day_name($date_info->weekday);
+$day_name = Calendar::traslate_2_portuguese($day_name);
 
 // Date format of bookings
-$date_format = setting('date_format_long', 'crbs');
+$date_format = 'd/m/Y';
 
 // For period display
 $time_fmt = setting('time_format_period');
@@ -21,9 +22,9 @@ $this->table->set_template([
 	'table_open' => '<table class="zebra-table" style="line-height:1.3;margin-top:16px;margin-bottom:16px" width="100%" cellpadding="10" cellspacing="0" border="0">',
 ]);
 $this->table->set_heading([
-	['data' => 'Date', 'width' => 250],
-	['data' => 'Action', 'width' => 250],
-	['data' => 'Exising booking', 'width' => 300],
+	['data' => 'Data', 'width' => 250],
+	['data' => 'Ação', 'width' => 250],
+	['data' => 'Agendamento existente', 'width' => 300],
 ]);
 
 
@@ -40,8 +41,8 @@ foreach ($slots as $key => $slot) {
 		$conflict_count++;
 
 		$user_label = strlen($slot['booking']->user->displayname)
-				? $slot['booking']->user->displayname
-				: $slot['booking']->user->username;
+			? $slot['booking']->user->displayname
+			: $slot['booking']->user->username;
 
 		$notes_html = '';
 		if ($slot['booking']->notes) {
@@ -50,7 +51,7 @@ foreach ($slots as $key => $slot) {
 			if (strlen($notes) > 15) {
 				$tooltip = 'up-tooltip="' . $notes . '"';
 			}
-			$notes_html = '<div ' . $tooltip . '>'.character_limiter($notes, 15).'</div>';
+			$notes_html = '<div ' . $tooltip . '>' . character_limiter($notes, 15) . '</div>';
 		}
 
 		$existing_html = $user_label . $notes_html;
@@ -75,7 +76,6 @@ foreach ($slots as $key => $slot) {
 		]);
 
 		$actions_html = $hidden . $actions_list;
-
 	} else {
 
 		$field_id = sprintf('date_%s', $date_ymd);
@@ -90,7 +90,7 @@ foreach ($slots as $key => $slot) {
 			'checked' => ($field_value == 'book'),
 		]);
 
-		$input_label = form_label('Create booking', $field_id, ['class' => 'ni']);
+		$input_label = form_label('Criar agendamento', $field_id, ['class' => 'ni']);
 
 		$actions_html = $input . $input_label;
 	}
@@ -104,8 +104,8 @@ foreach ($slots as $key => $slot) {
 $info = [];
 
 
-$recurring_html = sprintf('Every %s on %s', $day_name, html_escape($week->name));
-$info[] = "<p><strong>Recurs: </strong> {$recurring_html}</p>";
+$recurring_html = sprintf('Toda %s no %s', $day_name, html_escape($week->name));
+$info[] = "<p><strong>Recorrência: </strong> {$recurring_html}</p>";
 
 $period_html = html_escape($period->name);
 if (strlen($time_fmt)) {
@@ -116,26 +116,26 @@ if (strlen($time_fmt)) {
 $info[] = "<p><strong>Period: </strong> {$period_html}</p>";
 
 $room_html = html_escape($room->name);
-$info[] = "<p><strong>Room: </strong> {$room_html}</p>";
+$info[] = "<p><strong>Sala: </strong> {$room_html}</p>";
 
 if ($department) {
 	$department_html = html_escape($department->name);
-	$info[] = "<p><strong>Department: </strong> {$department_html}</p>";
+	$info[] = "<p><strong>Departamento: </strong> {$department_html}</p>";
 }
 
 $user_html = strlen($user->displayname)
 	? $user->displayname
 	: $user->username;
-$info[] = "<p><strong>User: </strong> {$user_html}</p>";
+$info[] = "<p><strong>Usuário: </strong> {$user_html}</p>";
 
 $notes_html = set_value('notes');
 if (strlen($notes_html)) {
-	$info[] = "<p><strong>Notes: </strong> {$notes_html}</p>";
+	$info[] = "<p><strong>Descrição: </strong> {$notes_html}</p>";
 }
 
 echo "<fieldset style='padding-top:0;padding-bottom:0'>" . implode("\n", $info) . "</fieldset>";
 
-$str = sprintf('This recurring booking would result in %d instances.', count($slots));
+$str = sprintf('Esse agendamento recorrente resultaria em %d instâncias.', count($slots));
 echo $str;
 
 if ($conflict_count > 0) {
@@ -180,10 +180,11 @@ $submit = form_button([
 	'type' => 'submit',
 	'name' => 'action',
 	'value' => 'create_recurring',
-	'content' => 'Create bookings',
+	'content' => 'Criar agendamentos',
+	'class' => 'btn btn-primary btn-sm'
 ]);
 
-$cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
+$cancel = anchor($return_uri, 'Cancelar', ['up-dismiss' => '']);
 
 echo "<div class='' style='border-top:0px;'>{$submit} &nbsp; {$cancel}</div>";
 

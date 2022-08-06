@@ -4,7 +4,8 @@ if (isset($holiday) && is_object($holiday)) {
 	$holiday_id = set_value('holiday_id', $holiday->holiday_id);
 }
 
-echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate' => 'true'), array('holiday_id' => $holiday_id));
+echo form_open(current_url(), array('class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate' => 'true'), array('holiday_id' => $holiday_id));
+
 ?>
 
 <fieldset>
@@ -38,11 +39,7 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 		<div class="col-sm-4">
 			<?php
 			$field = 'date_start';
-			$default = (isset($holiday)
-				? date('Y-m-d', strtotime($holiday->date_start))
-				: date('Y-m-d')
-			);
-			$value = set_value($field, $default, FALSE);
+			$value = set_value('date_end', isset($holiday) ? $holiday->date_start->format('Y-m-d') : '', FALSE);
 			echo form_input(array(
 				'name' => $field,
 				'id' => $field,
@@ -51,9 +48,12 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 				'tabindex' => tab_index(),
 				'value' => $value,
 				'class' => 'form-control',
-				'type' => 'date'
+				'type' => 'date',
+				'required' => '',
 			));
 			?>
+			<div class="invalid-feedback">Por favor, informe a data de início.</div>
+
 		</div>
 		<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_start', false);" /> -->
 	</div>
@@ -61,15 +61,11 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 
 
 	<div class="form-group row">
-		<label for="date_start" class="col-sm-2 col-form-label">Data Final</label>
+		<label for="date_start" class="col-sm-2 col-form-label">Data de término</label>
 		<div class="col-sm-4">
 			<?php
 			$field = 'date_end';
-			$default = (isset($holiday)
-				? date('Y-m-d', strtotime($holiday->date_end))
-				: date('Y-m-d')
-			);
-			$value = set_value($field, $default, FALSE);
+			$value = set_value('date_end', isset($holiday) ? $holiday->date_end->format('Y-m-d') : '', FALSE);
 			echo form_input(array(
 				'name' => $field,
 				'id' => $field,
@@ -78,9 +74,12 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 				'tabindex' => tab_index(),
 				'value' => $value,
 				'class' => 'form-control',
-				'type' => 'date'
+				'type' => 'date',
+				'required' => '',
 			));
 			?>
+
+			<div class="invalid-feedback">Por favor, informe a data de término.</div>
 			<!-- <img style="cursor:pointer" align="top" src="<?= base_url('assets/images/ui/cal_day.png') ?>" width="16" height="16" title="Choose date" onclick="displayDatePicker('date_end', false);" /> -->
 		</div>
 	</div>
@@ -91,9 +90,10 @@ echo form_open('holidays/save', array('class' => 'needs-validation', 'id' => 'ho
 
 <?php
 
+
 $this->load->view('partials/submit', array(
-	'submit' => array('Save', tab_index()),
-	'cancel' => array('Cancel', tab_index(), 'holidays/session/' . $session->session_id),
+	'submit' => array('Salvar', tab_index()),
+	'cancel' => array('Cancelar', tab_index(), 'holidays/session/' . $session->session_id),
 ));
 
 echo form_close();

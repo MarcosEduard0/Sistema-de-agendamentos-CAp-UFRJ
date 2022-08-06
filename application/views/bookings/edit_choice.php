@@ -1,13 +1,13 @@
 <?php
 
 if ($booking->user_id && $current_user->user_id != $booking->user_id) {
-	echo msgbox('exclamation', 'This is not your own.');
+	echo msgbox('exclamation', 'Isso não é seu.');
 	echo "<br>";
 }
 
 $cls = '';
 
-$heading = '<strong>Edit recurring booking:</strong><br><br>';
+$heading = '<strong>Editar agendamento recorrente:</strong><br><br>';
 
 $cls = 'is-repeat';
 
@@ -17,7 +17,7 @@ $buttons = [];
 $uri = sprintf('bookings/edit/%d?%s', $booking->booking_id, http_build_query(['params' => $params, 'edit' => '1']));
 $buttons[] = form_button([
 	'type' => 'button',
-	'content' => 'This booking only',
+	'content' => 'Este agendamento apenas',
 	'up-href' => site_url($uri),
 	'up-target' => '.bookings-edit',
 	'up-layer' => 'new modal',
@@ -27,7 +27,7 @@ $buttons[] = form_button([
 $uri = sprintf('bookings/edit/%d?%s', $booking->booking_id, http_build_query(['params' => $params, 'edit' => 'future']));
 $buttons[] = form_button([
 	'type' => 'button',
-	'content' => 'This and future bookings in series',
+	'content' => 'Este e futuros agendamentos em série',
 	'up-href' => site_url($uri),
 	'up-target' => '.bookings-edit',
 	'up-layer' => 'new modal',
@@ -36,13 +36,13 @@ $buttons[] = form_button([
 $uri = sprintf('bookings/edit/%d?%s', $booking->booking_id, http_build_query(['params' => $params, 'edit' => 'all']));
 $buttons[] = form_button([
 	'type' => 'button',
-	'content' => 'All bookings in series',
+	'content' => 'Todos os agendamentos em série.',
 	'up-href' => site_url($uri),
 	'up-target' => '.bookings-edit',
 	'up-layer' => 'new modal',
 ]);
 
-$cancel = "<a href='#' up-dismiss>Cancel</a>";
+$cancel = "<a href='#' up-dismiss>Cancelar</a>";
 
 $content = implode("\n", $buttons) . $cancel;
 

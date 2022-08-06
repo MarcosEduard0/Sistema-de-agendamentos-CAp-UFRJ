@@ -30,7 +30,7 @@ echo form_open('sessions/apply_week', $attrs, ['session_id' => $session->session
 
 	<?php
 	$this->load->view('partials/submit', array(
-		'submit' => array('Aplicar semana', tab_index()),
+		'submit' => array('Aplicar', tab_index()),
 	));
 	?>
 

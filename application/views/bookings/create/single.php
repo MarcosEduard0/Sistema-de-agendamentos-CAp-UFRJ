@@ -216,7 +216,7 @@ if ($is_admin) {
 	// Info
 	//
 	$field = 'recurring_info';
-	$label = form_label('Sempre as', 'recurring_info');
+	$label = form_label('Sempre', 'recurring_info');
 	$input = sprintf('Toda %s no %s', $day_name, html_escape($week->name));
 	$recurring_fields[] = "<p>{$label}{$input}</p>";
 
@@ -260,8 +260,8 @@ $submit_single = form_button([
 	'type' => 'submit',
 	'name' => 'action',
 	'value' => 'create',
-	'content' => 'Criar agendamento',
-	'class' => "btn btn-primary",
+	'content' => 'Agendar',
+	'class' => 'btn btn-primary btn-sm',
 ]);
 
 
@@ -269,8 +269,8 @@ $submit_recurring = form_button([
 	'type' => 'submit',
 	'name' => 'action',
 	'value' => 'preview_recurring',
-	'content' => 'Visualizar reservas recorrentes',
-	'class' => 'btn btn-primary',
+	'content' => 'Visualizar agendamentos recorrentes',
+	'class' => 'btn btn-primary btn-sm',
 ]);
 
 $cancel = anchor($return_uri, 'Cancelar', ['up-dismiss' => '']);

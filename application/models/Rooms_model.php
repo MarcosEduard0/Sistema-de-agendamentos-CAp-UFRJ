@@ -155,7 +155,7 @@ class Rooms_model extends CI_Model
 		if ($room->location) {
 			$info[] = [
 				'name' => 'location',
-				'label' => 'Location',
+				'label' => 'Localização',
 				'value' => html_escape($room->location),
 			];
 		}

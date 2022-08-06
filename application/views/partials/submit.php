@@ -1,7 +1,7 @@
 <div class="submit" style="border-top:0px;">
 	<?php
 	if (isset($submit)) {
-		echo form_submit(array('value' => $submit[0], 'tabindex' => $submit[1], 'class' => "btn btn-primary"));
+		echo form_submit(array('value' => $submit[0], 'tabindex' => $submit[1], 'class' => "btn btn-primary btn-sm"));
 	}
 	echo "&nbsp;&nbsp;";
 	if (isset($cancel)) {

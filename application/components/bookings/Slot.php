@@ -173,7 +173,7 @@ class Slot
 				case $booking_permitted->date_in_range:
 					$advance = (int) abs(setting('bia'));
 					$this->view_data = ['extended' => 'future'];
-					$this->label = sprintf('Você só pode criar agendamentos de até %d dias no futuro.', $advance);
+					$this->label = sprintf('Você só pode criar agendamentos de até %d dias de antecedência.', $advance);
 					break;
 
 				case $booking_permitted->is_future_date:

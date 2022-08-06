@@ -53,7 +53,7 @@ $sort_cols = ["Tipo", "Habilitado", "Usuário", "Nome", "Último Acesso", "Açõ
 							?></td>
 						<td><?php
 							if ($user->lastlogin == '0000-00-00 00:00:00' || empty($user->lastlogin)) {
-								$lastlogin = 'Never';
+								$lastlogin = 'Nunca';
 							} else {
 								$lastlogin = date("d/m/Y, H:i", strtotime($user->lastlogin));
 							}

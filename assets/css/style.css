@@ -941,7 +941,7 @@ button.link-md {
 	}
 
 	.bookings-grid-slot.booking-status-unavailable {
-		background-image: url('images/ui/bookings-unavailable-bg.png');
+		background-image: url('../images/ui/bookings-unavailable-bg.png');
 	}
 
 	.bookings-grid-slot.booking-status-unavailable-holiday {
@@ -1025,6 +1025,7 @@ a.booking-action:hover {
 .maintenance-wrapper {
 	padding: 8px 0;
 	background: #ffffaa;
+	text-align-last: center;
 }
 
 

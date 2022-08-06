@@ -172,7 +172,7 @@ class Rooms extends MY_Controller
 		$this->data['fields'] = $this->rooms_model->GetFields();
 		$this->data['fieldvalues'] = $this->rooms_model->GetFieldValues($id);
 
-		$this->data['title'] = 'Edit Room';
+		$this->data['title'] = 'Editar Sala';
 		// $this->data['showtitle'] = $this->data['title'];
 
 		$columns = array(

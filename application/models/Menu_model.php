@@ -78,7 +78,7 @@ class Menu_model extends CI_Model
 		];
 
 		$items[] = [
-			'label' => 'Sessions',
+			'label' => 'Sessões',
 			'icon' => 'school_manage_times.png',
 			'url' => site_url('sessions'),
 			'img' => 'holiday.png',
@@ -124,12 +124,12 @@ class Menu_model extends CI_Model
 			'img' => 'settings.png',
 		];
 
-		$items[] = [
-			'label' => 'Autentificação',
-			'icon' => 'lock.png',
-			'url' => site_url('settings/authentication/ldap'),
-			'img' => 'reports.png',
-		];
+		// $items[] = [
+		// 	'label' => 'Autentificação',
+		// 	'icon' => 'lock.png',
+		// 	'url' => site_url('settings/authentication/ldap'),
+		// 	'img' => 'reports.png',
+		// ];
 
 		return $items;
 	}

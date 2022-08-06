@@ -73,12 +73,10 @@ if ($allow_recurring) {
 	echo "<div class='booking-type-content' up-show-for='recurring'>";
 	$this->load->view('bookings/create/multi/details_recurring');
 	echo "</div>";
-
 } else {
 
 	echo form_hidden('type', 'single');
 	$this->load->view('bookings/create/multi/details_single');
-
 }
 
 
@@ -89,12 +87,13 @@ $cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
 
 $submit_single = form_button([
 	'type' => 'submit',
-	'content' => 'Create selected bookings',
+	'content' => 'Criar agendamentos selecionados',
+	'class' => 'btn btn-primary btn-sm',
 ]);
 
 $submit_recurring = form_button([
 	'type' => 'submit',
-	'content' => 'Next &rarr;',
+	'content' => 'Próximo &rarr;',
 ]);
 
 if ($allow_recurring) {

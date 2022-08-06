@@ -1,7 +1,7 @@
 <?php
 
 // Date format of bookings
-$date_format = setting('date_format_long', 'crbs');
+$date_format = 'd/m/Y';
 
 // For period display
 $time_fmt = setting('time_format_period');
@@ -36,21 +36,21 @@ $cols = [];
 $cols[] = ['data' => '', 'width' => 10];
 
 if ($show_date_col) {
-	$cols[] = ['data' => 'Date'];
+	$cols[] = ['data' => 'Data'];
 } else {
-	$cols[] = ['data' => 'Period'];
+	$cols[] = ['data' => 'Período'];
 }
 
 if ($show_room_col) {
-	$cols[] = ['data' => 'Room'];
+	$cols[] = ['data' => 'Sala'];
 }
 
 if ($is_admin) {
-	$cols[] = ['data' => 'Department'];
-	$cols[] = ['data' => 'User'];
+	$cols[] = ['data' => 'Departamento'];
+	$cols[] = ['data' => 'Usuário'];
 }
 
-$cols[] = ['data' => 'Notes'];
+$cols[] = ['data' => 'Descrição'];
 
 $this->table->set_heading($cols);
 
@@ -104,7 +104,7 @@ foreach ($multibooking->slots as $key => $slot) {
 	// User column
 	//
 	$user_field = sprintf('slot_single[%d][user_id]', $slot->mbs_id);
-	$options = results_to_assoc($all_users, 'user_id', function($user) {
+	$options = results_to_assoc($all_users, 'user_id', function ($user) {
 		return strlen($user->displayname)
 			? $user->displayname
 			: $user->username;
@@ -135,6 +135,7 @@ foreach ($multibooking->slots as $key => $slot) {
 		'size' => 30,
 		'value' => $value,
 		'up-copy-group' => 'notes',
+		'class' => 'form-control',
 	]);
 	$input_block = "<div class='block b-90'>{$input}</div>";
 	$append_block = '';
@@ -162,16 +163,16 @@ foreach ($multibooking->slots as $key => $slot) {
 	}
 }
 
-if ( ! $show_room_col || ! $show_date_col) {
+if (!$show_room_col || !$show_date_col) {
 
 	echo "<fieldset style='padding-top:0'>";
-	if ( ! $show_date_col) {
+	if (!$show_date_col) {
 		$date_str = $slot->datetime->format($date_format);
-		echo "<p><label>Date</label>{$date_str}</p>";
+		echo "<p><label>Data</label>{$date_str}</p>";
 	}
-	if ( ! $show_room_col) {
+	if (!$show_room_col) {
 		$room_str = html_escape($slot->room->name);
-		echo "<p><label>Room</label>{$room_str}</p>";
+		echo "<p><label>Sala</label>{$room_str}</p>";
 	}
 	echo "</fieldset>";
 }
