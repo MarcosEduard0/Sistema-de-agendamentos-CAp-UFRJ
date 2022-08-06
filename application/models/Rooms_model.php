@@ -167,7 +167,7 @@ class Rooms_model extends CI_Model
 		if ($room->displayname) {
 			$info[] = [
 				'name' => 'teacher',
-				'label' => 'Teacher',
+				'label' => 'Professor',
 				'value' => html_escape($room->displayname),
 			];
 		}
@@ -175,7 +175,7 @@ class Rooms_model extends CI_Model
 		if ($room->notes) {
 			$info[] = [
 				'name' => 'notes',
-				'label' => 'Notes',
+				'label' => 'Descrição',
 				'value' => html_escape($room->notes),
 			];
 		}
@@ -197,12 +197,12 @@ class Rooms_model extends CI_Model
 					$val = boolval($field_values[$field->field_id]);
 					if ($val) {
 						$img_src = base_url('assets/images/ui/enabled.png');
-						$alt = 'Yes';
+						$alt = 'Sim';
 					} else {
 						$img_src = base_url('assets/images/ui/no.png');
-						$alt = 'No';
+						$alt = 'Não';
 					}
-					$field_value = "<img src='{$img_src}' alt='{$alt}' up-tooltip='{$alt}' width='16' height='16'>";
+					$field_value = "<img style='margin-left: 5px;' src='{$img_src}' alt='{$alt}' up-tooltip='{$alt}' width='16' height='16'>";
 					break;
 
 				case 'SELECT':
@@ -381,7 +381,8 @@ class Rooms_model extends CI_Model
 	function delete_photo($room_id)
 	{
 		$row = $this->Get($room_id);
-		$photo = $row->photo;
+		// $photo = $row->photo;
+		$photo = $row['photo'];
 		$file_path = FCPATH . "uploads/{$photo}";
 		if (file_exists($file_path)) {
 			@unlink($file_path);

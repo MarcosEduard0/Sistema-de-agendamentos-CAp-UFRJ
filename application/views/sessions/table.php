@@ -48,14 +48,14 @@
 				// Recorrente
 				$img = '';
 				if ($session->is_current == 1) {
-					$img = img(['src' => 'assets/images/ui/enabled.png', 'width' => '16', 'height' => '16', 'alt' => 'Current session']);
+					$img = img(['src' => 'assets/images/ui/enabled.png', 'width' => '16', 'height' => '16', 'alt' => 'Sessão atual']);
 				}
 				echo "<td>{$img}</td>";
 
-				// Agebdavel
+				// Agendavel
 				$img = '';
 				if ($session->is_selectable == 1) {
-					$img = img(['src' => 'assets/images/ui/enabled.png', 'width' => '16', 'height' => '16', 'alt' => 'Selectable']);
+					$img = img(['src' => 'assets/images/ui/enabled.png', 'width' => '16', 'height' => '16', 'alt' => 'Habilitavel']);
 				}
 				echo "<td>{$img}</td>";
 

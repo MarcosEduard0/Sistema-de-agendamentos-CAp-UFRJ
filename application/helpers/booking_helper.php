@@ -1,14 +1,14 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
 
 function booking_editable($booking)
 {
-	$CI =& get_instance();
+	$CI = &get_instance();
 
-	if ( ! $booking) return FALSE;
+	if (!$booking) return FALSE;
 
 	$is_admin = $CI->userauth->is_level(ADMINISTRATOR);
 	if ($is_admin) return TRUE;
@@ -22,7 +22,7 @@ function booking_editable($booking)
 
 function booking_cancelable($booking)
 {
-	$CI =& get_instance();
+	$CI = &get_instance();
 
 	$is_admin = $CI->userauth->is_level(ADMINISTRATOR);
 	if ($is_admin) return TRUE;
@@ -38,7 +38,7 @@ function booking_cancelable($booking)
 	if ($booking->date < $today) return FALSE;
 
 	$is_booking_owner = ($CI->userauth->user->user_id == $booking->user_id);
-	$is_room_owner = ($CI->userauth->user->user_id == $booking->room->user_id && ! $booking->repeat_id);
+	$is_room_owner = ($CI->userauth->user->user_id == $booking->room->user_id && !$booking->repeat_id);
 
 	if ($is_booking_owner || $is_room_owner) return TRUE;
 

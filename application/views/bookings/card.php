@@ -92,7 +92,7 @@ $department = ($booking->department)
 if ($department) {
 	$info[] = [
 		'name' => 'department',
-		'label' => 'Department',
+		'label' => 'Departamento',
 		'value' => html_escape($department->name),
 	];
 }
@@ -102,7 +102,7 @@ if ($department) {
 if (strlen($booking->notes)) {
 	$info[] = [
 		'name' => 'notes',
-		'label' => 'Notes',
+		'label' => 'Descrição',
 		'value' => html_escape($booking->notes),
 	];
 }
