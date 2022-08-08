@@ -12,7 +12,7 @@ if (isset($slot->recurring_dates)) {
 		$title = $date->date->format(setting('date_format_long'));
 		$title = trim(str_replace($day_name, '', $title));
 		if ($date->date->format('Y-m-d') == $slot->date) $title = '* ' . $title;
-		$recurring_date_options[ $date->date->format('Y-m-d') ] = $title;
+		$recurring_date_options[$date->date->format('Y-m-d')] = $title;
 	}
 }
 
@@ -38,7 +38,7 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 //
 $field = sprintf('slots[%d][user_id]', $slot->mbs_id);
 $label = form_label('Who', $field);
-$options = results_to_assoc($all_users, 'user_id', function($user) {
+$options = results_to_assoc($all_users, 'user_id', function ($user) {
 	return strlen($user->displayname)
 		? $user->displayname
 		: $user->username;
@@ -59,7 +59,7 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 $field = sprintf('slots[%d][notes]', $slot->mbs_id);
 $default = isset($default_values['notes']) ? $default_values['notes'] : '';
 $value = set_value($field, $default, FALSE);
-$label = form_label('Notes', 'notes');
+$label = form_label('Descrição', 'notes');
 $input = form_textarea([
 	'autofocus' => 'true',
 	'name' => $field,

@@ -50,7 +50,7 @@ class Access_control_model extends CI_Model
 	public static function get_permissions()
 	{
 		return [
-			self::ACCESS_VIEW => 'Vizualizar',
+			self::ACCESS_VIEW => 'Visualizar',
 		];
 	}
 
@@ -58,7 +58,7 @@ class Access_control_model extends CI_Model
 	public static function get_access()
 	{
 		return [
-			self::ACCESS_VIEW => 'Vizualizar',
+			self::ACCESS_VIEW => 'Visualizar',
 		];
 	}
 

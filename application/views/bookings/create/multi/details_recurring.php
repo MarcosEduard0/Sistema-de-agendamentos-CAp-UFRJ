@@ -33,7 +33,7 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 //
 $field = 'user_id';
 $label = form_label('Who', $field);
-$options = results_to_assoc($all_users, 'user_id', function($user) {
+$options = results_to_assoc($all_users, 'user_id', function ($user) {
 	return strlen($user->displayname)
 		? $user->displayname
 		: $user->username;
@@ -52,7 +52,7 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 //
 $field = 'notes';
 $value = set_value($field, '', FALSE);
-$label = form_label('Notes', 'notes');
+$label = form_label('Descrição', 'notes');
 $input = form_textarea([
 	'autofocus' => 'true',
 	'name' => $field,

@@ -45,8 +45,8 @@ $sort_cols = ["Name", "Location", "Teacher", "Notes", "Photo", "None"];
 						if ($room->photo != '' && is_file(FCPATH . $photo_path)) {
 							$url = site_url("rooms/photo/{$room->room_id}");
 							$icon_src = base_url('assets/images/ui/picture.png');
-							$icon_el = "<img src='{$icon_src}' width='16' height='16' alt='Vizualizar Foto'>";
-							echo "<a href='{$url}' up-history='false' up-drawer='.room-photo' title='Vizualizar Foto'>{$icon_el}</a>";
+							$icon_el = "<img src='{$icon_src}' width='16' height='16' alt='Visualizar Foto'>";
+							echo "<a href='{$url}' up-history='false' up-drawer='.room-photo' title='Visualizar Foto'>{$icon_el}</a>";
 						}
 						?>
 					</td>
