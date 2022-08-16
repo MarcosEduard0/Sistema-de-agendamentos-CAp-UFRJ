@@ -9,6 +9,7 @@ class Login extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->require_logged_out();
 	}
 
 
