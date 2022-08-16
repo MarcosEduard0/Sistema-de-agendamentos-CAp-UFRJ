@@ -184,12 +184,14 @@ class Table
 		$cells = [];
 
 		$day_names = Calendar::get_day_names();
+		$day_names = $this->traslate_week_day_2_Br($day_names);
 
 		// Render header cell
 		//
 		$header_view_data = $params;
 		$header_view_data['day_names'] = $day_names;
 		$header_view_data['today'] = $this->context->today;
+
 		$header_view_name = sprintf('bookings_grid/table/row_%s', $params['name']);
 		$cells[] = $this->CI->load->view($header_view_name, $header_view_data, TRUE);
 

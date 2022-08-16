@@ -20,24 +20,27 @@ if ($booking->repeat_id) {
 		'type' => 'submit',
 		'name' => 'cancel',
 		'value' => '1',
-		'content' => 'Apenas este agendamento',
+		'content' => 'Apenas este agendamento.',
+		'class' => 'btn btn-outline-danger btn-sm',
 	]);
 
 	$buttons[] = form_button([
 		'type' => 'submit',
 		'name' => 'cancel',
 		'value' => 'future',
-		'content' => 'Este e futuros agendamentos em série',
+		'content' => 'Este e os demais agendamentos em sequência.',
+		'class' => 'btn btn-outline-danger btn-sm',
 	]);
 
 	$buttons[] = form_button([
 		'type' => 'submit',
 		'name' => 'cancel',
 		'value' => 'all',
-		'content' => 'Todos os agendamentos em série',
+		'content' => 'Todos os agendamentos.',
+		'class' => 'btn btn-outline-danger btn-sm',
 	]);
 
-	$cancel = "<a href='#' up-dismiss>No, keep it</a>";
+	$cancel = "<a href='#' up-dismiss>Não, mantenha-o</a>";
 
 	$content = implode("\n", $buttons) . $cancel;
 } else {

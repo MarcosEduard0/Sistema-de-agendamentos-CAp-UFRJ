@@ -71,8 +71,8 @@ class Header
 
 			case 'day':
 
-				$prev_label = '&larr; Back';
-				$next_label = 'Next &rarr;';
+				$prev_label = '&larr; Voltar';
+				$next_label = 'Próximo &rarr;';
 
 				// $long_date = $this->context->datetime->format(setting('date_format_long'));
 

@@ -14,6 +14,6 @@ echo "<h3>Sessões atuais e futuras</h3>";
 $this->load->view('sessions/table', ['items' => $active, 'id' => 'sessions_active', 'sort_cols' => $sort_cols]);
 
 if (!empty($past)) {
-	echo "<br><br><h3>Past sessions</h3>";
+	echo "<br><br><h3>Sessões anteriores</h3>";
 	$this->load->view('sessions/table', ['items' => $past, 'id' => 'sessions_past', 'sort_cols' => $sort_cols]);
 }

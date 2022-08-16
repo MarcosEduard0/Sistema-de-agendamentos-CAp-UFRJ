@@ -48,7 +48,7 @@ echo form_open(current_url(), array('id' => 'settings', 'class' => 'needs-valida
 			));
 			?>
 			<div class="invalid-feedback">Por favor, preencha este campo.</div>
-			<small class="form-text text-muted">Em quantos dias de antecedência os usuários podem fazer seus próprios agendamentos. Insira <strong>0</strong> para nenhuma restrição.</small>
+			<small class="form-text text-muted">Quantos dias no futuro os usuários podem fazer seus próprios agendamentos. Insira <strong>0</strong> para nenhuma restrição.</small>
 		</div>
 	</div>
 	<?php echo form_error('bia') ?>

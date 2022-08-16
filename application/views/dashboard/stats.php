@@ -39,7 +39,7 @@ if ($max_active_bookings > 0) {
 	];
 
 	$blocks[] = [
-		'title' => 'Agendamentos que você pode fazer',
+		'title' => 'Quantidade de agendamentos que você pode fazer',
 		'figure' => ($max_active_bookings - $num_active),
 	];
 }

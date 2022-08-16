@@ -22,7 +22,7 @@ if ($booking->repeat_id) {
 	$uri = sprintf('bookings/view_series/%d?%s', $booking->booking_id, http_build_query(['params' => $params]));
 	$links[] = [
 		'link' => $uri,
-		'name' => 'View all',
+		'name' => 'Ver tudo',
 		'icon' => 'calendar_view_month.png',
 		'attrs' => [
 			'up-target' => '.bookings-view',
@@ -103,6 +103,8 @@ $info[] = [
 
 if ($booking->repeat_id) {
 	$weekday = Calendar::get_day_name($booking->repeat->weekday);
+	$weekday = Calendar::traslate_2_portuguese($weekday);
+
 	$info[] = [
 		'name' => 'occurs',
 		'label' => 'Ocorre',
@@ -206,7 +208,7 @@ echo $info_html;
 // Room
 //
 
-echo '<h3>' . html_escape($booking->room->name) . '</h3>';
+echo '<h3 style="margin: 20px 0px 20px 0px;">' . html_escape($booking->room->name) . '</h3>';
 
 $photo_html = '';
 $fields_html = '';

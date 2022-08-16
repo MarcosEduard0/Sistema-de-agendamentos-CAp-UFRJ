@@ -3,12 +3,13 @@
 use app\components\Calendar;
 
 $this->table->set_template([
-	'table_open' => '<table class="zebra-table" style="line-height:1.3" width="100%" cellpadding="10" cellspacing="0" border="0">',
+	'table_open' => '<table class="zebra-table" style="line-height:1.3; text-align: center;" width="100%" cellpadding="10" cellspacing="0" border="0">',
 ]);
 
 $this->table->set_heading('Status', 'Agendamento');
 
-$date_format = setting('date_format_long', 'crbs');
+// $date_format = setting('date_format_long', 'crbs');
+$date_format = 'd/m/Y';
 
 $links = [];
 $info = [];
@@ -25,7 +26,7 @@ if ($booking->repeat_id) {
 
 	$links[] = [
 		'link' => $uri,
-		'name' => 'Back to booking details',
+		'name' => 'Voltar aos detalhes do agendamento',
 		'icon' => 'arrow_turn_left.png',
 		'attrs' => [
 			'up-target' => '.bookings-view',
@@ -39,7 +40,7 @@ $links_html = empty($links)
 	: iconbar($links);
 
 
-// Generate table of all bookings
+// Gerar tabela de todos os agendamentos
 //
 
 foreach ($all_bookings as $epeat_booking) {

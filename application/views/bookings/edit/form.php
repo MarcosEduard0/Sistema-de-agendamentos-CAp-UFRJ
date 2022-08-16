@@ -34,10 +34,10 @@ if ($booking->repeat_id) {
 			$msg = 'As alterações que você fizer abaixo serão aplicadas apenas ao agendamento selecionado.';
 			break;
 		case UpdateAgent::EDIT_FUTURE:
-			$msg = 'As alterações feitas abaixo serão aplicadas ao agendamento selecionado e a todas as entradas futuras da série.';
+			$msg = 'As alterações feitas abaixo serão aplicadas ao agendamento selecionado e a todas as entradas futuras da sequência.';
 			break;
 		case UpdateAgent::EDIT_ALL:
-			$msg = 'As alterações feitas abaixo serão aplicadas a todos os agendamentos da série.';
+			$msg = 'As alterações feitas abaixo serão aplicadas a todos os agendamentos da sequência.';
 			break;
 	}
 
@@ -57,26 +57,15 @@ if ($features[UpdateAgent::FEATURE_DATE]) {
 		'class' => 'up-datepicker-input',
 		'name' => $field,
 		'id' => $field,
-		'size' => '10',
-		'maxlength' => '10',
 		'tabindex' => tab_index(),
-		'value' => set_value($field, $datetime ? $datetime->format('d/m/Y') : '', FALSE),
+		'value' => set_value($field, $datetime ? $datetime->format('Y-m-d') : '', FALSE),
 		'class' => 'form-control',
+		'type' => 'date',
 	));
-	$input .= img([
-		'style' => 'cursor:pointer',
-		'align' => 'top',
-		'src' => base_url('assets/images/ui/cal_day.png'),
-		'width' => 16,
-		'height' => 16,
-		'title' => 'Choose date',
-		'class' => 'up-datepicker',
-		'up-data' => html_escape(json_encode(['input' => $field])),
-	]);
 } else {
 	$input = sprintf('%s (%s)', $datetime->format('d/m/Y'), html_escape($booking->week->name));
 	if ($edit_mode != UpdateAgent::EDIT_ONE) {
-		$input .= ' (+ others)';
+		$input .= ' (+ outros)';
 	}
 }
 echo "<p>{$label}{$input}</p>";

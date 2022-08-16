@@ -160,7 +160,7 @@ class Rooms_model extends CI_Model
 			];
 		}
 
-		// User
+		// Usuário
 		if ($room->displayname == '') {
 			$room->displayname = $room->username;
 		}

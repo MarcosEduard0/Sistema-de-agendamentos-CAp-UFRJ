@@ -28,7 +28,7 @@ echo iconbar(array(
 
 
 <?php if ($mybookings) { ?>
-	<h3>My bookings</h3>
+	<h3>Meus Agendamentos</h3>
 	<ul>
 		<?php
 		foreach ($mybookings as $booking) {

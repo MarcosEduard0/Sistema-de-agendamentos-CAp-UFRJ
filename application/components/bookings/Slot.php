@@ -175,9 +175,11 @@ class Slot
 			switch (FALSE) {
 
 				case $booking_permitted->date_in_range:
+					// print_r($booking_permitted);
+					// exit;
 					$advance = (int) abs(setting('bia'));
 					$this->view_data = ['extended' => 'future'];
-					$this->label = sprintf('Você só pode criar agendamentos de até %d dias de antecedência.', $advance);
+					$this->label = sprintf('Você só pode criar agendamentos de até %d dias da data atual.', $advance);
 					break;
 
 				case $booking_permitted->is_future_date:
