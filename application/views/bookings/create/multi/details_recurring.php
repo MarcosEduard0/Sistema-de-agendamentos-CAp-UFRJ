@@ -12,12 +12,12 @@ $time_fmt = setting('time_format_period');
 
 echo "<fieldset>";
 
-echo "<div style='margin-bottom:16px'>Enter the default values for each recurring booking. You can change these for each booking on the next step.</div>";
+echo "<div style='margin-bottom:16px'>Insira os valores padrão para cada agendamento recorrente. Você pode alterá-los para cada agendamento na próxima etapa.</div>";
 
 // Department
 //
 $field = 'department_id';
-$label = form_label('Department', $field);
+$label = form_label('Departamento', $field);
 $options = results_to_assoc($all_departments, 'department_id', 'name', '(None)');
 $value = set_value($field, $department ? $department->department_id : '', FALSE);
 $input = form_dropdown([
@@ -25,6 +25,7 @@ $input = form_dropdown([
 	'id' => $field,
 	'options' => $options,
 	'selected' => $value,
+	'class' => 'form-control'
 ]);
 echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 
@@ -32,7 +33,7 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 // Who
 //
 $field = 'user_id';
-$label = form_label('Who', $field);
+$label = form_label('Usuário', $field);
 $options = results_to_assoc($all_users, 'user_id', function ($user) {
 	return strlen($user->displayname)
 		? $user->displayname
@@ -44,6 +45,7 @@ $input = form_dropdown([
 	'id' => $field,
 	'options' => $options,
 	'selected' => $value,
+	'class' => 'form-control'
 ]);
 echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 
@@ -61,6 +63,8 @@ $input = form_textarea([
 	'cols' => '50',
 	'tabindex' => tab_index(),
 	'value' => $value,
+	'class' => 'form-control',
+	'style' =>  'width: auto;'
 ]);
 echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 
@@ -68,25 +72,27 @@ echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 //
 $field = 'recurring_start';
 $value = set_value($field, 'date', FALSE);
-$label = form_label('Starting from...', 'recurring_start');
-$options = ['session' => 'Start of session', 'date' => 'Selected date(s)'];
+$label = form_label('Começando de...', 'recurring_start');
+$options = ['session' => 'Início da sessão', 'date' => 'Data(s) selecionada(s)'];
 $input = form_dropdown([
 	'name' => 'recurring_start',
 	'options' => $options,
 	'selected' => $value,
+	'class' => 'form-control',
 ]);
 echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 
 // Recurring end date
 //
 $field = 'recurring_end';
-$label = form_label('Until...', 'recurring_end');
+$label = form_label('Até...', 'recurring_end');
 $value = set_value($field, 'session', FALSE);
-$options = ['session' => 'End of session', 'date' => 'Selected date(s)'];
+$options = ['session' => 'Fim da sessão', 'date' => 'Data(s) selecionada(s)'];
 $input = form_dropdown([
 	'name' => 'recurring_end',
 	'options' => $options,
 	'selected' => $value,
+	'class' => 'form-control'
 ]);
 echo sprintf("<p>%s%s</p>%s", $label, $input, form_error($field));
 

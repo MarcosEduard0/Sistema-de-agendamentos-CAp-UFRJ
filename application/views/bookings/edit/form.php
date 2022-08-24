@@ -209,7 +209,7 @@ $submit = form_button([
 	'class' => "btn btn-primary btn-sm",
 ]);
 
-$cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
+$cancel = anchor($return_uri, 'Cancelar', ['up-dismiss' => '']);
 
 echo "<div class='submit' style='border-top:0px;'>{$submit} &nbsp; {$cancel}</div>";
 

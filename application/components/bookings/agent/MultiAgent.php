@@ -156,7 +156,7 @@ class MultiAgent extends BaseAgent
 	private function handle_recurring_customise()
 	{
 		$this->view = 'bookings/create/multi/recurring_customise';
-		$this->title = 'Create multiple recurring bookings';
+		$this->title = 'Crie vários agendamentos recorrentes';
 
 		$session_key = sprintf('mb_%d', $this->view_data['mb_id']);
 		$this->view_data['default_values'] = isset($_SESSION[$session_key]) ? $_SESSION[$session_key] : [];
@@ -170,7 +170,7 @@ class MultiAgent extends BaseAgent
 	private function handle_recurring_preview()
 	{
 		$this->view = 'bookings/create/multi/recurring_preview';
-		$this->title = 'Create multiple recurring bookings';
+		$this->title = 'Crie vários agendamentos recorrentes';
 
 		$session_key = sprintf('mb_%d_slots', $this->view_data['mb_id']);
 
@@ -217,13 +217,13 @@ class MultiAgent extends BaseAgent
 				$actions = [];
 
 				if (array_key_exists($key, $existing_bookings)) {
-					$actions['do_not_book'] = 'Keep existing booking';
-					$actions['replace'] = 'Replace existing booking';
+					$actions['do_not_book'] = 'Manter o agendamento existente';
+					$actions['replace'] = 'Substituir agendamento existente';
 					$instances[$key]['booking'] = $existing_bookings[$key];
 					$slot->conflict_count++;
 				} else {
-					$actions['book'] = 'Book';
-					$actions['do_not_book'] = 'Do not book';
+					$actions['book'] = 'Agendar';
+					$actions['do_not_book'] = 'Não agendar';
 				}
 
 				$instances[$key]['actions'] = $actions;
@@ -254,13 +254,13 @@ class MultiAgent extends BaseAgent
 		$slots = $this->CI->input->post('slots');
 
 		if (!$slots || empty($slots)) {
-			throw new AgentException("Você não selecionou nenhum slot gratuito para agendar.");
+			throw new AgentException("Você não selecionou nenhum slot livre para agendar.");
 		}
 
 
 		if (!$this->is_admin && is_numeric($this->max_allowed_bookings)) {
 			if (count($slots) > $this->max_allowed_bookings) {
-				$msg = "You can only create a maximum of %d booking(s), please select fewer periods.";
+				$msg = "Você só pode criar no máximo %d reserva(s), selecione menos períodos.";
 				throw new AgentException(sprintf($msg, $this->max_allowed_bookings));
 			}
 		}
@@ -303,11 +303,11 @@ class MultiAgent extends BaseAgent
 		// The scenarios below shouldn't really happen:
 
 		if (!$date_info || !$date_info->session_id) {
-			throw new AgentException('Selected date does not belong to a session.');
+			throw new AgentException('A data selecionada não pertence a uma sessão.');
 		}
 
 		if (!$date_info->week_id) {
-			throw new AgentException('Selected date does not belong to a timetable week.');
+			throw new AgentException('A data selecionada não pertence a uma semana de horário.');
 		}
 
 		// Got data - create multibooking entry.
@@ -321,7 +321,7 @@ class MultiAgent extends BaseAgent
 		$mb_id = $this->CI->multi_booking_model->create($mb_data);
 
 		if (!$mb_id) {
-			throw new AgentException("Could not create multibooking entry.");
+			throw new AgentException("Não foi possível criar uma entrada de multireserva.");
 		}
 
 		redirect(current_url() . '?' . http_build_query([
@@ -348,7 +348,7 @@ class MultiAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() === FALSE) {
-			$this->message = 'The form contained some invalid values. Please check and try again.';
+			$this->message = 'O formulário continha alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -411,7 +411,7 @@ class MultiAgent extends BaseAgent
 			$this->CI->form_validation->set_data($booking_data);
 
 			if ($this->CI->form_validation->run() === FALSE) {
-				$this->message = 'One or more of the bookings contained some invalid values. Please check and try again.';
+				$this->message = 'Uma ou mais agedamentos continham alguns valores inválidos. Por favor verifique e tente novamente.';
 				return FALSE;
 			}
 
@@ -433,7 +433,7 @@ class MultiAgent extends BaseAgent
 			$this->CI->multi_booking_model->delete($multibooking->mb_id);
 			// Finish
 			$this->success = TRUE;
-			$this->message = sprintf('%d bookings have been created.', count($booking_ids));
+			$this->message = sprintf('%d agendamentos foram criados.', count($booking_ids));
 			return TRUE;
 		}
 
@@ -441,7 +441,7 @@ class MultiAgent extends BaseAgent
 
 		$this->message = ($err)
 			? $err
-			: 'Could not create booking.';
+			: 'Não foi possível criar o agendamento.';
 
 		return FALSE;
 	}
@@ -464,7 +464,7 @@ class MultiAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() === FALSE) {
-			$this->message = 'One or more of the bookings contained some invalid values. Please check and try again.';
+			$this->message = 'Uma ou mais agendamentos continham alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -502,7 +502,7 @@ class MultiAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() === FALSE) {
-			$this->message = 'The form contained some invalid values. Please check and try again.';
+			$this->message = 'O formulário continha alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -573,7 +573,7 @@ class MultiAgent extends BaseAgent
 			$this->CI->form_validation->set_data($booking_data);
 
 			if ($this->CI->form_validation->run() === FALSE) {
-				$this->message = 'One or more of the bookings contained some invalid values. Please check and try again.';
+				$this->message = 'Uma ou mais agendamentos continham alguns valores inválidos. Por favor verifique e tente novamente.';
 				return FALSE;
 			}
 
@@ -610,7 +610,7 @@ class MultiAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() === FALSE) {
-			$this->message = 'The form contained some invalid values. Please check and try again.';
+			$this->message = 'O formulário continha alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -656,7 +656,7 @@ class MultiAgent extends BaseAgent
 
 			if (!$repeat_id) {
 				$this->CI->db->trans_rollback();
-				$this->message = 'Could not create one or more recurring bookings.';
+				$this->message = 'Não foi possível criar uma ou mais agendamentos recorrentes.';
 				return FALSE;
 			}
 
@@ -665,14 +665,14 @@ class MultiAgent extends BaseAgent
 
 		if ($this->CI->db->trans_status() === FALSE) {
 			$this->CI->db->trans_rollback();
-			$this->message = 'Could not create recurring bookings.';
+			$this->message = 'Não foi possível criar agendamentos recorrentes.';
 			return FALSE;
 		}
 
 		$this->CI->db->trans_commit();
 
 		$this->success = TRUE;
-		$this->message = sprintf('%d recurring bookings have been created successfully.', count($repeat_ids));
+		$this->message = sprintf('%d agendamentos recorrentes foram criados com sucesso.', count($repeat_ids));
 		return TRUE;
 	}
 }

@@ -7,7 +7,7 @@ $iconbar = iconbar(array(
 
 echo $iconbar;
 
-echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'saveacademicyear') );
+echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'saveacademicyear'));
 ?>
 
 
@@ -57,8 +57,8 @@ echo form_open('weeks/saveacademicyear', array('class' => 'cssform', 'id' => 'sa
 <?php
 
 $this->load->view('partials/submit', array(
-	'submit' => array('Save', tab_index()),
-	'cancel' => array('Cancel', tab_index(), 'weeks'),
+	'submit' => array('Savar', tab_index()),
+	'cancel' => array('Cancelar', tab_index(), 'weeks'),
 ));
 
 echo form_close();

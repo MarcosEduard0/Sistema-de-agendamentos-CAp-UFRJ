@@ -144,7 +144,7 @@ class SingleAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() == FALSE) {
-			$this->message = 'The form contained some invalid values. Please check and try again.';
+			$this->message = 'O formulário continha alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -177,7 +177,7 @@ class SingleAgent extends BaseAgent
 
 		$this->message = ($err)
 			? $err
-			: 'Could not create booking.';
+			: 'Não foi possível criar o agendamento.';
 
 		return FALSE;
 	}
@@ -232,7 +232,7 @@ class SingleAgent extends BaseAgent
 		$this->CI->form_validation->set_rules($rules);
 
 		if ($this->CI->form_validation->run() == FALSE) {
-			$this->message = 'The form contained some invalid values. Please check and try again.';
+			$this->message = 'O formulário continha alguns valores inválidos. Por favor verifique e tente novamente.';
 			return FALSE;
 		}
 
@@ -267,8 +267,8 @@ class SingleAgent extends BaseAgent
 			$actions = [];
 
 			if (array_key_exists($key, $existing_bookings)) {
-				$actions['do_not_book'] = 'Keep existing booking';
-				$actions['replace'] = 'Replace existing booking';
+				$actions['do_not_book'] = 'Manter o agendamento existente';
+				$actions['replace'] = 'Substituir agendamento existente';
 				$slots[$key]['booking'] = $existing_bookings[$key];
 			} else {
 				$actions['book'] = 'Book';
@@ -295,7 +295,7 @@ class SingleAgent extends BaseAgent
 		$dates = $this->CI->input->post('dates');
 
 		if (empty($dates)) {
-			$this->message = 'No dates selected.';
+			$this->message = 'Nenhuma data selecionada.';
 			return FALSE;
 		}
 
@@ -322,12 +322,12 @@ class SingleAgent extends BaseAgent
 		$repeat_id = $this->CI->bookings_repeat_model->create($repeat_data);
 
 		if (!$repeat_id) {
-			$this->message = 'Could not create recurring booking.';
+			$this->message = 'Não foi possível criar um ageamento recorrente.';
 			return FALSE;
 		}
 
 		$this->success = TRUE;
-		$this->message = 'The bookings have been created successfully.';
+		$this->message = 'Os agendamentos foram criados com sucesso';
 		return TRUE;
 	}
 }

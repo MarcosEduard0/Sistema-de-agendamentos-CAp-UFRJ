@@ -19,7 +19,6 @@ foreach ($multibooking->slots as $key => $slot) {
 		'key' => $key,
 		'slot' => $slot,
 	]);
-
 }
 
 // echo json_encode($multibooking, JSON_PRETTY_PRINT);
@@ -49,18 +48,19 @@ echo validation_errors();
 
 echo form_open(current_url(), $attrs, $hidden);
 
-echo "<div style='margin-bottom:16px'>Use this page to check all the booking instances that will be created for each series.</div>";
+echo "<div style='margin-bottom:16px'>Use esta página para verificar todas as instâncias do agendamento que serão criadas para cada série.</div>";
 
 echo $tabs->render();
 
 // Footer (submit or canceL)
 //
 
-$cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
+$cancel = anchor($return_uri, 'Cancelar', ['up-dismiss' => '']);
 
 $submit = form_button([
 	'type' => 'submit',
-	'content' => 'Create recurring bookings',
+	'content' => 'Crie agendamentos recorrentes',
+	'class' => 'btn btn-outline-primary btn-sm'
 ]);
 
 echo "<div style='border-top:0px;'>{$submit} &nbsp; {$cancel}</div>";

@@ -3,15 +3,16 @@
 use app\components\Calendar;
 
 $day_name = Calendar::get_day_name($slot->datetime->format('N'));
+$day_name = Calendar::traslate_2_portuguese($day_name);
 
 $period = $slot->period->name;
 
 if ($slot->conflict_count === 0) {
-	$icon_name = 'accept.png';
-	$title = 'No conflicts';
+	$icon_name = 'tick.png';
+	$title = 'Sem conflitos';
 } else {
-	$icon_name = 'error.png';
-	$title = sprintf('%d %s', $slot->conflict_count, ($slot->conflict_count === 1 ? 'conflict' : 'conflicts'));
+	$icon_name = 'i_error2.png';
+	$title = sprintf('%d %s', $slot->conflict_count, ($slot->conflict_count === 1 ? 'conflito' : 'conflitos'));
 }
 
 $img = img([

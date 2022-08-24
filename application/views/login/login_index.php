@@ -1,6 +1,13 @@
 <div class="limiter">
 	<div class="container-login100">
 		<div class="wrap-login100">
+			<?php
+			if (strlen($message)) {
+				echo '<div style="position: absolute; padding-top: 3%;">';
+				echo "<div class='login_message'>" . nl2br($message) . "</div>";
+				echo '</div>';
+			}
+			?>
 			<div class="login100-pic js-tilt" data-tilt>
 				<?= img($logo, FALSE) ?>
 			</div>

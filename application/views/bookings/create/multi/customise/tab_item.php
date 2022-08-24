@@ -3,6 +3,7 @@
 use app\components\Calendar;
 
 $day_name = Calendar::get_day_name($slot->datetime->format('N'));
+$day_name = Calendar::traslate_2_portuguese($day_name);
 
 $period = $slot->period->name;
 echo "<div style='float:right'>{$period}</div>";

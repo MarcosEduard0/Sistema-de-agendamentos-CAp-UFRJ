@@ -36,7 +36,7 @@ $sort_cols = ["Name", "StartDate", "EndDate", "None"];
 
 		<tbody>
 			<tr>
-				<td colspan="4" align="center" style="padding:16px 0; color: #666">No holidays.</td>
+				<td colspan="4" align="center" style="padding:16px 0; color: #666">Sem feriados.</td>
 			</tr>
 		</tbody>
 
@@ -60,7 +60,7 @@ $sort_cols = ["Name", "StartDate", "EndDate", "None"];
 				$end = $holiday->date_end ? $holiday->date_end->format($dateFormat) : '';
 				echo "<td>{$end}</td>";
 
-				// Duration
+				// Duração
 				$duration = 1 + ($holiday->date_start->diff($holiday->date_end)->format('%a'));
 				echo "<td>{$duration} dias</td>";
 

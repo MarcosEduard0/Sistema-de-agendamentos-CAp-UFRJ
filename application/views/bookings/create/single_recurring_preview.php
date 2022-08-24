@@ -140,8 +140,8 @@ echo $str;
 
 if ($conflict_count > 0) {
 	$str = ($conflict_count === 1)
-		? 'There is <strong>one</strong> booking conflict to review.'
-		: sprintf('There are <strong>%d</strong> booking conflicts to review.', $conflict_count);
+		? 'Há <strong>um</strong> conflito de agendamento para revisão.'
+		: sprintf('Existem <strong>%d</strong> conflitos de agendamento para analisar.', $conflict_count);
 	echo msgbox('exclamation', $str, FALSE);
 }
 

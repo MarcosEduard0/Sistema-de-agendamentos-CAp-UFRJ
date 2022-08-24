@@ -309,8 +309,8 @@ echo form_open(current_url(), array('id' => 'ldap_settings', 'class' => 'cssform
 <?php
 
 $this->load->view('partials/submit', array(
-	'submit' => array('Save', tab_index()),
-	'cancel' => array('Cancel', tab_index(), 'controlpanel'),
+	'submit' => array('Salvar', tab_index()),
+	'cancel' => array('Cancelar', tab_index(), 'controlpanel'),
 ));
 
 echo form_close();

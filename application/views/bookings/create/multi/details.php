@@ -37,11 +37,11 @@ if ($allow_recurring) {
 	$week = week_dot($multibooking->week, 'sm') . ' ' . $multibooking->week->name;
 
 	$options = [
-		['value' => 'single', 'label' => 'Single bookings on the selected dates'],
-		['value' => 'recurring', 'label' => sprintf('Recurring bookings every week <small>(%s)</small>', $week)],
+		['value' => 'single', 'label' => 'Agendamentos individuais nas datas selecionadas'],
+		['value' => 'recurring', 'label' => sprintf('Agendamentos recorrentes toda semana <small>(%s)</small>', $week)],
 	];
 	$field = 'type';
-	$label = form_label('Type');
+	$label = form_label('Tipo');
 	$value = set_value($field);
 
 	$inputs_html = '';
@@ -83,7 +83,7 @@ if ($allow_recurring) {
 // Footer (submit or canceL)
 //
 
-$cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
+$cancel = anchor($return_uri, 'Cancelar', ['up-dismiss' => '']);
 
 $submit_single = form_button([
 	'type' => 'submit',
@@ -94,6 +94,7 @@ $submit_single = form_button([
 $submit_recurring = form_button([
 	'type' => 'submit',
 	'content' => 'Próximo &rarr;',
+	'class' => 'btn btn-outline-primary btn-sm',
 ]);
 
 if ($allow_recurring) {

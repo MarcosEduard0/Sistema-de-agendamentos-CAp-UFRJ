@@ -22,7 +22,6 @@ foreach ($multibooking->slots as $key => $slot) {
 		'slot' => $slot,
 		'default_values' => $default_values,
 	]);
-
 }
 
 
@@ -49,7 +48,7 @@ echo validation_errors();
 
 echo form_open(current_url(), $attrs, $hidden);
 
-echo "<div style='margin-bottom:16px'>Use this page to review your selections and change the options for each booking series.</div>";
+echo "<div style='margin-bottom:16px'>Use esta página para revisar suas seleções e alterar as opções para cada série do agendamento.</div>";
 
 echo $tabs->render();
 
@@ -61,7 +60,8 @@ $cancel = anchor($return_uri, 'Cancel', ['up-dismiss' => '']);
 
 $submit = form_button([
 	'type' => 'submit',
-	'content' => 'Next &rarr;',
+	'content' => 'Próximo &rarr;',
+	'class' => 'btn btn-outline-primary btn-sm'
 ]);
 
 echo "<div style='border-top:0px;'>{$submit} &nbsp; {$cancel}</div>";

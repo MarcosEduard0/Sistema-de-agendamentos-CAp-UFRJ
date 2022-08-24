@@ -340,7 +340,7 @@ iframe {
   
   /*------------------------------------------------------------------
     [ Responsive ]*/
-  
+/*   
   @media (max-width: 992px) {
     .wrap-login100 {
       padding: 85px 90px 33px 85px;
@@ -374,7 +374,7 @@ iframe {
     .wrap-login100 {
       padding: 100px 15px 33px 15px;
     }
-  }
+  } */
   
   /*------------------------------------------------------------------
     [ Alert validate ]*/
@@ -442,3 +442,20 @@ iframe {
       opacity: 1;
     }
   }
+
+  div.login_message{
+    width: 71%;
+  	padding: 10px 10px 10px 28px;
+    background-position: 4px 4px;
+    background-repeat: no-repeat;
+    color: #000;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 10pt;
+    position: relative;
+    border-radius: 0.25rem;
+    background-image: url(../images/ui/i_exclamation2.png);
+    background-color: #f8f6d7;
+    border-color: #eef5c6;
+    background-position-y: center;
+    }

@@ -4,9 +4,11 @@ use app\components\Calendar;
 
 // Day name for the slot
 $day_name = Calendar::get_day_name($slot->datetime->format('N'));
+$day_name = Calendar::traslate_2_portuguese($day_name);
 
 // Date format of bookings
-$date_format = setting('date_format_long', 'crbs');
+// $date_format = setting('date_format_long', 'crbs');
+$date_format = 'd-m-Y';
 
 // Generate table of bookings
 //
@@ -15,9 +17,9 @@ $this->table->set_template([
 ]);
 
 $this->table->set_heading([
-	['data' => 'Date', 'width' => '33%'],
-	['data' => 'Action', 'width' => '33%'],
-	['data' => 'Exising booking', 'width' => '33%'],
+	['data' => 'Data', 'width' => '33%'],
+	['data' => 'Ação', 'width' => '33%'],
+	['data' => 'Agendamento existente', 'width' => '33%'],
 ]);
 
 
@@ -89,7 +91,7 @@ foreach ($slot->instances as $key => $instance) {
 			'checked' => ($field_value == 'book'),
 		]);
 
-		$input_label = form_label('Create booking', $field_id, ['class' => 'ni', 'style' => 'display:inline-block']);
+		$input_label = form_label('Criar agendamento', $field_id, ['class' => 'ni', 'style' => 'display:inline-block']);
 
 		$actions_html = $input . $input_label;
 	}

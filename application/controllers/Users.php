@@ -150,25 +150,25 @@ class Users extends MY_Controller
 
 		$this->form_validation->set_rules('user_id', 'ID', 'integer');
 		$this->form_validation->set_rules('username', 'Username', 'required|max_length[32]|regex_match[/^[A-Za-z0-9-_.@]+$/]');
-		$this->form_validation->set_rules('authlevel', 'Type', 'required|integer');
-		$this->form_validation->set_rules('enabled', 'Enabled', 'required|integer');
-		$this->form_validation->set_rules('email', 'Email address', 'valid_email|max_length[255]');
+		$this->form_validation->set_rules('authlevel', 'Tipo', 'required|integer');
+		$this->form_validation->set_rules('enabled', 'Habilitado', 'required|integer');
+		$this->form_validation->set_rules('email', 'Email', 'valid_email|max_length[255]');
 
 		if (empty($user_id)) {
-			$this->form_validation->set_rules('password1', 'Password', 'trim|required');
-			$this->form_validation->set_rules('password2', 'Password (confirm)', 'trim|matches[password1]');
+			$this->form_validation->set_rules('password1', 'Senha', 'trim|required');
+			$this->form_validation->set_rules('password2', 'Senha (confirma)', 'trim|matches[password1]');
 		} else {
 			if ($this->input->post('password1')) {
-				$this->form_validation->set_rules('password1', 'Password', 'trim');
-				$this->form_validation->set_rules('password2', 'Password (confirm)', 'trim|matches[password1]');
+				$this->form_validation->set_rules('password1', 'Senha', 'trim');
+				$this->form_validation->set_rules('password2', 'Senha (confirma)', 'trim|matches[password1]');
 			}
 		}
 
-		$this->form_validation->set_rules('firstname', 'First name', 'max_length[20]');
-		$this->form_validation->set_rules('lastname', 'Last name', 'max_length[20]');
+		$this->form_validation->set_rules('firstname', 'Nome', 'max_length[20]');
+		$this->form_validation->set_rules('lastname', 'Sobrenome', 'max_length[20]');
 		$this->form_validation->set_rules('displayname', 'Display name', 'max_length[20]');
-		$this->form_validation->set_rules('department_id', 'Department', 'integer');
-		$this->form_validation->set_rules('ext', 'Extension', 'max_length[10]');
+		$this->form_validation->set_rules('department_id', 'Ddepartamento', 'integer');
+		$this->form_validation->set_rules('ext', 'Telefone', 'max_length[20]');
 
 		if ($this->form_validation->run() == FALSE) {
 			return (empty($user_id) ? $this->add() : $this->edit($user_id));
