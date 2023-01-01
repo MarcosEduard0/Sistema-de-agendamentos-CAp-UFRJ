@@ -9,28 +9,26 @@ class AvailabilityException extends \RuntimeException
 
 	public static function forNoWeek()
 	{
-		return new static("The selected date is not assigned to a timetable week.");
+		return new static("A data selecionada não está atribuída a uma semana de horário do ano letivo.");
 	}
 
 
 	public static function forNoPeriods()
 	{
-		return new static("There are no periods available for the selected date.");
+		return new static("Não há períodos disponíveis para a data selecionada.");
 	}
 
 
 	public static function forHoliday($holiday = NULL)
 	{
-		if ( ! is_object($holiday)) {
-			return new static('The date you selected is during a holiday.');
+		if (!is_object($holiday)) {
+			return new static('A data que você selecionou é durante um feriado.');
 		}
 
-		$format = 'The date you selected is during a holiday: %s: %s - %s';
+		$format = 'A data que você selecionou é durante um feriado: %s: %s - %s';
 		$start = $holiday->date_start->format('d/m/Y');
 		$end = $holiday->date_end->format('d/m/Y');
 		$str = sprintf($format, $holiday->name, $start, $end);
 		return new static($str);
 	}
-
-
 }

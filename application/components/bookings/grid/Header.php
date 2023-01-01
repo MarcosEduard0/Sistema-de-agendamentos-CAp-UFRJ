@@ -74,9 +74,9 @@ class Header
 				$prev_label = '&larr; Voltar';
 				$next_label = 'Próximo &rarr;';
 
-				// $long_date = $this->context->datetime->format(setting('date_format_long'));
+				$long_date = $this->context->datetime->format(setting('date_format_long'));
 
-				$long_date = $this->formatter->format($this->context->datetime);
+				// $long_date = $this->formatter->format($this->context->datetime);
 
 				$data['title'] = $this->context->timetable_week
 					? $long_date . ' - ' . html_escape($this->context->timetable_week->name)
@@ -89,8 +89,8 @@ class Header
 				$prev_label = '&larr; Semana anterior';
 				$next_label = 'Próxima semana &rarr;';
 
-				// $start_date = $this->context->week_start->format(setting('date_format_long'));
-				$start_date = $this->formatter->format($this->context->week_start);
+				$start_date = $this->context->week_start->format(setting('date_format_long'));
+				// $start_date = $this->formatter->format($this->context->week_start);
 
 				$week_text = sprintf('Semana começando em %s', $start_date);
 

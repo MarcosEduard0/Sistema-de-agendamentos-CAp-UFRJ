@@ -119,7 +119,7 @@ class Slot
 					$holiday->date_start->format($date_fmt),
 					$holiday->date_end->format($date_fmt)
 				)
-				: 'Holiday';
+				: 'Feriado';
 
 			return;
 		}

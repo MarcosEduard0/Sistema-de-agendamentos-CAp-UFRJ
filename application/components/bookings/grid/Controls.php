@@ -108,13 +108,13 @@ class Controls
 
 			if ($this->context->active_sessions) {
 				foreach ($this->context->active_sessions as $session) {
-					$session_options['Atual e futuro'][$session->session_id] = $session->name;
+					$session_options['Atual e Futuro'][$session->session_id] = $session->name;
 				}
 			}
 
 			if ($this->context->past_sessions) {
 				foreach ($this->context->past_sessions as $session) {
-					$session_options['Past'][$session->session_id] = $session->name;
+					$session_options['Anterior'][$session->session_id] = $session->name;
 				}
 			}
 		} else {
