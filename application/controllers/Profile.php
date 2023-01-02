@@ -14,6 +14,7 @@ class Profile extends MY_Controller
 
 		$this->load->model('crud_model');
 		$this->load->model('users_model');
+		$this->load->model('departments_model');
 	}
 
 
@@ -23,6 +24,7 @@ class Profile extends MY_Controller
 		$user_id = $this->userauth->user->user_id;
 
 		$this->data['user'] = $this->users_model->Get($user_id);
+		$this->data['department'] = $this->departments_model->Get($this->data['user']->department_id)->name;
 
 		$columns = array(
 			'c1' => array(

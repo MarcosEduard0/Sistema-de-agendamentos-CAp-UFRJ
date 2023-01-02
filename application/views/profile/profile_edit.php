@@ -173,8 +173,8 @@ echo form_open('profile/save', array('class' => 'needs-validation', 'id' => 'pro
 		<label class="col-sm-3 col-form-label" for="department">Departamento</label>
 		<div class="col-sm-4">
 			<?php
-			if (isset($department->department_id)) {
-				$options = html_escape($department->name);
+			if (isset($department)) {
+				$options = html_escape($department);
 			} else {
 				$options = '(nenhum)';
 			}
