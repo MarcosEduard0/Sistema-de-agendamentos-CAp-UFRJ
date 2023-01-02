@@ -59,7 +59,7 @@ class Holidays extends MY_Controller
 
 
 	/**
-	 * Add a new holiday
+	 * Adicionar um novo feriado
 	 *
 	 */
 	function add()
@@ -92,7 +92,7 @@ class Holidays extends MY_Controller
 
 
 	/**
-	 * Edit a holiday
+	 * Editar Feriado
 	 *
 	 */
 	function edit($id)
@@ -125,7 +125,7 @@ class Holidays extends MY_Controller
 
 
 	/**
-	 * Add or edit a holiday
+	 * Adicionar ou Editar feriado
 	 *
 	 */
 	private function save_holiday($holiday_id = NULL)
@@ -161,7 +161,7 @@ class Holidays extends MY_Controller
 			}
 		} else {
 			if ($holiday_id = $this->holidays_model->insert($data)) {
-				$line = sprintf($this->lang->line('crbs_action_added'), 'Session');
+				$line = sprintf($this->lang->line('crbs_action_added'),  $data['name']);
 				$flashmsg = msgbox('info', $line);
 			} else {
 				$line = sprintf($this->lang->line('crbs_action_dberror'), 'adding');
@@ -200,7 +200,7 @@ class Holidays extends MY_Controller
 		$this->data['cancel'] = 'holidays/session/' . $session->session_id;
 		// $this->data['text'] = 'If you delete this holiday, <strong>all bookings</strong> and holidays during this session will be <strong>permanently deleted</strong> as well.';
 
-		$this->data['title'] = sprintf('Delete Holiday (%s)', html_escape($holiday->name));
+		$this->data['title'] = sprintf('Deletar Feriado (%s)', html_escape($holiday->name));
 
 		$title = "<h2>{$this->data['title']}</h2>";
 		$body = $this->load->view('partials/deleteconfirm', $this->data, TRUE);
@@ -223,13 +223,13 @@ class Holidays extends MY_Controller
 		$session = $this->sessions_model->get($session_id);
 
 		if (!$session) {
-			$this->form_validation->set_message($rule, 'Session could not be loaded.');
+			$this->form_validation->set_message($rule, 'A sessão não pôde ser carregada.');
 			return FALSE;
 		}
 
 		$dt = datetime_from_string($value);
 		if (!$dt) {
-			$msg = sprintf("The {field} value '%s' does not look like a valid date.", $value);
+			$msg = sprintf("O valor de {field} '%s' não parece uma data válida.", $value);
 			$this->form_validation->set_message($rule, $msg);
 			return FALSE;
 		}
@@ -237,7 +237,7 @@ class Holidays extends MY_Controller
 		if ($dt < $session->date_start || $dt > $session->date_end) {
 			$start_fmt = $session->date_start->format('d/m/Y');
 			$end_fmt = $session->date_end->format('d/m/Y');
-			$msg = sprintf("The {field} must be between %s and %s.", $start_fmt, $end_fmt);
+			$msg = sprintf("O {field} deve estar entre %s e %s.", $start_fmt, $end_fmt);
 			$this->form_validation->set_message($rule, $msg);
 			return FALSE;
 		}

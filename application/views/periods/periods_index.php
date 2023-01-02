@@ -61,7 +61,7 @@ $sort_cols = ["None", "Nome", "TimeStart", "TimeEnd", "Duration", "Days", "None"
 						foreach ($days_list as $day_num => $day_name) {
 							$day_name = preg_split("/(?<!^)(?!$)/u", $day_name); //correção para caracteres multibytes
 							$key = "day_{$day_num}";
-							$letter = "{$day_name[0]}{$day_name[1]}";
+							$letter = "{$day_name[0]}{$day_name[1]}{$day_name[2]}";
 							if ($period->{$key} == '1') {
 								echo "$letter ";
 							} else {

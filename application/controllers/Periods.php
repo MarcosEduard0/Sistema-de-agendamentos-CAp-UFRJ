@@ -207,7 +207,7 @@ class Periods extends MY_Controller
 		if (($times['data'] >= $times['am'] && $times['data'] <= $times['pm']) || !isset($times['data'])) {
 			$ret = true;
 		} else {
-			$this->form_validation->set_message('_is_valid_time', 'You entered an invalid time. It must be between 00:00 and 23:59.');
+			$this->form_validation->set_message('_is_valid_time', 'Você digitou um horário inválido. Deve estar entre 00:00 e 23:59.');
 			$ret = false;
 		}
 
@@ -233,7 +233,7 @@ class Periods extends MY_Controller
 		if ($end >= $start) {
 			$ret = true;
 		} else {
-			$this->form_validation->set_message('_is_after', 'The end time must be equal to or greater than the start time of ' . $this->_fix_time($this->input->post('time_start')) . '.');
+			$this->form_validation->set_message('_is_after', 'A hora de término deve ser igual ou maior que a hora de início do ' . $this->_fix_time($this->input->post('time_start')) . '.');
 			$ret = false;
 		}
 		return $ret;

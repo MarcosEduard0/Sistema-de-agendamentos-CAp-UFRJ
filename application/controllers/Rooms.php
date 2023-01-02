@@ -394,7 +394,7 @@ class Rooms extends MY_Controller
 		$this->data['action'] = 'rooms/delete';
 		$this->data['id'] = $id;
 		$this->data['cancel'] = 'rooms';
-		$this->data['text'] = 'If you delete this room, <strong>all bookings</strong> for this room will be <strong>permanently deleted</strong> as well.';
+		$this->data['text'] = 'Se você excluir esta sala, <strong>todas os agendamentos</strong> para esta sala também serão <strong>excluídos permanentemente</strong>.';
 
 		$row = $this->rooms_model->Get($id);
 		$this->data['title'] = 'Deletar Sala (' . html_escape($row->name) . ')';

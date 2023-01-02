@@ -22,6 +22,7 @@ echo form_open('sessions/apply_week', $attrs, ['session_id' => $session->session
 		echo form_dropdown([
 			'name' => 'week_id',
 			'id' => 'week_id',
+			'class' => 'form-control',
 			'options' => $options,
 		]);
 		?>

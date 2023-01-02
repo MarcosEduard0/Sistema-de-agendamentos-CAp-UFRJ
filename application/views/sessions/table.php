@@ -27,7 +27,8 @@
 		<tbody>
 			<?php
 
-			$dateFormat = setting('date_format_long');
+			// $dateFormat = setting('date_format_long');
+			$dateFormat = 'dd/MM/Y';
 
 			foreach ($items as $session) {
 
@@ -50,10 +51,9 @@
 					$img = img(['src' => 'assets/images/ui/enabled.png', 'width' => '16', 'height' => '16', 'alt' => 'Habilitavel']);
 				}
 				echo "<td>{$img}</td>";
-
-				$start = $session->date_start ? $session->date_start->format($dateFormat) : '';
+				$start = $session->date_start ? dateFormatter($dateFormat, $session->date_start) : '';
 				echo "<td>{$start}</td>";
-				$end = $session->date_end ? $session->date_end->format($dateFormat) : '';
+				$end = $session->date_end ? dateFormatter($dateFormat, $session->date_end) : '';
 				echo "<td>{$end}</td>";
 
 				echo "<td>";

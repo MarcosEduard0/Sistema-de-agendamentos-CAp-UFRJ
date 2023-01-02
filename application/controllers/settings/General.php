@@ -18,7 +18,7 @@ class General extends MY_Controller
 
 
 	/**
-	 * Settings page
+	 * Página de configurações
 	 *
 	 */
 	function index()
@@ -46,14 +46,14 @@ class General extends MY_Controller
 
 
 	/**
-	 * Controller function to handle submitted form
+	 * Função do controlador para lidar com o formulário enviado
 	 *
 	 */
 	private function save_settings()
 	{
-		// Parse data input from view and carry out appropriate action.
+		// Analise a entrada de dados da visualização e execute a ação apropriada.
 
-		// Load image manipulation library
+		// Carregar biblioteca de manipulação de imagens
 		$this->load->library('image_lib');
 
 		$this->load->library('form_validation');
@@ -63,7 +63,7 @@ class General extends MY_Controller
 		$this->form_validation->set_rules('displaytype', 'Display type', 'required');
 		$this->form_validation->set_rules('d_columns', 'Display columns', 'callback__valid_columns');
 		$this->form_validation->set_rules('timezone', 'Timezone', 'required');
-		$this->form_validation->set_rules('date_format_long', 'Long date format', 'required|max_length[30]');
+		$this->form_validation->set_rules('date_format_long', 'Long date format', 'max_length[30]');
 		$this->form_validation->set_rules('date_format_weekday', 'Weekday date format', 'max_length[30]');
 		$this->form_validation->set_rules('time_format_period', 'Period time format', 'max_length[30]');
 		$this->form_validation->set_rules('bookings_show_user_single', 'User display (single)', 'is_natural');
@@ -97,11 +97,20 @@ class General extends MY_Controller
 
 		$settings['colour'] = '468ED8';
 
-		// Set default date value if empty
+		// Definir valor de data padrão se vazio
 		$date_format_long = trim($settings['date_format_long']);
 		if (!strlen($date_format_long)) {
-			$settings['date_format_long'] = "EEEE, dd MMMM 'de' y";
+			$settings['date_format_long'] = "EEEE, dd 'de' MMMM 'de' y";
 		}
+		$date_format_weekday = trim($settings['date_format_weekday']);
+		if (!strlen($date_format_weekday)) {
+			$settings['date_format_weekday'] = "dd MMM";
+		}
+		$time_format_period = trim($settings['time_format_period']);
+		if (!strlen($time_format_period)) {
+			$settings['time_format_period'] = "H:i";
+		}
+
 
 		$this->settings_model->set($settings);
 
@@ -113,8 +122,8 @@ class General extends MY_Controller
 
 	function _valid_columns($cols)
 	{
-		// Day: Periods / Rooms
-		// Room: Periods / Days
+		// Dia: Períodos / Sala
+		// Sala: Períodos / Dias
 		$valid['day'] = array('periods', 'rooms');
 		$valid['room'] = array('periods', 'days');
 

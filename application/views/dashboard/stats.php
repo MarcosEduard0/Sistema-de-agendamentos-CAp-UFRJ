@@ -10,7 +10,7 @@ $blocks[] = [
 ];
 
 $blocks[] = [
-	'title' => 'Agendamentos desta sessão',
+	'title' => 'Agendamentos neste ano',
 	'figure' => $totals['session'],
 ];
 

@@ -227,11 +227,10 @@ echo form_open(current_url(), array('id' => 'settings', 'class' => 'needs-valida
 					'name' => 'date_format_long',
 					'id' => 'date_format_long',
 					'size' => '20',
-					'maxlength' => '20',
+					'maxlength' => '30',
 					'tabindex' => tab_index(),
 					'value' => $value,
 					'class' => 'form-control',
-					'style' => 'width: 70%; text-align: center;',
 				));
 				?>
 			</div>
@@ -250,12 +249,11 @@ echo form_open(current_url(), array('id' => 'settings', 'class' => 'needs-valida
 					'name' => 'date_format_weekday',
 					'id' => 'date_format_weekday',
 					'size' => '15',
-					'maxlength' => '10',
+					'maxlength' => '30',
 					'tabindex' => tab_index(),
 					'value' => $value,
 					'class' => 'form-control',
 					'style' => 'width: auto;',
-					'style' => 'width: 40%; text-align: center;',
 				));
 				?>
 			</div>
@@ -274,11 +272,11 @@ echo form_open(current_url(), array('id' => 'settings', 'class' => 'needs-valida
 					'name' => 'time_format_period',
 					'id' => 'time_format_period',
 					'size' => '15',
-					'maxlength' => '10',
+					'maxlength' => '30',
 					'tabindex' => tab_index(),
 					'value' => $value,
 					'class' => 'form-control',
-					'style' => 'width: auto; text-align: center;',
+					'style' => 'width: auto;',
 				));
 				?>
 				<small class="form-text text-muted">Formato de hora para períodos.</small>

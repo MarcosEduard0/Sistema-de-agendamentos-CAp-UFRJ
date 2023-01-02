@@ -36,7 +36,7 @@ echo form_open('access_control/save', $attrs);
 			'id' => 'target_id',
 			'options' => $options,
 			'value' => set_value('target_id'),
-			'class' => 'form-control2',
+			'class' => 'form-control',
 			'required' => true,
 		]);
 		?>
@@ -89,7 +89,7 @@ echo form_open('access_control/save', $attrs);
 				'id' => 'department_id',
 				'options' => $options,
 				'value' => set_value('department_id'),
-				'class' => 'form-control2',
+				'class' => 'form-control',
 				'required' => true,
 			]);
 			?>
@@ -100,7 +100,8 @@ echo form_open('access_control/save', $attrs);
 
 	<div class="submit" style="border-top:0px;">
 		<?php
-		echo form_submit(array('value' => 'Adicionar'));
+		// echo form_submit(array('value' => 'Adicionar'));
+		echo '<input type="submit" value="Adicionar" tabindex="0" class="btn btn-primary btn-sm">&nbsp;&nbsp;';
 		echo anchor('access_control?' . http_build_query($this->input->get()), 'Cancelar', [
 			'up-target' => "#access_control_add",
 			'up-history' => "false",

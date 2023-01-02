@@ -1,11 +1,11 @@
 <?php
 $holiday_id = NULL;
+
 if (isset($holiday) && is_object($holiday)) {
 	$holiday_id = set_value('holiday_id', $holiday->holiday_id);
 }
 
-echo form_open(current_url(), array('class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate' => 'true'), array('holiday_id' => $holiday_id));
-
+echo form_open(current_url(), ['class' => 'needs-validation', 'id' => 'holiday_add', 'novalidate' => 'true'], ['holiday_id' => $holiday_id, 'session_id' => $session->session_id]);
 ?>
 
 <fieldset>

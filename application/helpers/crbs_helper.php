@@ -14,17 +14,17 @@ function max_upload_file_size()
 
 
 /**
-* This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
-*
-* @param string $sSize
-* @return integer The value in bytes
-*
-*/
+ * This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
+ *
+ * @param string $sSize
+ * @return integer The value in bytes
+ *
+ */
 function php_size_to_bytes($sSize)
 {
     //
     $sSuffix = strtoupper(substr($sSize, -1));
-    if (!in_array($sSuffix,array('P','T','G','M','K'))){
+    if (!in_array($sSuffix, array('P', 'T', 'G', 'M', 'K'))) {
         return (int)$sSize;
     }
     $iValue = substr($sSize, 0, -1);
@@ -51,13 +51,26 @@ function php_size_to_bytes($sSize)
 
 function setting($key, $group = 'crbs')
 {
-	$CI =& get_instance();
-	return $CI->settings_model->get($key, $group);
+    $CI = &get_instance();
+    return $CI->settings_model->get($key, $group);
 }
 
+function dateFormatter($format, $date)
+{
+    $formatter = new IntlDateFormatter(
+        'pt_BR',
+        IntlDateFormatter::FULL,
+        IntlDateFormatter::NONE,
+        'America/Sao_Paulo',
+        IntlDateFormatter::GREGORIAN,
+        $format
+    );
+
+    return $formatter->format($date);
+}
 
 
 function json_encode_html($value)
 {
-	return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+    return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
 }

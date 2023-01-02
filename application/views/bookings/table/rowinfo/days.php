@@ -5,7 +5,6 @@
 	if (strlen($date_fmt)) {
 		echo "<br />";
 		echo sprintf("<span style='font-size:90%%'>%s</span>", utf8_encode(strftime($date_fmt, strtotime($date))));
-
 	}
 	?>
 </td>
