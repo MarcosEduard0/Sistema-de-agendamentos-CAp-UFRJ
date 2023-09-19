@@ -22,7 +22,7 @@
 			$field_labels = [
 				'firstname' => 'Nome',
 				'lastname' => 'Sobrenome',
-				'displayname' => 'Nome Social',
+				'displayname' => 'Nome de exibição',
 				'email' => 'Email address',
 			];
 

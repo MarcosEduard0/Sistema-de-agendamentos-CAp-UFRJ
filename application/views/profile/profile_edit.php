@@ -150,7 +150,7 @@ echo form_open('profile/save', array('class' => 'needs-validation', 'id' => 'pro
 
 
 	<div class="form-group row">
-		<label class="col-sm-3 col-form-label" for="displayname">Nome Social</label>
+		<label class="col-sm-3 col-form-label" for="displayname">Nome de exibição</label>
 		<div class="col-sm-4">
 			<?php
 			$field = 'displayname';

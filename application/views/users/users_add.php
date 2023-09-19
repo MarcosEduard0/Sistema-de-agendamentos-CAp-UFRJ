@@ -255,7 +255,7 @@ echo form_open_multipart('users/save', array('class' => 'needs-validation', 'id'
 	<?php echo form_error($field); ?>
 
 	<div class="form-group row">
-		<label for="displayname" class="col-sm-3 col-form-label">Nome Social</label>
+		<label for="displayname" class="col-sm-3 col-form-label">Nome de exibição</label>
 		<div class="col-sm-4">
 			<?php
 			$field = 'displayname';
